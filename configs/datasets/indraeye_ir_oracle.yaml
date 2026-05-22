@@ -1,0 +1,32 @@
+# YOLO dataset config template for IR oracle training/evaluation.
+
+name: indraeye_ir_oracle
+task: segment
+
+paths:
+  data_root: ${DATA_ROOT:data/processed}
+  train_images: ${DATA_ROOT:data/processed}/ir_train/images
+  val_images: ${DATA_ROOT:data/processed}/ir_val/images
+  test_images: ${DATA_ROOT:data/processed}/ir_test/images
+
+labels:
+  train: ${DATA_ROOT:data/processed}/ir_train/labels
+  val: ${DATA_ROOT:data/processed}/ir_val/labels
+  test: ${DATA_ROOT:data/processed}/ir_test/labels
+
+# TODO: Fill from validated IndraEye class mapping.
+names:
+  0: backhoe_loader
+  1: bicycle
+  2: bus
+  3: car
+  4: cargo_trike
+  5: ignore
+  6: motorcycle
+  7: person
+  8: rickshaw
+  9: small_truck
+  10: tractor
+  11: truck
+  12: van
+

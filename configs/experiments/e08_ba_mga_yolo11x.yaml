@@ -1,0 +1,13 @@
+id: E08
+name: ba_mga_yolo11x
+method: ba_mga
+model: yolo11x-seg.pt
+dataset: configs/datasets/indraeye_rgb_to_ir.yaml
+train_modality: RGB
+test_modality: IR
+augmentation: boundary_aware_mask_guided_gray
+epochs: 100
+imgsz: 640
+batch: auto
+seed: 42
+

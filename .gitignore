@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Environments
+.venv/
+venv/
+.env
+
+# Data and large artifacts
+data/raw/
+data/processed/
+*.zip
+*.tar
+*.tar.gz
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# Training runs: keep summaries through explicit force-add if needed
+runs/
+
+# Local/editor files
+.idea/
+.vscode/
+*.log
+

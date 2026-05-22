@@ -1,0 +1,13 @@
+id: E04
+name: mga_yolo11s
+method: mga
+model: yolo11s-seg.pt
+dataset: configs/datasets/indraeye_rgb_to_ir.yaml
+train_modality: RGB
+test_modality: IR
+augmentation: mask_guided_gray
+epochs: 100
+imgsz: 640
+batch: auto
+seed: 42
+

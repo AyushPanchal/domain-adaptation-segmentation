@@ -1,0 +1,30 @@
+[project]
+name = "domain-adaptation-segmentation"
+version = "0.1.0"
+description = "YOLO segmentation experiments for visible-to-thermal aerial domain adaptation."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26",
+  "opencv-python>=4.9",
+  "pandas>=2.2",
+  "pillow>=10.0",
+  "pyyaml>=6.0",
+  "rich>=13.0",
+  "tqdm>=4.66",
+  "ultralytics>=8.3",
+]
+
+[project.optional-dependencies]
+dev = [
+  "ruff>=0.6",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
