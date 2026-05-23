@@ -2,7 +2,7 @@ id: E02
 name: full_gray_yolo11s
 method: full_gray
 model: yolo11s-seg.pt
-dataset: configs/datasets/indraeye_rgb_to_ir.yaml
+dataset: data/manifests/dataset_yamls/full_gray.yaml
 train_modality: RGB
 test_modality: IR
 augmentation: full_gray
@@ -10,4 +10,3 @@ epochs: 100
 imgsz: 640
 batch: auto
 seed: 42
-

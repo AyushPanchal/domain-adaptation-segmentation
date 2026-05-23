@@ -2,7 +2,7 @@ id: E06
 name: ir_oracle_yolo11s
 method: ir_oracle
 model: yolo11s-seg.pt
-dataset: configs/datasets/indraeye_ir_oracle.yaml
+dataset: data/manifests/dataset_yamls/ir_oracle.yaml
 train_modality: IR
 test_modality: IR
 augmentation: none
@@ -10,4 +10,3 @@ epochs: 100
 imgsz: 640
 batch: auto
 seed: 42
-

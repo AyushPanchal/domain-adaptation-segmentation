@@ -2,7 +2,7 @@ id: E07
 name: source_rgb_yolo11x
 method: source_rgb
 model: yolo11x-seg.pt
-dataset: configs/datasets/indraeye_rgb_to_ir.yaml
+dataset: data/manifests/dataset_yamls/source_rgb.yaml
 train_modality: RGB
 test_modality: IR
 augmentation: none
@@ -10,4 +10,3 @@ epochs: 100
 imgsz: 640
 batch: auto
 seed: 42
-

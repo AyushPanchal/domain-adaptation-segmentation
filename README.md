@@ -16,6 +16,9 @@ IR segmentation:
 The project is designed for portable execution on local machines, college GPU
 servers, or Kaggle notebooks.
 
+See [AUGMENTATION_METHODS.md](AUGMENTATION_METHODS.md) for the generated
+dataset variants.
+
 ## Current Status
 
 See [AGENT_HANDOFF.md](AGENT_HANDOFF.md) for the latest implementation status
@@ -29,4 +32,3 @@ and [EXPERIMENT_TRACKER.md](EXPERIMENT_TRACKER.md) for the experiment log.
 4. Package datasets and configs for remote GPU training.
 5. Run YOLO segmentation experiments.
 6. Collect metrics, logs, model artifacts, and qualitative predictions.
-

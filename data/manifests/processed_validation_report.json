@@ -1,0 +1,120 @@
+{
+  "validated_at_utc": "2026-05-23T08:11:16+00:00",
+  "processed_root": "data\\processed",
+  "class_config": "configs\\classes\\indraeye_seg_active12.yaml",
+  "nc": 12,
+  "methods": {
+    "source_rgb": {
+      "train": {
+        "jpg_images": 2024,
+        "label_files": 2024,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 68414
+      },
+      "val": {
+        "jpg_images": 58,
+        "label_files": 58,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 1196
+      }
+    },
+    "full_gray": {
+      "train": {
+        "jpg_images": 2024,
+        "label_files": 2024,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 68414
+      },
+      "val": {
+        "jpg_images": 58,
+        "label_files": 58,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 1196
+      }
+    },
+    "box_guided_gray": {
+      "train": {
+        "jpg_images": 2024,
+        "label_files": 2024,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 68414
+      },
+      "val": {
+        "jpg_images": 58,
+        "label_files": 58,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 1196
+      }
+    },
+    "mga": {
+      "train": {
+        "jpg_images": 2024,
+        "label_files": 2024,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 68414
+      },
+      "val": {
+        "jpg_images": 58,
+        "label_files": 58,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 1196
+      }
+    },
+    "ba_mga": {
+      "train": {
+        "jpg_images": 2024,
+        "label_files": 2024,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 68414
+      },
+      "val": {
+        "jpg_images": 58,
+        "label_files": 58,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 1196
+      }
+    },
+    "ir_oracle": {
+      "train": {
+        "jpg_images": 2967,
+        "label_files": 2967,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 53191
+      },
+      "val": {
+        "jpg_images": 58,
+        "label_files": 58,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 1196
+      }
+    }
+  },
+  "totals": {
+    "issues": 0,
+    "instances": 402437
+  }
+}

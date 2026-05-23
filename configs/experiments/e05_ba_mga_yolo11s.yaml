@@ -2,7 +2,7 @@ id: E05
 name: ba_mga_yolo11s
 method: ba_mga
 model: yolo11s-seg.pt
-dataset: configs/datasets/indraeye_rgb_to_ir.yaml
+dataset: data/manifests/dataset_yamls/ba_mga.yaml
 train_modality: RGB
 test_modality: IR
 augmentation: boundary_aware_mask_guided_gray
@@ -10,4 +10,3 @@ epochs: 100
 imgsz: 640
 batch: auto
 seed: 42
-

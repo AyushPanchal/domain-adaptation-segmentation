@@ -141,3 +141,6 @@ Copied dataset totals:
 
 Next step: implement augmentation generation for Full Gray, Box-Guided Gray,
 MGA, and BA-MGA.
+
+Update: augmentation generation was completed on 2026-05-23. See
+`AUGMENTATION_METHODS.md` and `data/manifests/augmentation_summary.json`.

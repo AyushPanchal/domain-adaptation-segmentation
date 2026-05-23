@@ -26,7 +26,7 @@ visible-to-thermal object detection.
 - Scaffold status: initialized with docs, config placeholders, source package layout,
   and nested Git repository
 - Dataset copied: yes, matched `.jpg`/`.txt` pairs under `data/raw/indraeye_seg`
-- Augmentation code implemented: no
+- Augmentation code implemented: yes
 - Training runner implemented: no
 - Remote packaging implemented: no
 - Experiments run: none
@@ -41,14 +41,15 @@ visible-to-thermal object detection.
 | 2026-05-23 | Completed initial data discovery | See `DATA_DISCOVERY.md`; prepared YOLO segmentation data exists at `../datasets/indraeye_seg`. |
 | 2026-05-23 | Resolved prepared-label class mapping | Use active 12-class mapping: `0 Bicycle ... 11 Van`; see `configs/classes/indraeye_seg_active12.yaml`. |
 | 2026-05-23 | Copied and validated raw YOLO segmentation pairs | 5108 matched pairs, 125055 instances, 13 skipped unlabeled images, 0 validation issues. |
+| 2026-05-23 | Generated processed augmentation datasets | `source_rgb`, `full_gray`, `box_guided_gray`, `mga`, `ba_mga`, and `ir_oracle`; processed validation has 0 issues. |
 
 ## Next Recommended Actions
 
-1. Implement augmentation generation for Full Gray, Box-Guided Gray, MGA, and BA-MGA.
-2. Generate augmented training datasets under `data/processed/`.
-3. Create YOLO dataset YAMLs pointing to generated data.
-4. Add a smoke-test training command for a tiny run.
-5. Package data/configs/code for Kaggle or college GPU training.
+1. Add the YOLO training runner with live logs/status JSON.
+2. Add a smoke-test training command for a tiny run.
+3. Package data/configs/code for Kaggle or college GPU training.
+4. Run E01/E05 smoke tests remotely or locally if a GPU is available.
+5. Start full E01-E06 `YOLO11s-seg` experiment queue.
 
 ## Latest Data Discovery Summary
 
@@ -72,6 +73,17 @@ visible-to-thermal object detection.
 - EO val: 59 images, 2254 instances
 - IR train: 2967 images, 53191 instances
 - IR val: 58 images, 1196 instances
+
+## Processed Dataset Summary
+
+- Processed root: `data/processed`
+- Generated dataset YAMLs: `data/manifests/dataset_yamls`
+- Methods generated: `source_rgb`, `full_gray`, `box_guided_gray`, `mga`,
+  `ba_mga`, `ir_oracle`
+- Object-region augmentations skip class `4: Ignore`.
+- BA-MGA feather radius: `3.0`
+- Processed validation issues: 0
+- Total instances across generated train/val datasets: 402437
 
 ## Known Constraints
 

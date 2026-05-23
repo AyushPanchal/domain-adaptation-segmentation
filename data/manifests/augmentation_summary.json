@@ -1,0 +1,55 @@
+{
+  "created_at_utc": "2026-05-23T08:05:02+00:00",
+  "raw_root": "data\\raw\\indraeye_seg",
+  "processed_root": "data\\processed",
+  "class_config": "configs\\classes\\indraeye_seg_active12.yaml",
+  "nc": 12,
+  "skip_classes": [
+    4
+  ],
+  "feather_radius": 3.0,
+  "methods": {
+    "source_rgb": {
+      "dataset_yaml": "data\\manifests\\dataset_yamls\\source_rgb.yaml",
+      "train_pairs": 2024,
+      "val_pairs": 58,
+      "train_instances": 68414,
+      "val_instances": 1196
+    },
+    "full_gray": {
+      "dataset_yaml": "data\\manifests\\dataset_yamls\\full_gray.yaml",
+      "train_pairs": 2024,
+      "val_pairs": 58,
+      "train_instances": 68414,
+      "val_instances": 1196
+    },
+    "box_guided_gray": {
+      "dataset_yaml": "data\\manifests\\dataset_yamls\\box_guided_gray.yaml",
+      "train_pairs": 2024,
+      "val_pairs": 58,
+      "train_instances": 68414,
+      "val_instances": 1196
+    },
+    "mga": {
+      "dataset_yaml": "data\\manifests\\dataset_yamls\\mga.yaml",
+      "train_pairs": 2024,
+      "val_pairs": 58,
+      "train_instances": 68414,
+      "val_instances": 1196
+    },
+    "ba_mga": {
+      "dataset_yaml": "data\\manifests\\dataset_yamls\\ba_mga.yaml",
+      "train_pairs": 2024,
+      "val_pairs": 58,
+      "train_instances": 68414,
+      "val_instances": 1196
+    },
+    "ir_oracle": {
+      "dataset_yaml": "data\\manifests\\dataset_yamls\\ir_oracle.yaml",
+      "train_pairs": 2967,
+      "val_pairs": 58,
+      "train_instances": 53191,
+      "val_instances": 1196
+    }
+  }
+}
