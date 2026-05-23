@@ -1,0 +1,48 @@
+{
+  "validated_at_utc": "2026-05-23T06:52:47+00:00",
+  "dataset_root": "data\\raw\\indraeye_seg",
+  "class_config": "configs\\classes\\indraeye_seg_active12.yaml",
+  "nc": 12,
+  "domains": {
+    "eo": {
+      "train": {
+        "jpg_images": 2024,
+        "label_files": 2024,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 68414
+      },
+      "val": {
+        "jpg_images": 59,
+        "label_files": 59,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 2254
+      }
+    },
+    "ir": {
+      "train": {
+        "jpg_images": 2967,
+        "label_files": 2967,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 53191
+      },
+      "val": {
+        "jpg_images": 58,
+        "label_files": 58,
+        "missing_labels": 0,
+        "orphan_labels": 0,
+        "invalid_labels": 0,
+        "instances": 1196
+      }
+    }
+  },
+  "totals": {
+    "issues": 0,
+    "instances": 125055
+  }
+}

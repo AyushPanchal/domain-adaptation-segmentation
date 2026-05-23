@@ -124,10 +124,20 @@ dataset, stored in `configs/classes/indraeye_seg_active12.yaml`.
 
 ## Recommended Next Step
 
-Implement a validation script that:
+Completed on 2026-05-23:
 
-1. Copies only matched `.jpg`/`.txt` pairs into the new repo.
-2. Records skipped files and checksum metadata.
-3. Computes class counts per split.
-4. Validates polygon coordinates are normalized in `[0, 1]`.
-5. Fails loudly if class IDs exceed the selected class mapping.
+1. Added a copy script for matched `.jpg`/`.txt` pairs.
+2. Copied the prepared dataset into `data/raw/indraeye_seg`.
+3. Wrote copied/skipped/checksum/class-count manifests into `data/manifests`.
+4. Validated polygon coordinates, class IDs, and image/label pairing.
+5. Confirmed zero validation issues after copying.
+
+Copied dataset totals:
+
+- Copied pairs: 5108
+- Skipped unlabeled images: 13
+- Instances: 125055
+- Validation issues: 0
+
+Next step: implement augmentation generation for Full Gray, Box-Guided Gray,
+MGA, and BA-MGA.

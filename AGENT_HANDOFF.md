@@ -25,7 +25,7 @@ visible-to-thermal object detection.
 - Repository directory: `domain-adaptation-segmentation`
 - Scaffold status: initialized with docs, config placeholders, source package layout,
   and nested Git repository
-- Dataset copied: no
+- Dataset copied: yes, matched `.jpg`/`.txt` pairs under `data/raw/indraeye_seg`
 - Augmentation code implemented: no
 - Training runner implemented: no
 - Remote packaging implemented: no
@@ -40,14 +40,15 @@ visible-to-thermal object detection.
 | 2026-05-22 | Initialized nested Git repository | First `git init` hit a stale lock; `.git/config.lock` was removed and init succeeded. |
 | 2026-05-23 | Completed initial data discovery | See `DATA_DISCOVERY.md`; prepared YOLO segmentation data exists at `../datasets/indraeye_seg`. |
 | 2026-05-23 | Resolved prepared-label class mapping | Use active 12-class mapping: `0 Bicycle ... 11 Van`; see `configs/classes/indraeye_seg_active12.yaml`. |
+| 2026-05-23 | Copied and validated raw YOLO segmentation pairs | 5108 matched pairs, 125055 instances, 13 skipped unlabeled images, 0 validation issues. |
 
 ## Next Recommended Actions
 
-1. Add dataset validation and copy scripts.
-2. Copy only matched `.jpg`/`.txt` pairs into the new repository.
-3. Generate manifests for copied/skipped files and class counts.
-4. Commit the dataset tooling and copied-data manifests.
-5. Implement augmentation generation.
+1. Implement augmentation generation for Full Gray, Box-Guided Gray, MGA, and BA-MGA.
+2. Generate augmented training datasets under `data/processed/`.
+3. Create YOLO dataset YAMLs pointing to generated data.
+4. Add a smoke-test training command for a tiny run.
+5. Package data/configs/code for Kaggle or college GPU training.
 
 ## Latest Data Discovery Summary
 
@@ -58,6 +59,19 @@ visible-to-thermal object detection.
 - Important caveat: existing EO/IR YAML class mappings disagree in the parent
   workspace. This repo now uses the verified prepared-label mapping in
   `configs/classes/indraeye_seg_active12.yaml`.
+
+## Copied Dataset Summary
+
+- Raw copy root: `data/raw/indraeye_seg`
+- Manifest root: `data/manifests`
+- Copied pairs: 5108
+- Skipped records: 13
+- Validation issues: 0
+- Instances: 125055
+- EO train: 2024 images, 68414 instances
+- EO val: 59 images, 2254 instances
+- IR train: 2967 images, 53191 instances
+- IR val: 58 images, 1196 instances
 
 ## Known Constraints
 
