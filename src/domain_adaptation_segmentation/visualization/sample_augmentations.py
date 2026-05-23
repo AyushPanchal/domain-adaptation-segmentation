@@ -44,6 +44,19 @@ def read_label_classes(label_path: Path) -> Counter[int]:
     return counts
 
 
+def read_label_points(label_path: Path) -> list[tuple[int, list[tuple[float, float]]]]:
+    instances: list[tuple[int, list[tuple[float, float]]]] = []
+    for line in label_path.read_text(encoding="utf-8").splitlines():
+        parts = line.strip().split()
+        if not parts:
+            continue
+        class_id = int(float(parts[0]))
+        coords = [float(value) for value in parts[1:]]
+        points = list(zip(coords[0::2], coords[1::2]))
+        instances.append((class_id, points))
+    return instances
+
+
 def choose_samples(label_dir: Path, limit: int) -> list[Candidate]:
     candidates: list[Candidate] = []
     for label_path in sorted(label_dir.glob("*.txt")):
@@ -152,6 +165,58 @@ def make_overview_sheet(image_paths: list[Path], output_path: Path, max_width: i
     sheet.save(output_path, quality=95)
 
 
+def crop_box_from_label(label_path: Path, image_size: tuple[int, int], padding_ratio: float) -> tuple[int, int, int, int]:
+    width, height = image_size
+    xs: list[float] = []
+    ys: list[float] = []
+    for class_id, points in read_label_points(label_path):
+        if class_id == 4:
+            continue
+        for x_norm, y_norm in points:
+            xs.append(x_norm * width)
+            ys.append(y_norm * height)
+    if not xs or not ys:
+        return (0, 0, width, height)
+
+    x1, x2 = min(xs), max(xs)
+    y1, y2 = min(ys), max(ys)
+    pad = padding_ratio * max(x2 - x1, y2 - y1)
+    left = max(int(x1 - pad), 0)
+    top = max(int(y1 - pad), 0)
+    right = min(int(x2 + pad), width)
+    bottom = min(int(y2 + pad), height)
+    if right <= left or bottom <= top:
+        return (0, 0, width, height)
+    return (left, top, right, bottom)
+
+
+def save_individual_method_images(
+    processed_root: Path,
+    raw_label_dir: Path,
+    candidate: Candidate,
+    output_dir: Path,
+    crop_padding_ratio: float,
+) -> list[Path]:
+    output_paths: list[Path] = []
+    sample_dir = output_dir / candidate.stem
+    sample_dir.mkdir(parents=True, exist_ok=True)
+    label_path = raw_label_dir / f"{candidate.stem}.txt"
+
+    source_image = Image.open(processed_root / "source_rgb" / "images" / "train" / f"{candidate.stem}.jpg")
+    crop_box = crop_box_from_label(label_path, source_image.size, crop_padding_ratio)
+
+    for method in METHODS:
+        image_path = processed_root / method / "images" / "train" / f"{candidate.stem}.jpg"
+        image = Image.open(image_path).convert("RGB")
+        full_out = sample_dir / f"{method}_full.jpg"
+        crop_out = sample_dir / f"{method}_crop.jpg"
+        image.save(full_out, quality=95)
+        image.crop(crop_box).save(crop_out, quality=95)
+        output_paths.extend([full_out, crop_out])
+
+    return output_paths
+
+
 def make_ir_oracle_sheet(
     processed_root: Path,
     label_dir: Path,
@@ -195,6 +260,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--limit", type=int, default=4)
     parser.add_argument("--tile-width", type=int, default=320)
     parser.add_argument("--tile-height", type=int, default=220)
+    parser.add_argument("--crop-padding-ratio", type=float, default=0.08)
     return parser.parse_args()
 
 
@@ -226,6 +292,24 @@ def main() -> None:
                 "instances": candidate.instances,
             }
         )
+        for path in save_individual_method_images(
+            processed_root=args.processed_root,
+            raw_label_dir=eo_label_dir,
+            candidate=candidate,
+            output_dir=args.output_dir / "individual",
+            crop_padding_ratio=args.crop_padding_ratio,
+        ):
+            rows.append(
+                {
+                    "kind": "individual_method_image",
+                    "path": str(path),
+                    "stem": candidate.stem,
+                    "classes": "|".join(
+                        CLASS_NAMES[class_id] for class_id in sorted(candidate.classes)
+                    ),
+                    "instances": candidate.instances,
+                }
+            )
 
     overview_path = args.output_dir / "augmentation_comparison_overview.jpg"
     make_overview_sheet(comparison_paths, overview_path)
@@ -263,4 +347,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
