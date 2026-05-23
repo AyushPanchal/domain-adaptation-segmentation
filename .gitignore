@@ -24,8 +24,10 @@ data/processed/
 # Training runs: keep summaries through explicit force-add if needed
 runs/
 
+# Local packages for upload
+artifacts/
+
 # Local/editor files
 .idea/
 .vscode/
 *.log
-

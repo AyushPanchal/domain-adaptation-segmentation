@@ -27,8 +27,8 @@ visible-to-thermal object detection.
   and nested Git repository
 - Dataset copied: yes, matched `.jpg`/`.txt` pairs under `data/raw/indraeye_seg`
 - Augmentation code implemented: yes
-- Training runner implemented: no
-- Remote packaging implemented: no
+- Training runner implemented: yes, with status/log/result collection helpers
+- Remote packaging implemented: yes, Kaggle package script added
 - Experiments run: none
 
 ## Completed Steps
@@ -42,14 +42,16 @@ visible-to-thermal object detection.
 | 2026-05-23 | Resolved prepared-label class mapping | Use active 12-class mapping: `0 Bicycle ... 11 Van`; see `configs/classes/indraeye_seg_active12.yaml`. |
 | 2026-05-23 | Copied and validated raw YOLO segmentation pairs | 5108 matched pairs, 125055 instances, 13 skipped unlabeled images, 0 validation issues. |
 | 2026-05-23 | Generated processed augmentation datasets | `source_rgb`, `full_gray`, `box_guided_gray`, `mga`, `ba_mga`, and `ir_oracle`; processed validation has 0 issues. |
+| 2026-05-23 | Added Kaggle training runner and packaging workflow | Use `KAGGLE_TRAINING.md`; package ZIP is generated locally under `artifacts/kaggle/`. |
+| 2026-05-23 | Built Kaggle upload ZIP locally | `artifacts/kaggle/domain-adaptation-segmentation-kaggle.zip`, 26926 files, about 3.52 GB. |
 
 ## Next Recommended Actions
 
-1. Add the YOLO training runner with live logs/status JSON.
-2. Add a smoke-test training command for a tiny run.
-3. Package data/configs/code for Kaggle or college GPU training.
-4. Run E01/E05 smoke tests remotely or locally if a GPU is available.
-5. Start full E01-E06 `YOLO11s-seg` experiment queue.
+1. Create/upload the Kaggle ZIP package.
+2. Run `scripts/remote/kaggle_smoke_test.sh` on Kaggle T4.
+3. Pull back smoke-test logs if it fails; otherwise run E01-E06 queue.
+4. After E01-E06 completes, run E07-E08 large-model experiments.
+5. Collect `reports/tables/summary_results.csv` and model outputs.
 
 ## Latest Data Discovery Summary
 
