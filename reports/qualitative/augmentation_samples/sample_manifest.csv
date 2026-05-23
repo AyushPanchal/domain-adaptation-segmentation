@@ -1,0 +1,6 @@
+kind,path,stem,classes,instances
+augmentation_comparison,reports\qualitative\augmentation_samples\day_eo_hebbal_03052024_frame_69790_augmentation_comparison.jpg,day_eo_hebbal_03052024_frame_69790,Bicycle|Bus|Car|Cargo trike|Ignore|Motorcycle|Person|Rickshaw|Small truck|Truck|Van,184
+augmentation_comparison,reports\qualitative\augmentation_samples\day_eo_hebbal_03052024_frame_80640_augmentation_comparison.jpg,day_eo_hebbal_03052024_frame_80640,Bus|Car|Cargo trike|Ignore|Motorcycle|Person|Rickshaw|Small truck|Tractor|Truck|Van,166
+augmentation_comparison,reports\qualitative\augmentation_samples\night_eo_hebbal_nvrec_12_frame_0000_augmentation_comparison.jpg,night_eo_hebbal_nvrec_12_frame_0000,Bus|Car|Cargo trike|Ignore|Motorcycle|Person|Rickshaw|Small truck|Truck|Van,261
+augmentation_overview,reports\qualitative\augmentation_samples\augmentation_comparison_overview.jpg,,,
+ir_oracle_samples,reports\qualitative\augmentation_samples\ir_oracle_samples.jpg,,,
