@@ -38,15 +38,24 @@ visible-to-thermal object detection.
 | 2026-05-22 | Created project scaffold | Directory structure and initial docs added. |
 | 2026-05-22 | Added experiment config placeholders | E01-E08 are represented under `configs/experiments/`. |
 | 2026-05-22 | Initialized nested Git repository | First `git init` hit a stale lock; `.git/config.lock` was removed and init succeeded. |
+| 2026-05-23 | Completed initial data discovery | See `DATA_DISCOVERY.md`; prepared YOLO segmentation data exists at `../datasets/indraeye_seg`. |
 
 ## Next Recommended Actions
 
-1. Inspect the current workspace to locate IndraEye RGB/IR segmentation images,
-   labels, and split files.
-2. Define the exact raw data copy plan.
-3. Add dataset validation and summary scripts.
-4. Add experiment config files.
-5. Make the first Git commit after reviewing the scaffold.
+1. Resolve/confirm the correct class mapping for EO and IR segmentation labels.
+2. Add dataset validation and copy scripts.
+3. Copy only matched `.jpg`/`.txt` pairs into the new repository.
+4. Generate manifests for copied/skipped files and class counts.
+5. Commit the dataset tooling and discovery notes.
+
+## Latest Data Discovery Summary
+
+- Best candidate source: `../datasets/indraeye_seg`
+- Labels are already YOLO segmentation polygon files.
+- Image folders include both `.jpg` and `.json`; copy `.jpg` and `.txt` pairs.
+- A small number of images have no matching labels.
+- Important caveat: existing EO/IR YAML class mappings disagree; resolve before
+  training.
 
 ## Known Constraints
 
