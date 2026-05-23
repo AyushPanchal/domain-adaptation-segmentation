@@ -1,0 +1,28 @@
+# Canonical class mapping for the prepared YOLO segmentation dataset.
+#
+# Applies to:
+#   ../datasets/indraeye_seg/{eo,ir}/labels/{train,val}
+#
+# Important:
+# - This mapping is for the prepared segmentation labels, not the original
+#   IndraEye COCO category IDs.
+# - Prepared labels currently contain class IDs 0-11 only.
+# - Backhoe loader is present in the original COCO categories but does not
+#   appear as class 12 in the prepared YOLO segmentation labels inspected on
+#   2026-05-23.
+
+nc: 12
+names:
+  0: Bicycle
+  1: Bus
+  2: Car
+  3: Cargo trike
+  4: Ignore
+  5: Motorcycle
+  6: Person
+  7: Rickshaw
+  8: Small truck
+  9: Tractor
+  10: Truck
+  11: Van
+

@@ -39,14 +39,15 @@ visible-to-thermal object detection.
 | 2026-05-22 | Added experiment config placeholders | E01-E08 are represented under `configs/experiments/`. |
 | 2026-05-22 | Initialized nested Git repository | First `git init` hit a stale lock; `.git/config.lock` was removed and init succeeded. |
 | 2026-05-23 | Completed initial data discovery | See `DATA_DISCOVERY.md`; prepared YOLO segmentation data exists at `../datasets/indraeye_seg`. |
+| 2026-05-23 | Resolved prepared-label class mapping | Use active 12-class mapping: `0 Bicycle ... 11 Van`; see `configs/classes/indraeye_seg_active12.yaml`. |
 
 ## Next Recommended Actions
 
-1. Resolve/confirm the correct class mapping for EO and IR segmentation labels.
-2. Add dataset validation and copy scripts.
-3. Copy only matched `.jpg`/`.txt` pairs into the new repository.
-4. Generate manifests for copied/skipped files and class counts.
-5. Commit the dataset tooling and discovery notes.
+1. Add dataset validation and copy scripts.
+2. Copy only matched `.jpg`/`.txt` pairs into the new repository.
+3. Generate manifests for copied/skipped files and class counts.
+4. Commit the dataset tooling and copied-data manifests.
+5. Implement augmentation generation.
 
 ## Latest Data Discovery Summary
 
@@ -54,8 +55,9 @@ visible-to-thermal object detection.
 - Labels are already YOLO segmentation polygon files.
 - Image folders include both `.jpg` and `.json`; copy `.jpg` and `.txt` pairs.
 - A small number of images have no matching labels.
-- Important caveat: existing EO/IR YAML class mappings disagree; resolve before
-  training.
+- Important caveat: existing EO/IR YAML class mappings disagree in the parent
+  workspace. This repo now uses the verified prepared-label mapping in
+  `configs/classes/indraeye_seg_active12.yaml`.
 
 ## Known Constraints
 

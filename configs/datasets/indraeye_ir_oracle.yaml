@@ -14,19 +14,17 @@ labels:
   val: ${DATA_ROOT:data/processed}/ir_val/labels
   test: ${DATA_ROOT:data/processed}/ir_test/labels
 
-# TODO: Fill from validated IndraEye class mapping.
+nc: 12
 names:
-  0: backhoe_loader
-  1: bicycle
-  2: bus
-  3: car
-  4: cargo_trike
-  5: ignore
-  6: motorcycle
-  7: person
-  8: rickshaw
-  9: small_truck
-  10: tractor
-  11: truck
-  12: van
-
+  0: Bicycle
+  1: Bus
+  2: Car
+  3: Cargo trike
+  4: Ignore
+  5: Motorcycle
+  6: Person
+  7: Rickshaw
+  8: Small truck
+  9: Tractor
+  10: Truck
+  11: Van

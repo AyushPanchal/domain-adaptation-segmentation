@@ -83,18 +83,44 @@ all skipped images into a manifest.
 | IR | train | 2967 | 53191 | 0-11 |
 | IR | val | 58 | 1196 | 0-11 |
 
-## Class Mapping Caveat
+## Class Mapping Decision
 
-The existing YAML files disagree:
+The existing YAML files in the parent workspace disagree:
 
 - `indraeye_eo_seg.yaml` maps class `0` to `Bicycle` and includes `Ignore`.
 - `indraeye_ir_seg.yaml` maps class `0` to `Backhoe loader` and drops `Ignore`.
 - `indraeye_mixed_seg.yaml` uses 13 names and adds `Backhoe loader` as class `12`.
 
-Before training, we must define one consistent 12-class or 13-class mapping and
-verify it against the original conversion scripts or annotation JSON files.
+The prepared YOLO segmentation labels in `../datasets/indraeye_seg` contain
+class IDs `0-11`, not `12`. This matches the corrected Phase 3 mapping:
 
-This is the highest-risk data issue discovered so far.
+```text
+0: Bicycle
+1: Bus
+2: Car
+3: Cargo trike
+4: Ignore
+5: Motorcycle
+6: Person
+7: Rickshaw
+8: Small truck
+9: Tractor
+10: Truck
+11: Van
+```
+
+Verification checks:
+
+- `../phase3_ensemble/AI_HANDOFF.md` warns that the corrected mapping is
+  `0: Bicycle ... 11: Van, 12: Backhoe loader`.
+- The local prepared labels currently contain only `0-11`.
+- A sample file with YOLO class IDs `[2, 4, 5, 6, 7, 10]` has JSON labels
+  including `car`, `ignore`, `motorcycle`, `person`, `rickshaw`, and `truck`.
+- A sample file containing YOLO class ID `0` has JSON labels including
+  `bicycle`.
+
+Decision for this repository: use a 12-class active mapping for the prepared
+dataset, stored in `configs/classes/indraeye_seg_active12.yaml`.
 
 ## Recommended Next Step
 
@@ -105,4 +131,3 @@ Implement a validation script that:
 3. Computes class counts per split.
 4. Validates polygon coordinates are normalized in `[0, 1]`.
 5. Fails loudly if class IDs exceed the selected class mapping.
-
