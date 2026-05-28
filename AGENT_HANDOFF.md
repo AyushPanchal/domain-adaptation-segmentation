@@ -44,14 +44,15 @@ visible-to-thermal object detection.
 | 2026-05-23 | Generated processed augmentation datasets | `source_rgb`, `full_gray`, `box_guided_gray`, `mga`, `ba_mga`, and `ir_oracle`; processed validation has 0 issues. |
 | 2026-05-23 | Added Kaggle training runner and packaging workflow | Use `KAGGLE_TRAINING.md`; package ZIP is generated locally under `artifacts/kaggle/`. |
 | 2026-05-23 | Built Kaggle upload ZIP locally | `artifacts/kaggle/domain-adaptation-segmentation-kaggle.zip`, 26926 files, about 3.52 GB. |
+| 2026-05-28 | Added HPC training workflow | Use `HPC_TRAINING.md` and `scripts/remote/hpc_*.sh` after pulling on the cluster. |
 
 ## Next Recommended Actions
 
-1. Create/upload the Kaggle ZIP package.
-2. Run `scripts/remote/kaggle_smoke_test.sh` on Kaggle T4.
-3. Pull back smoke-test logs if it fails; otherwise run E01-E06 queue.
-4. After E01-E06 completes, run E07-E08 large-model experiments.
-5. Collect `reports/tables/summary_results.csv` and model outputs.
+1. On HPC, pull latest code and run `bash scripts/remote/hpc_check.sh`.
+2. Run `bash scripts/remote/hpc_smoke_test.sh`.
+3. If smoke test passes, run `bash scripts/remote/hpc_run_e01_to_e06.sh`.
+4. After E01-E06 completes, run `bash scripts/remote/hpc_run_e07_e08.sh`.
+5. Bring back `runs/` and `reports/` with WinSCP.
 
 ## Latest Data Discovery Summary
 
