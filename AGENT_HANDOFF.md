@@ -45,13 +45,14 @@ visible-to-thermal object detection.
 | 2026-05-23 | Added Kaggle training runner and packaging workflow | Use `KAGGLE_TRAINING.md`; package ZIP is generated locally under `artifacts/kaggle/`. |
 | 2026-05-23 | Built Kaggle upload ZIP locally | `artifacts/kaggle/domain-adaptation-segmentation-kaggle.zip`, 26926 files, about 3.52 GB. |
 | 2026-05-28 | Added HPC training workflow | Use `HPC_TRAINING.md` and `scripts/remote/hpc_*.sh` after pulling on the cluster. |
+| 2026-05-28 | Added Slurm batch wrappers | Use `scripts/remote/slurm_*.sbatch`; they follow the SVNIT manual GPU pattern with `--partition=gpu` and `--gres=shard:1`. |
 
 ## Next Recommended Actions
 
 1. On HPC, pull latest code and run `bash scripts/remote/hpc_check.sh`.
-2. Run `bash scripts/remote/hpc_smoke_test.sh`.
-3. If smoke test passes, run `bash scripts/remote/hpc_run_e01_to_e06.sh`.
-4. After E01-E06 completes, run `bash scripts/remote/hpc_run_e07_e08.sh`.
+2. Submit smoke test with `sbatch scripts/remote/slurm_smoke.sbatch`.
+3. If smoke test passes, submit `sbatch scripts/remote/slurm_e01_to_e06.sbatch`.
+4. After E01-E06 completes, submit `sbatch scripts/remote/slurm_e07_e08.sbatch`.
 5. Bring back `runs/` and `reports/` with WinSCP.
 
 ## Latest Data Discovery Summary

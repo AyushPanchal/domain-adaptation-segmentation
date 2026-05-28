@@ -27,7 +27,12 @@ runs/
 # Local packages for upload
 artifacts/
 
+# Local reference documents
+misc/
+
 # Local/editor files
 .idea/
 .vscode/
 *.log
+logs/*.out
+logs/*.err

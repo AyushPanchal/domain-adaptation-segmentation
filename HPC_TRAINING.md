@@ -42,7 +42,21 @@ This verifies:
 
 ## 4. Smoke Test
 
-Run one epoch of E01:
+The SVNIT manual says GPU jobs should run through Slurm. Prefer `sbatch`:
+
+```bash
+sbatch scripts/remote/slurm_smoke.sbatch
+squeue
+```
+
+Watch logs:
+
+```bash
+tail -f logs/mga_smoke_<jobid>.out
+tail -f logs/mga_smoke_<jobid>.err
+```
+
+If you are inside an allocated GPU job and need to run manually, use:
 
 ```bash
 export YOLO_DEVICE=0
@@ -69,6 +83,19 @@ runs/experiments/E01_source_rgb_yolo11s/results.csv
 After the smoke test passes:
 
 ```bash
+sbatch scripts/remote/slurm_e01_to_e06.sbatch
+squeue
+```
+
+To watch:
+
+```bash
+tail -f logs/mga_e01_e06_<jobid>.out
+```
+
+The underlying direct command is:
+
+```bash
 export YOLO_DEVICE=0
 export YOLO_BATCH=16
 export YOLO_WORKERS=4
@@ -84,9 +111,40 @@ export YOLO_BATCH=8
 After E01-E06 complete, run the large model comparison:
 
 ```bash
+sbatch scripts/remote/slurm_e07_e08.sbatch
+```
+
+Underlying direct command:
+
+```bash
 export YOLO_DEVICE=0
 export YOLO_BATCH=8
 bash scripts/remote/hpc_run_e07_e08.sh
+```
+
+## Slurm Notes
+
+The batch scripts use:
+
+```text
+#SBATCH --partition=gpu
+#SBATCH --gres=shard:1
+#SBATCH --cpus-per-task=12
+```
+
+The user manual FAQ says not to explicitly specify a node number, so the scripts
+do not use `--nodelist`.
+
+The default conda environment name is:
+
+```text
+base
+```
+
+Override it at submit time if your environment has another name:
+
+```bash
+CONDA_ENV=my_env sbatch scripts/remote/slurm_smoke.sbatch
 ```
 
 ## 6. Bring Results Back
@@ -104,4 +162,3 @@ Git should only be used for small summaries such as:
 reports/tables/summary_results.csv
 reports/tables/summary_results.json
 ```
-
