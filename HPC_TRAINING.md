@@ -40,6 +40,19 @@ This verifies:
 - GPU visibility
 - Ultralytics import
 
+If `git` is not available inside a compute job, the check script will skip the
+commit check. That is okay.
+
+If PyTorch fails with an error involving `libcusparse.so.12` and
+`__nvJitLinkAddData`, the Slurm scripts try to prefer conda's bundled
+`nvjitlink` library automatically. If it still fails, create/use a clean conda
+environment with a PyTorch build matching the cluster CUDA module, then submit
+with:
+
+```bash
+CONDA_ENV=<your_env_name> sbatch scripts/remote/slurm_smoke.sbatch
+```
+
 ## 4. Smoke Test
 
 The SVNIT manual says GPU jobs should run through Slurm. Prefer `sbatch`:

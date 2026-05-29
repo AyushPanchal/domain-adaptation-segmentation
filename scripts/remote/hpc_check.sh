@@ -9,7 +9,11 @@ echo "[HPC CHECK] python: $(command -v python)"
 python --version
 
 echo "[HPC CHECK] git commit:"
-git rev-parse --short HEAD
+if command -v git >/dev/null 2>&1; then
+  git rev-parse --short HEAD
+else
+  echo "git not found on this compute node; skipping commit check"
+fi
 
 echo "[HPC CHECK] checking required paths..."
 test -d data/processed
@@ -32,12 +36,15 @@ fi
 echo "[HPC CHECK] ultralytics import:"
 python - <<'PY'
 try:
+    import torch
+    print("torch", torch.__version__)
+    print("cuda available", torch.cuda.is_available())
+    print("cuda devices", torch.cuda.device_count())
     import ultralytics
     print("ultralytics", ultralytics.__version__)
 except Exception as exc:
-    print("ultralytics import failed:", exc)
+    print("python dependency import failed:", exc)
     raise
 PY
 
 echo "[HPC CHECK] OK"
-

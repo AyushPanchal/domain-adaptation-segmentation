@@ -23,6 +23,20 @@ cd "${SLURM_SUBMIT_DIR:-$PWD}"
 source /apps/compilers/anaconda3-24.2/etc/profile.d/conda.sh
 conda activate "${CONDA_ENV:-base}"
 
+# Prefer conda/PyTorch CUDA helper libraries over older system copies.
+NVJITLINK_DIR="$(python - <<'PY'
+from pathlib import Path
+import sys
+root = Path(sys.prefix)
+candidates = list(root.glob("lib/python*/site-packages/nvidia/nvjitlink/lib"))
+print(candidates[0] if candidates else "")
+PY
+)"
+if [ -n "$NVJITLINK_DIR" ]; then
+  export LD_LIBRARY_PATH="$NVJITLINK_DIR:${LD_LIBRARY_PATH:-}"
+  echo "nvJitLink: $NVJITLINK_DIR"
+fi
+
 echo "Python   : $(which python)"
 python --version
 python - <<'PY'
