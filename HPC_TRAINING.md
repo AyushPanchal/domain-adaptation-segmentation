@@ -74,6 +74,15 @@ The Slurm wrappers export `PYTHONNOUSERSITE=1` after conda activation so the
 job does not accidentally load packages from `~/.local` instead of the selected
 conda environment.
 
+For the `domainseg` environment used during May 2026 HPC setup, Torch was
+installed as `torch==2.5.1+cu124`; install the matching TorchVision wheel with:
+
+```bash
+python -m pip install --force-reinstall --no-cache-dir \
+  torchvision==0.20.1+cu124 \
+  --index-url https://download.pytorch.org/whl/cu124
+```
+
 ## 4. Smoke Test
 
 The SVNIT manual says GPU jobs should run through Slurm. Prefer `sbatch`:
