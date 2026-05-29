@@ -23,30 +23,9 @@ cd "${SLURM_SUBMIT_DIR:-$PWD}"
 source /apps/compilers/anaconda3-24.2/etc/profile.d/conda.sh
 conda activate "${CONDA_ENV:-base}"
 
-# Prefer conda/PyTorch CUDA helper libraries over older system copies.
-NVJITLINK_DIR="$(python - <<'PY'
-from pathlib import Path
-import sys
-root = Path(sys.prefix)
-candidates = list(root.glob("lib/python*/site-packages/nvidia/nvjitlink/lib"))
-print(candidates[0] if candidates else "")
-PY
-)"
-if [ -n "$NVJITLINK_DIR" ]; then
-  export LD_LIBRARY_PATH="$NVJITLINK_DIR:${LD_LIBRARY_PATH:-}"
-  echo "nvJitLink: $NVJITLINK_DIR"
-fi
-
-echo "Python   : $(which python)"
-python --version
-python - <<'PY'
-try:
-    import torch
-    print("Torch    :", torch.__version__)
-    print("CUDA     :", torch.cuda.is_available(), torch.cuda.device_count())
-except Exception as exc:
-    print("Torch import failed:", exc)
-PY
+source scripts/remote/hpc_cuda_env.sh
+setup_conda_cuda_paths
+print_python_gpu_diagnostics
 
 export REPO_ROOT="$PWD"
 export PYTHONPATH="$PWD/src"
