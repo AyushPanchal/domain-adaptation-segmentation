@@ -28,6 +28,7 @@ print_python_gpu_diagnostics() {
   python --version
   echo "Conda env: ${CONDA_DEFAULT_ENV:-unknown}"
   echo "Conda prefix: ${CONDA_PREFIX:-unknown}"
+  echo "PYTHONNOUSERSITE: ${PYTHONNOUSERSITE:-<unset>}"
   echo "LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:-<empty>}"
 
   echo "nvidia-smi:"

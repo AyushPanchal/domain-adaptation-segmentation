@@ -22,6 +22,7 @@ cd "${SLURM_SUBMIT_DIR:-$PWD}"
 
 source /apps/compilers/anaconda3-24.2/etc/profile.d/conda.sh
 conda activate "${CONDA_ENV:-base}"
+export PYTHONNOUSERSITE=1
 
 source scripts/remote/hpc_cuda_env.sh
 setup_conda_cuda_paths

@@ -70,6 +70,10 @@ If `nvidia-smi` fails even before conda activation or with an empty
 `LD_LIBRARY_PATH`, it is likely a cluster driver/user-library mismatch on the
 allocated node and should be reported to the HPC admin.
 
+The Slurm wrappers export `PYTHONNOUSERSITE=1` after conda activation so the
+job does not accidentally load packages from `~/.local` instead of the selected
+conda environment.
+
 ## 4. Smoke Test
 
 The SVNIT manual says GPU jobs should run through Slurm. Prefer `sbatch`:
