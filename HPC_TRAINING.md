@@ -123,7 +123,18 @@ runs/experiments/E01_source_rgb_yolo11s/results.csv
 
 ## 5. Main Runs
 
-After the smoke test passes:
+After the smoke test passes, prefer single-experiment jobs first. They are
+easier to resume if Slurm cancels a job:
+
+```bash
+CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=2 YOLO_WORKERS=2 \
+EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml \
+sbatch --exclude=node1 scripts/remote/slurm_single_experiment.sbatch
+```
+
+Repeat by changing `EXPERIMENT_CONFIG` for E02-E06.
+
+To submit the whole E01-E06 queue in one job:
 
 ```bash
 CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=8 YOLO_WORKERS=8 sbatch --exclude=node1 scripts/remote/slurm_e01_to_e06.sbatch
