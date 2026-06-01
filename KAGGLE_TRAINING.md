@@ -81,22 +81,41 @@ For the Kaggle trial, use the notebook:
 notebooks/kaggle_one_experiment_e01.ipynb
 ```
 
-It extracts the uploaded project ZIP, installs dependencies, runs only E01, and
-packages `/kaggle/working/runs` plus `reports` into:
+It is a single-notebook workflow for one experiment. It:
+
+- runs a smoke test first with `RUN_STAGE="smoke"`
+- switches to the full 100-epoch run later with `RUN_STAGE="full"`
+- streams logs live in each notebook cell
+- prints `status.json`, the latest `results.csv` rows, and key mask/box metrics
+- packages run outputs and report tables at the end
+
+For Kaggle, the final zip is exposed as a notebook file/link. For Colab, the
+same final cell calls `google.colab.files.download(...)` to start a browser
+download automatically.
+
+The Kaggle smoke result zip is:
 
 ```text
-/kaggle/working/kaggle_single_e01_results.zip
+/kaggle/working/smoke_e01_results.zip
 ```
 
-Default settings are conservative for Kaggle T4:
+The Kaggle full-run result zip is:
+
+```text
+/kaggle/working/full_e01_results.zip
+```
+
+Default settings are conservative for T4:
 
 ```text
 EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml
-OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01
+OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01_smoke  # smoke
+OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01_full   # full
 YOLO_DEVICE=0
 YOLO_BATCH=8
 YOLO_WORKERS=2
-YOLO_EPOCHS=100
+YOLO_EPOCHS=1    # smoke
+YOLO_EPOCHS=100  # full
 YOLO_RESUME=auto
 ```
 
