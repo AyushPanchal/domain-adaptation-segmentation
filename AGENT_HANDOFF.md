@@ -59,6 +59,7 @@ visible-to-thermal object detection.
 | 2026-06-01 | Hardened experiment runner paths and startup failures | Relative `--output-root` is now resolved under the repo root, preventing nested Ultralytics `runs/segment/runs/...` paths. If `yolo` cannot start, `status.json` is marked failed instead of staying in running state. |
 | 2026-06-01 | Added single-job serial Slurm queue | Use `bash scripts/remote/submit_yolo11s_serial_queue.sh`; it submits only one Slurm job and runs E01-E06 sequentially inside it. This avoids `AssocMaxSubmitJobLimit` on clusters that count array tasks against the submit quota. |
 | 2026-06-01 | Added checkpoint resume support | `run_experiment.py` supports `--resume` and `--resume-if-available`; `slurm_single_experiment.sbatch` defaults to `YOLO_RESUME=auto`. Re-submit the same experiment with the same `OUTPUT_ROOT` after cluster cancellation to continue from `ultralytics/train/weights/last.pt`. |
+| 2026-06-02 | Added Kaggle one-experiment workflow | Use `notebooks/kaggle_one_experiment_e01.ipynb` or `scripts/remote/kaggle_run_one_experiment.sh` to run only E01 on Kaggle. Defaults are T4-safe: device 0, batch 8, workers 2, 100 epochs, resume auto. |
 
 ## Next Recommended Actions
 

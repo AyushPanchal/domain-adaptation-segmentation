@@ -73,6 +73,52 @@ Watch progress in the notebook output or inspect:
 /kaggle/working/runs/experiments/E01_source_rgb_yolo11s/stdout.log
 ```
 
+## One Full Experiment First
+
+For the Kaggle trial, use the notebook:
+
+```text
+notebooks/kaggle_one_experiment_e01.ipynb
+```
+
+It extracts the uploaded project ZIP, installs dependencies, runs only E01, and
+packages `/kaggle/working/runs` plus `reports` into:
+
+```text
+/kaggle/working/kaggle_single_e01_results.zip
+```
+
+Default settings are conservative for Kaggle T4:
+
+```text
+EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml
+OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01
+YOLO_DEVICE=0
+YOLO_BATCH=8
+YOLO_WORKERS=2
+YOLO_EPOCHS=100
+YOLO_RESUME=auto
+```
+
+The same run can also be launched from a notebook cell or Kaggle terminal:
+
+```bash
+cd /kaggle/working/domain-adaptation-segmentation
+export OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01
+export EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml
+export YOLO_DEVICE=0
+export YOLO_BATCH=8
+export YOLO_WORKERS=2
+export YOLO_EPOCHS=100
+export YOLO_PATIENCE=25
+export YOLO_RESUME=auto
+bash scripts/remote/kaggle_run_one_experiment.sh
+```
+
+If E01 completes cleanly, try `YOLO_BATCH=16` or `YOLO_DEVICE=0,1` in a fresh
+test. Keep `YOLO_DEVICE=0` for the first run because single-GPU training is
+usually easier to debug inside notebooks.
+
 ## Main YOLO11s Queue
 
 After the smoke test passes:
