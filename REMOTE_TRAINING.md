@@ -61,3 +61,44 @@ bash scripts/remote/watch_runs.sh runs/yolo11s_100ep_v1 40
 This displays experiment statuses, the active/latest run, latest `results.csv`
 row if available, and the tail of `stdout.log`.
 
+## One Experiment At A Time On Slurm
+
+Use the serial Slurm array for the main YOLO11s E01-E06 run. The array is
+declared as `--array=1-6%1`, so Slurm will keep at most one experiment task
+running at any time.
+
+```bash
+git pull
+conda activate domainseg
+export PYTHONPATH=$PWD/src
+
+export OUTPUT_ROOT=$PWD/runs/yolo11s_100ep_serial
+export REPORT_DIR=$PWD/reports/tables/yolo11s_100ep_serial
+export YOLO_BATCH=16
+export YOLO_WORKERS=0
+export YOLO_EPOCHS=100
+export YOLO_PATIENCE=25
+
+bash scripts/remote/submit_yolo11s_serial_array.sh
+```
+
+If a node is unstable, pass normal `sbatch` options through the helper:
+
+```bash
+bash scripts/remote/submit_yolo11s_serial_array.sh --exclude=node1
+```
+
+Monitor it from the login node:
+
+```bash
+squeue -u "$USER"
+bash scripts/remote/watch_runs.sh runs/yolo11s_100ep_serial 40
+```
+
+When all tasks finish, collect the final table:
+
+```bash
+python -m domain_adaptation_segmentation.training.collect_results \
+  --runs-root runs/yolo11s_100ep_serial \
+  --output-dir reports/tables/yolo11s_100ep_serial
+```

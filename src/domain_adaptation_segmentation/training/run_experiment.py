@@ -164,14 +164,38 @@ def run_experiment(
     with stdout_path.open("w", encoding="utf-8") as stdout_log, stderr_path.open(
         "w", encoding="utf-8"
     ) as stderr_log:
-        process = subprocess.Popen(
-            command,
-            cwd=repo_root,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            bufsize=1,
-        )
+        try:
+            process = subprocess.Popen(
+                command,
+                cwd=repo_root,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+            )
+        except OSError as exc:
+            elapsed = time.time() - start
+            message = f"Failed to start command: {exc}\n"
+            print(message, end="")
+            stderr_log.write(message)
+            status.update(
+                {
+                    "status": "failed",
+                    "finished_at_utc": utc_now(),
+                    "return_code": 127,
+                    "elapsed_seconds": round(elapsed, 2),
+                    "error": str(exc),
+                }
+            )
+            timestamps.update(
+                {
+                    "finished_at_utc": status["finished_at_utc"],
+                    "elapsed_seconds": round(elapsed, 2),
+                }
+            )
+            write_json(run_dir / "status.json", status)
+            write_json(run_dir / "timestamps.json", timestamps)
+            return 127
 
         assert process.stdout is not None
         for line in process.stdout:
@@ -229,11 +253,15 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     repo_root = args.repo_root.resolve()
+    output_root = args.output_root
+    if not output_root.is_absolute():
+        output_root = repo_root / output_root
+    output_root = output_root.resolve()
     raise SystemExit(
         run_experiment(
             config_path=args.config,
             repo_root=repo_root,
-            output_root=args.output_root,
+            output_root=output_root,
             device=args.device,
             epochs_override=args.epochs,
             batch_override=args.batch,
@@ -246,4 +274,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

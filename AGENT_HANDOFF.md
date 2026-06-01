@@ -55,13 +55,16 @@ visible-to-thermal object detection.
 | 2026-06-01 | Added single-experiment Slurm wrapper | Use `scripts/remote/slurm_single_experiment.sbatch` with `EXPERIMENT_CONFIG=...` when long queue jobs are cancelled by Slurm. |
 | 2026-06-01 | Added `YOLO_EPOCHS` override for Slurm runs | Use `YOLO_EPOCHS=1` or small values to debug HPC scheduler kills without editing experiment YAMLs. |
 | 2026-06-01 | Made smoke runner configurable | `slurm_smoke.sbatch` can now run any `EXPERIMENT_CONFIG` with `YOLO_EPOCHS`; use this path if other Slurm wrappers are cancelled. |
+| 2026-06-01 | Added serial YOLO11s Slurm array | Use `bash scripts/remote/submit_yolo11s_serial_array.sh`; it submits E01-E06 with `--array=1-6%1`, so only one experiment can run at a time. Defaults: 100 epochs, batch 16, workers 0, patience 25. |
+| 2026-06-01 | Hardened experiment runner paths and startup failures | Relative `--output-root` is now resolved under the repo root, preventing nested Ultralytics `runs/segment/runs/...` paths. If `yolo` cannot start, `status.json` is marked failed instead of staying in running state. |
 
 ## Next Recommended Actions
 
 1. On HPC, pull latest code.
-2. Debug scheduler behavior with `CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=2 YOLO_WORKERS=2 YOLO_EPOCHS=1 EXPERIMENT_CONFIG=<config> sbatch --exclude=node1 scripts/remote/slurm_smoke.sbatch`.
-3. After E01-E06 completes, submit `CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=4 YOLO_WORKERS=8 sbatch --exclude=node1 scripts/remote/slurm_e07_e08.sbatch`.
-4. Bring back `runs/` and `reports/` with WinSCP.
+2. Submit the serial main run with `bash scripts/remote/submit_yolo11s_serial_array.sh`; this keeps only one E01-E06 task running at once.
+3. Monitor with `bash scripts/remote/watch_runs.sh runs/yolo11s_100ep_serial 40`.
+4. After E01-E06 completes, decide whether to run YOLO11x E07/E08.
+5. Bring back `runs/` and `reports/` with WinSCP.
 
 ## Latest Data Discovery Summary
 
