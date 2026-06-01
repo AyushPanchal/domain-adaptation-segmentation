@@ -2,7 +2,70 @@
 
 Target hardware: Kaggle T4 x2.
 
-## Upload / Working Directory
+## Recommended: Direct Kaggle Dataset Workflow
+
+Use the existing Kaggle dataset instead of uploading the full project ZIP:
+
+[ayushbpanchal/indraeye-seg](https://www.kaggle.com/datasets/ayushbpanchal/indraeye-seg)
+
+In the Kaggle notebook:
+
+1. Add the dataset `ayushbpanchal/indraeye-seg`.
+2. Select accelerator `GPU T4 x2`.
+3. Enable Internet so the notebook can clone the GitHub code repo and install
+   packages.
+4. Open/run:
+
+```text
+notebooks/kaggle_one_experiment_e01.ipynb
+```
+
+The notebook uses:
+
+```text
+/kaggle/input/indraeye-seg/eo/images/train
+/kaggle/input/indraeye-seg/eo/labels/train
+/kaggle/input/indraeye-seg/ir/images/val
+/kaggle/input/indraeye-seg/ir/labels/val
+```
+
+It creates a small YOLO dataset YAML inside `/kaggle/working`, then runs E01.
+No large ZIP upload is required.
+
+Start with:
+
+```python
+RUN_STAGE = "smoke"
+```
+
+After smoke passes, change only:
+
+```python
+RUN_STAGE = "full"
+```
+
+Defaults:
+
+```text
+YOLO_DEVICE=0,1
+YOLO_BATCH=16
+YOLO_WORKERS=2
+YOLO_EPOCHS=1    # smoke
+YOLO_EPOCHS=100  # full
+```
+
+The notebook prints logs live, prints metrics in the notebook, and creates:
+
+```text
+/kaggle/working/smoke_e01_results.zip
+/kaggle/working/full_e01_results.zip
+```
+
+Kaggle cannot silently auto-download local files from the kernel, but the final
+cell displays a `FileLink` and the zip also appears in the Output/Files panel.
+In Colab, the same cell uses `google.colab.files.download(...)`.
+
+## Optional: Upload / Working Directory Package
 
 Create the Kaggle package locally:
 
@@ -45,14 +108,14 @@ The generated datasets should be present under:
 The raw copied data is not required for training once `data/processed` and
 `data/manifests/dataset_yamls` are available.
 
-## Setup
+## Optional Package Setup
 
 ```bash
 cd /kaggle/working/domain-adaptation-segmentation
 bash scripts/remote/kaggle_setup.sh
 ```
 
-## Smoke Test
+## Optional Package Smoke Test
 
 Run one epoch on E01 first:
 
@@ -73,9 +136,7 @@ Watch progress in the notebook output or inspect:
 /kaggle/working/runs/experiments/E01_source_rgb_yolo11s/stdout.log
 ```
 
-## One Full Experiment First
-
-For the Kaggle trial, use the notebook:
+## Direct One-Experiment Notebook
 
 ```text
 notebooks/kaggle_one_experiment_e01.ipynb
@@ -108,30 +169,16 @@ The Kaggle full-run result zip is:
 Default settings use both Kaggle T4 GPUs:
 
 ```text
-EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml
-OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01_smoke  # smoke
-OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01_full   # full
+DATASET_ROOT=/kaggle/input/indraeye-seg
+EXPERIMENT_CONFIG=configs/experiments/e01_kaggle_direct_source_rgb_yolo11s.yaml
+OUTPUT_ROOT=/kaggle/working/runs/kaggle_direct_e01_smoke  # smoke
+OUTPUT_ROOT=/kaggle/working/runs/kaggle_direct_e01_full   # full
 YOLO_DEVICE=0,1
 YOLO_BATCH=16
 YOLO_WORKERS=2
 YOLO_EPOCHS=1    # smoke
 YOLO_EPOCHS=100  # full
 YOLO_RESUME=auto
-```
-
-The same run can also be launched from a notebook cell or Kaggle terminal:
-
-```bash
-cd /kaggle/working/domain-adaptation-segmentation
-export OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01
-export EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml
-export YOLO_DEVICE=0,1
-export YOLO_BATCH=16
-export YOLO_WORKERS=2
-export YOLO_EPOCHS=100
-export YOLO_PATIENCE=25
-export YOLO_RESUME=auto
-bash scripts/remote/kaggle_run_one_experiment.sh
 ```
 
 If dual-GPU training is unstable in Kaggle, fall back to `YOLO_DEVICE=0` and
