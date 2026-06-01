@@ -29,7 +29,7 @@ visible-to-thermal object detection.
 - Augmentation code implemented: yes
 - Training runner implemented: yes, with status/log/result collection helpers
 - Remote packaging implemented: yes, Kaggle package script added
-- Experiments run: none
+- Experiments run: HPC GPU smoke test passed for E01 on node2
 
 ## Completed Steps
 
@@ -50,14 +50,14 @@ visible-to-thermal object detection.
 | 2026-05-29 | Added HPC GPU environment diagnostic job | Use `sbatch scripts/remote/slurm_env_diagnose.sbatch` if `nvidia-smi` or PyTorch CUDA imports fail. |
 | 2026-05-29 | Isolated Slurm Python env from user site packages | Slurm scripts set `PYTHONNOUSERSITE=1` to avoid loading CUDA/PyTorch packages from `~/.local`. |
 | 2026-05-29 | Added TorchVision as explicit dependency | HPC smoke reached Ultralytics import but failed without TorchVision package metadata; install matching `torchvision==0.20.1+cu124` for `torch==2.5.1+cu124`. |
+| 2026-06-01 | HPC GPU smoke passed | Job `24475` ran YOLO11s-seg E01 for 1 epoch on node2/H100 with CUDA; `GPU_mem` reached about 4.08G and `reports/tables/summary_results.*` were written. |
 
 ## Next Recommended Actions
 
-1. On HPC, pull latest code and run `bash scripts/remote/hpc_check.sh`.
-2. Submit smoke test with `sbatch scripts/remote/slurm_smoke.sbatch`.
-3. If smoke test passes, submit `sbatch scripts/remote/slurm_e01_to_e06.sbatch`.
-4. After E01-E06 completes, submit `sbatch scripts/remote/slurm_e07_e08.sbatch`.
-5. Bring back `runs/` and `reports/` with WinSCP.
+1. On HPC, pull latest code.
+2. Submit E01-E06 with `CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=8 YOLO_WORKERS=8 sbatch --exclude=node1 scripts/remote/slurm_e01_to_e06.sbatch`.
+3. After E01-E06 completes, submit `CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=4 YOLO_WORKERS=8 sbatch --exclude=node1 scripts/remote/slurm_e07_e08.sbatch`.
+4. Bring back `runs/` and `reports/` with WinSCP.
 
 ## Latest Data Discovery Summary
 

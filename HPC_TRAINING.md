@@ -88,7 +88,7 @@ python -m pip install --force-reinstall --no-cache-dir \
 The SVNIT manual says GPU jobs should run through Slurm. Prefer `sbatch`:
 
 ```bash
-sbatch scripts/remote/slurm_smoke.sbatch
+CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=2 YOLO_WORKERS=2 sbatch --exclude=node1 scripts/remote/slurm_smoke.sbatch
 squeue
 ```
 
@@ -126,7 +126,7 @@ runs/experiments/E01_source_rgb_yolo11s/results.csv
 After the smoke test passes:
 
 ```bash
-sbatch scripts/remote/slurm_e01_to_e06.sbatch
+CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=8 YOLO_WORKERS=8 sbatch --exclude=node1 scripts/remote/slurm_e01_to_e06.sbatch
 squeue
 ```
 

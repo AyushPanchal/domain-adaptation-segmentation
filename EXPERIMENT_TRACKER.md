@@ -5,7 +5,8 @@ fails. Results should also be exported as CSV/JSON under `reports/tables/`.
 
 | ID | Method | Model | Train | Test | Platform | Status | Started | Finished | Key Metrics | Result Path | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| E01 | Source RGB | YOLO11s-seg | RGB | IR | TBD | planned | - | - | - | - | Domain gap baseline |
+| SMOKE-E01 | Source RGB | YOLO11s-seg | RGB | IR | SVNIT HPC node2 H100 | completed | 2026-06-01 12:14 IST | 2026-06-01 12:16 IST | mask mAP50 0.224, mask mAP50-95 0.108, box mAP50 0.240, box mAP50-95 0.153 | `runs/experiments/E01_source_rgb_yolo11s`, `reports/tables/summary_results.*` | 1 epoch GPU smoke, batch=2, workers=2, CUDA:0, peak GPU_mem about 4.08G |
+| E01 | Source RGB | YOLO11s-seg | RGB | IR | SVNIT HPC | planned | - | - | - | - | Domain gap baseline |
 | E02 | Full Gray | YOLO11s-seg | RGB | IR | TBD | planned | - | - | - | - | Naive grayscale baseline |
 | E03 | Box-Guided Gray | YOLO11s-seg | RGB | IR | TBD | planned | - | - | - | - | Box-level semantic gray baseline |
 | E04 | MGA | YOLO11s-seg | RGB | IR | TBD | planned | - | - | - | - | Proposed mask-guided method |
@@ -13,4 +14,3 @@ fails. Results should also be exported as CSV/JSON under `reports/tables/`.
 | E06 | IR Oracle | YOLO11s-seg | IR | IR | TBD | planned | - | - | - | - | Upper-bound baseline |
 | E07 | Source RGB | YOLO11x-seg | RGB | IR | TBD | planned | - | - | - | - | Large-model domain gap baseline |
 | E08 | BA-MGA | YOLO11x-seg | RGB | IR | TBD | planned | - | - | - | - | Best-performance result |
-
