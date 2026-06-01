@@ -11,18 +11,7 @@ export YOLO_WORKERS="${YOLO_WORKERS:-4}"
 export EXPERIMENT_CONFIG="${EXPERIMENT_CONFIG:-configs/experiments/e01_source_rgb_yolo11s.yaml}"
 export YOLO_EPOCHS="${YOLO_EPOCHS:-1}"
 
-python -m domain_adaptation_segmentation.training.run_experiment \
-  --config "$EXPERIMENT_CONFIG" \
-  --output-root "$OUTPUT_ROOT" \
-  --device "$YOLO_DEVICE" \
-  --epochs "$YOLO_EPOCHS" \
-  --batch "${YOLO_BATCH:-8}" \
-  --workers "$YOLO_WORKERS" \
-  --patience "${YOLO_PATIENCE:-5}"
-
-python -m domain_adaptation_segmentation.training.collect_results \
-  --runs-root "$OUTPUT_ROOT" \
-  --output-dir reports/tables
+python scripts/remote/train_smoke.py
 
 echo "[HPC SMOKE] done"
 echo "[HPC SMOKE] config: $EXPERIMENT_CONFIG"

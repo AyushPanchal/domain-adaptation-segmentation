@@ -85,6 +85,14 @@ python -m pip install --force-reinstall --no-cache-dir \
 
 ## 4. Smoke Test
 
+Python-first smoke command:
+
+```bash
+CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=2 YOLO_WORKERS=2 YOLO_EPOCHS=1 YOLO_PATIENCE=5 \
+EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml \
+python scripts/remote/train_smoke.py
+```
+
 The SVNIT manual says GPU jobs should run through Slurm. Prefer `sbatch`:
 
 ```bash
@@ -104,7 +112,7 @@ If you are inside an allocated GPU job and need to run manually, use:
 ```bash
 export YOLO_DEVICE=0
 export YOLO_BATCH=8
-bash scripts/remote/hpc_smoke_test.sh
+python scripts/remote/train_smoke.py
 ```
 
 The smoke Slurm wrapper is also configurable and has been the most reliable
@@ -131,6 +139,17 @@ runs/experiments/E01_source_rgb_yolo11s/results.csv
 ```
 
 ## 5. Main Runs
+
+Python-first full queue command for E01-E06:
+
+```bash
+CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=2 YOLO_WORKERS=2 YOLO_EPOCHS=50 YOLO_PATIENCE=0 \
+python scripts/remote/train_e01_to_e06.py
+```
+
+Without `YOLO_EPOCHS`, `train_e01_to_e06.py` uses the `epochs` value from each
+experiment YAML. Set `YOLO_PATIENCE=0` for fixed-epoch comparisons, or set a
+positive value to enable Ultralytics early stopping.
 
 After the smoke test passes, prefer single-experiment jobs first. They are
 easier to resume if Slurm cancels a job:
@@ -170,7 +189,7 @@ The underlying direct command is:
 export YOLO_DEVICE=0
 export YOLO_BATCH=16
 export YOLO_WORKERS=4
-bash scripts/remote/hpc_run_e01_to_e06.sh
+python scripts/remote/train_e01_to_e06.py
 ```
 
 If memory fails, reduce batch:
