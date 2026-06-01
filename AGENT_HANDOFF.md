@@ -53,11 +53,12 @@ visible-to-thermal object detection.
 | 2026-06-01 | HPC GPU smoke passed | Job `24475` ran YOLO11s-seg E01 for 1 epoch on node2/H100 with CUDA; `GPU_mem` reached about 4.08G and `reports/tables/summary_results.*` were written. |
 | 2026-06-01 | Added single-experiment Slurm wrapper | Use `scripts/remote/slurm_single_experiment.sbatch` with `EXPERIMENT_CONFIG=...` when long queue jobs are cancelled by Slurm. |
 | 2026-06-01 | Added `YOLO_EPOCHS` override for Slurm runs | Use `YOLO_EPOCHS=1` or small values to debug HPC scheduler kills without editing experiment YAMLs. |
+| 2026-06-01 | Made smoke runner configurable | `slurm_smoke.sbatch` can now run any `EXPERIMENT_CONFIG` with `YOLO_EPOCHS`; use this path if other Slurm wrappers are cancelled. |
 
 ## Next Recommended Actions
 
 1. On HPC, pull latest code.
-2. Debug scheduler behavior with `CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=2 YOLO_WORKERS=2 YOLO_EPOCHS=1 EXPERIMENT_CONFIG=<config> sbatch --time=00:30:00 --exclude=node1 scripts/remote/slurm_single_experiment.sbatch`.
+2. Debug scheduler behavior with `CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=2 YOLO_WORKERS=2 YOLO_EPOCHS=1 EXPERIMENT_CONFIG=<config> sbatch --exclude=node1 scripts/remote/slurm_smoke.sbatch`.
 3. After E01-E06 completes, submit `CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=4 YOLO_WORKERS=8 sbatch --exclude=node1 scripts/remote/slurm_e07_e08.sbatch`.
 4. Bring back `runs/` and `reports/` with WinSCP.
 

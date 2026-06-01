@@ -107,6 +107,15 @@ export YOLO_BATCH=8
 bash scripts/remote/hpc_smoke_test.sh
 ```
 
+The smoke Slurm wrapper is also configurable and has been the most reliable
+HPC path. To run one experiment through the smoke-safe wrapper:
+
+```bash
+CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=2 YOLO_WORKERS=2 YOLO_EPOCHS=1 \
+EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml \
+sbatch --exclude=node1 scripts/remote/slurm_smoke.sbatch
+```
+
 The run folder will be:
 
 ```text
