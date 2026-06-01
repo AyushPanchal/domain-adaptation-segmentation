@@ -105,14 +105,14 @@ The Kaggle full-run result zip is:
 /kaggle/working/full_e01_results.zip
 ```
 
-Default settings are conservative for T4:
+Default settings use both Kaggle T4 GPUs:
 
 ```text
 EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01_smoke  # smoke
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01_full   # full
-YOLO_DEVICE=0
-YOLO_BATCH=8
+YOLO_DEVICE=0,1
+YOLO_BATCH=16
 YOLO_WORKERS=2
 YOLO_EPOCHS=1    # smoke
 YOLO_EPOCHS=100  # full
@@ -125,8 +125,8 @@ The same run can also be launched from a notebook cell or Kaggle terminal:
 cd /kaggle/working/domain-adaptation-segmentation
 export OUTPUT_ROOT=/kaggle/working/runs/kaggle_single_e01
 export EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml
-export YOLO_DEVICE=0
-export YOLO_BATCH=8
+export YOLO_DEVICE=0,1
+export YOLO_BATCH=16
 export YOLO_WORKERS=2
 export YOLO_EPOCHS=100
 export YOLO_PATIENCE=25
@@ -134,9 +134,8 @@ export YOLO_RESUME=auto
 bash scripts/remote/kaggle_run_one_experiment.sh
 ```
 
-If E01 completes cleanly, try `YOLO_BATCH=16` or `YOLO_DEVICE=0,1` in a fresh
-test. Keep `YOLO_DEVICE=0` for the first run because single-GPU training is
-usually easier to debug inside notebooks.
+If dual-GPU training is unstable in Kaggle, fall back to `YOLO_DEVICE=0` and
+`YOLO_BATCH=8` for debugging.
 
 ## Main YOLO11s Queue
 
