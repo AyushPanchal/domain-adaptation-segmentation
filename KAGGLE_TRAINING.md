@@ -113,3 +113,21 @@ Each experiment folder contains:
 - `metrics.json` after result collection
 - `ultralytics/train/weights/best.pt`
 - `ultralytics/train/weights/last.pt`
+
+## Live Monitoring
+
+For any run queue, open a second terminal/session and run:
+
+```bash
+export PYTHONPATH=$PWD/src
+bash scripts/remote/watch_runs.sh runs/yolo11s_100ep_v1 40
+```
+
+For a one-time snapshot:
+
+```bash
+python -m domain_adaptation_segmentation.training.watch_runs \
+  --runs-root runs/yolo11s_100ep_v1 \
+  --tail 40 \
+  --once
+```

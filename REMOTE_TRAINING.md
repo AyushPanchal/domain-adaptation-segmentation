@@ -49,3 +49,15 @@ Every training run should:
 - update `status.json`
 - preserve partial logs on failure
 
+## Live Watch Command
+
+From the repository root on a remote machine:
+
+```bash
+export PYTHONPATH=$PWD/src
+bash scripts/remote/watch_runs.sh runs/yolo11s_100ep_v1 40
+```
+
+This displays experiment statuses, the active/latest run, latest `results.csv`
+row if available, and the tail of `stdout.log`.
+
