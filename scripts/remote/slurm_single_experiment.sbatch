@@ -17,6 +17,7 @@ echo "Node     : ${SLURM_NODELIST:-unknown}"
 echo "Start    : $(date)"
 echo "Submit   : ${SLURM_SUBMIT_DIR:-$PWD}"
 echo "Config   : ${EXPERIMENT_CONFIG:-unset}"
+echo "Epochs   : ${YOLO_EPOCHS:-config default}"
 echo "========================================="
 
 cd "${SLURM_SUBMIT_DIR:-$PWD}"
@@ -42,10 +43,16 @@ export YOLO_BATCH="${YOLO_BATCH:-2}"
 export YOLO_WORKERS="${YOLO_WORKERS:-2}"
 export YOLO_PATIENCE="${YOLO_PATIENCE:-25}"
 
+EPOCH_ARGS=()
+if [ -n "${YOLO_EPOCHS:-}" ]; then
+  EPOCH_ARGS=(--epochs "$YOLO_EPOCHS")
+fi
+
 python -m domain_adaptation_segmentation.training.run_experiment \
   --config "$EXPERIMENT_CONFIG" \
   --output-root "$OUTPUT_ROOT" \
   --device "$YOLO_DEVICE" \
+  "${EPOCH_ARGS[@]}" \
   --batch "$YOLO_BATCH" \
   --workers "$YOLO_WORKERS" \
   --patience "$YOLO_PATIENCE"

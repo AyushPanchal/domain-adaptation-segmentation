@@ -133,6 +133,14 @@ sbatch --exclude=node1 scripts/remote/slurm_single_experiment.sbatch
 ```
 
 Repeat by changing `EXPERIMENT_CONFIG` for E02-E06.
+Set `YOLO_EPOCHS=1` or another small value when debugging scheduler behavior
+without changing config YAMLs:
+
+```bash
+CONDA_ENV=domainseg YOLO_DEVICE=0 YOLO_BATCH=2 YOLO_WORKERS=2 YOLO_EPOCHS=1 \
+EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml \
+sbatch --time=00:30:00 --exclude=node1 scripts/remote/slurm_single_experiment.sbatch
+```
 
 To submit the whole E01-E06 queue in one job:
 

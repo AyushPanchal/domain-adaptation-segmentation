@@ -11,6 +11,11 @@ export YOLO_BATCH="${YOLO_BATCH:-16}"
 export YOLO_WORKERS="${YOLO_WORKERS:-4}"
 export YOLO_PATIENCE="${YOLO_PATIENCE:-25}"
 
+EPOCH_ARGS=()
+if [ -n "${YOLO_EPOCHS:-}" ]; then
+  EPOCH_ARGS=(--epochs "$YOLO_EPOCHS")
+fi
+
 CONFIGS=(
   configs/experiments/e01_source_rgb_yolo11s.yaml
   configs/experiments/e02_full_gray_yolo11s.yaml
@@ -26,6 +31,7 @@ for config in "${CONFIGS[@]}"; do
     --config "$config" \
     --output-root "$OUTPUT_ROOT" \
     --device "$YOLO_DEVICE" \
+    "${EPOCH_ARGS[@]}" \
     --batch "$YOLO_BATCH" \
     --workers "$YOLO_WORKERS" \
     --patience "$YOLO_PATIENCE"
@@ -36,4 +42,3 @@ for config in "${CONFIGS[@]}"; do
 done
 
 echo "[HPC RUN] E01-E06 queue complete"
-
