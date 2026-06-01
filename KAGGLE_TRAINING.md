@@ -23,14 +23,16 @@ notebooks/kaggle_one_experiment_e01.ipynb
 The notebook uses:
 
 ```text
-/kaggle/input/indraeye-seg/eo/images/train
-/kaggle/input/indraeye-seg/eo/labels/train
-/kaggle/input/indraeye-seg/ir/images/val
-/kaggle/input/indraeye-seg/ir/labels/val
+/kaggle/input/datasets/ayushbpanchal/indraeye-seg/eo/images/train
+/kaggle/input/datasets/ayushbpanchal/indraeye-seg/eo/labels/train
+/kaggle/input/datasets/ayushbpanchal/indraeye-seg/ir/images/val
+/kaggle/input/datasets/ayushbpanchal/indraeye-seg/ir/labels/val
 ```
 
-It creates a small YOLO dataset YAML inside `/kaggle/working`, then runs E01.
-No large ZIP upload is required.
+It auto-detects this path and also falls back to `/kaggle/input/indraeye-seg`
+if Kaggle mounts the dataset using the shorter slug. It creates a small YOLO
+dataset YAML inside `/kaggle/working`, then runs E01. No large ZIP upload is
+required.
 
 Start with:
 
@@ -169,7 +171,7 @@ The Kaggle full-run result zip is:
 Default settings use both Kaggle T4 GPUs:
 
 ```text
-DATASET_ROOT=/kaggle/input/indraeye-seg
+DATASET_ROOT=/kaggle/input/datasets/ayushbpanchal/indraeye-seg
 EXPERIMENT_CONFIG=configs/experiments/e01_kaggle_direct_source_rgb_yolo11s.yaml
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_direct_e01_smoke  # smoke
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_direct_e01_full   # full
