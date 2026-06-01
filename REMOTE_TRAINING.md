@@ -107,3 +107,28 @@ python -m domain_adaptation_segmentation.training.collect_results \
   --runs-root runs/yolo11s_100ep_serial \
   --output-dir reports/tables/yolo11s_100ep_serial
 ```
+
+## Resuming After Cluster Cancellation
+
+If Slurm cancels a job before 100 epochs finish, keep the same
+`OUTPUT_ROOT` and submit the same experiment again. `slurm_single_experiment`
+defaults to `YOLO_RESUME=auto`, so it resumes from
+`ultralytics/train/weights/last.pt` when that checkpoint exists.
+
+```bash
+export OUTPUT_ROOT=$PWD/runs/yolo11s_100ep_serial
+export EXPERIMENT_CONFIG=configs/experiments/e01_source_rgb_yolo11s.yaml
+export CONDA_ENV=domainseg
+export YOLO_BATCH=16
+export YOLO_WORKERS=0
+export YOLO_EPOCHS=100
+export YOLO_PATIENCE=25
+export YOLO_DEVICE=0
+export YOLO_RESUME=auto
+
+sbatch --exclude=node1 --gres=shard:10 --cpus-per-task=12 --mem=64G \
+  scripts/remote/slurm_single_experiment.sbatch
+```
+
+The runner appends new attempts to the same `stdout.log` and updates
+`status.json` with the checkpoint path used for resume.

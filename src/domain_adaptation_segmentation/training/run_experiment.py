@@ -46,7 +46,20 @@ def build_yolo_command(
     batch_override: str | None,
     workers: int,
     patience: int,
+    resume_checkpoint: Path | None,
 ) -> list[str]:
+    if resume_checkpoint is not None:
+        return [
+            "yolo",
+            "segment",
+            "train",
+            f"model={resume_checkpoint.as_posix()}",
+            "resume=True",
+            f"device={device}",
+            f"workers={workers}",
+            "verbose=True",
+        ]
+
     epochs = epochs_override if epochs_override is not None else int(config.get("epochs", 100))
     batch = batch_override if batch_override is not None else str(config.get("batch", "auto"))
     image_size = int(config.get("imgsz", 640))
@@ -100,6 +113,11 @@ def collect_basic_outputs(run_dir: Path) -> dict[str, str]:
     return outputs
 
 
+def find_last_checkpoint(run_dir: Path) -> Path | None:
+    checkpoint = run_dir / "ultralytics" / "train" / "weights" / "last.pt"
+    return checkpoint if checkpoint.exists() else None
+
+
 def run_experiment(
     config_path: Path,
     repo_root: Path,
@@ -110,6 +128,8 @@ def run_experiment(
     workers: int,
     patience: int,
     dry_run: bool,
+    resume: bool,
+    resume_if_available: bool,
 ) -> int:
     config = read_yaml(config_path)
     exp_id = str(config["id"])
@@ -118,6 +138,11 @@ def run_experiment(
     run_dir.mkdir(parents=True, exist_ok=True)
 
     dataset_path = resolve_path(str(config["dataset"]), repo_root)
+    resume_checkpoint = find_last_checkpoint(run_dir) if (resume or resume_if_available) else None
+    if resume and resume_checkpoint is None:
+        print(f"No checkpoint found for resume under {run_dir}", file=sys.stderr)
+        return 2
+
     command = build_yolo_command(
         config=config,
         dataset_path=dataset_path,
@@ -127,6 +152,7 @@ def run_experiment(
         batch_override=batch_override,
         workers=workers,
         patience=patience,
+        resume_checkpoint=resume_checkpoint,
     )
 
     shutil.copy2(config_path, run_dir / "config.yaml")
@@ -142,6 +168,7 @@ def run_experiment(
         "dataset_path": str(dataset_path),
         "run_dir": str(run_dir),
         "device": device,
+        "resume_checkpoint": str(resume_checkpoint) if resume_checkpoint else None,
         "command": command,
     }
     write_json(run_dir / "status.json", status)
@@ -160,10 +187,22 @@ def run_experiment(
     start = time.time()
     stdout_path = run_dir / "stdout.log"
     stderr_path = run_dir / "stderr.log"
+    log_mode = "a" if stdout_path.exists() or stderr_path.exists() else "w"
 
-    with stdout_path.open("w", encoding="utf-8") as stdout_log, stderr_path.open(
-        "w", encoding="utf-8"
+    with stdout_path.open(log_mode, encoding="utf-8") as stdout_log, stderr_path.open(
+        log_mode, encoding="utf-8"
     ) as stderr_log:
+        if log_mode == "a":
+            marker = (
+                "\n\n"
+                f"===== New runner attempt at {utc_now()} =====\n"
+                f"Command: {' '.join(command)}\n"
+                "===========================================\n"
+            )
+            print(marker, end="")
+            stdout_log.write(marker)
+            stdout_log.flush()
+
         try:
             process = subprocess.Popen(
                 command,
@@ -246,6 +285,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--batch", default=None)
     parser.add_argument("--workers", type=int, default=int(os.environ.get("YOLO_WORKERS", "2")))
     parser.add_argument("--patience", type=int, default=int(os.environ.get("YOLO_PATIENCE", "25")))
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume from this experiment's existing last.pt checkpoint; fail if missing.",
+    )
+    parser.add_argument(
+        "--resume-if-available",
+        action="store_true",
+        help="Resume from last.pt when present, otherwise start a fresh run.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -268,6 +317,8 @@ def main() -> None:
             workers=args.workers,
             patience=args.patience,
             dry_run=args.dry_run,
+            resume=args.resume,
+            resume_if_available=args.resume_if_available,
         )
     )
 

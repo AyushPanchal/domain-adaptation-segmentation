@@ -63,6 +63,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--batch", default=env_str("YOLO_BATCH", "8"))
     parser.add_argument("--workers", type=int, default=env_int("YOLO_WORKERS", 4))
     parser.add_argument("--patience", type=int, default=env_int("YOLO_PATIENCE", 5))
+    parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--resume-if-available", action="store_true")
     parser.add_argument(
         "--reports-dir",
         type=Path,
@@ -97,6 +99,8 @@ def main() -> int:
         workers=args.workers,
         patience=args.patience,
         dry_run=args.dry_run,
+        resume=args.resume,
+        resume_if_available=args.resume_if_available,
     )
 
     if return_code == 0 and not args.no_collect and not args.dry_run:

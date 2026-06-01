@@ -18,6 +18,7 @@ echo "Start    : $(date)"
 echo "Submit   : ${SLURM_SUBMIT_DIR:-$PWD}"
 echo "Config   : ${EXPERIMENT_CONFIG:-unset}"
 echo "Epochs   : ${YOLO_EPOCHS:-config default}"
+echo "Resume   : ${YOLO_RESUME:-auto}"
 echo "========================================="
 
 cd "${SLURM_SUBMIT_DIR:-$PWD}"
@@ -48,6 +49,23 @@ if [ -n "${YOLO_EPOCHS:-}" ]; then
   EPOCH_ARGS=(--epochs "$YOLO_EPOCHS")
 fi
 
+RESUME_ARGS=()
+case "${YOLO_RESUME:-auto}" in
+  auto)
+    RESUME_ARGS=(--resume-if-available)
+    ;;
+  1|true|TRUE|yes|YES)
+    RESUME_ARGS=(--resume)
+    ;;
+  0|false|FALSE|no|NO)
+    RESUME_ARGS=()
+    ;;
+  *)
+    echo "ERROR: YOLO_RESUME must be auto, true, or false."
+    exit 2
+    ;;
+esac
+
 python -m domain_adaptation_segmentation.training.run_experiment \
   --config "$EXPERIMENT_CONFIG" \
   --output-root "$OUTPUT_ROOT" \
@@ -55,7 +73,8 @@ python -m domain_adaptation_segmentation.training.run_experiment \
   "${EPOCH_ARGS[@]}" \
   --batch "$YOLO_BATCH" \
   --workers "$YOLO_WORKERS" \
-  --patience "$YOLO_PATIENCE"
+  --patience "$YOLO_PATIENCE" \
+  "${RESUME_ARGS[@]}"
 
 python -m domain_adaptation_segmentation.training.collect_results \
   --runs-root "$OUTPUT_ROOT" \
