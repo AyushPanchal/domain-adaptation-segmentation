@@ -57,11 +57,12 @@ visible-to-thermal object detection.
 | 2026-06-01 | Made smoke runner configurable | `slurm_smoke.sbatch` can now run any `EXPERIMENT_CONFIG` with `YOLO_EPOCHS`; use this path if other Slurm wrappers are cancelled. |
 | 2026-06-01 | Added serial YOLO11s Slurm array | Use `bash scripts/remote/submit_yolo11s_serial_array.sh`; it submits E01-E06 with `--array=1-6%1`, so only one experiment can run at a time. Defaults: 100 epochs, batch 16, workers 0, patience 25. |
 | 2026-06-01 | Hardened experiment runner paths and startup failures | Relative `--output-root` is now resolved under the repo root, preventing nested Ultralytics `runs/segment/runs/...` paths. If `yolo` cannot start, `status.json` is marked failed instead of staying in running state. |
+| 2026-06-01 | Added single-job serial Slurm queue | Use `bash scripts/remote/submit_yolo11s_serial_queue.sh`; it submits only one Slurm job and runs E01-E06 sequentially inside it. This avoids `AssocMaxSubmitJobLimit` on clusters that count array tasks against the submit quota. |
 
 ## Next Recommended Actions
 
 1. On HPC, pull latest code.
-2. Submit the serial main run with `bash scripts/remote/submit_yolo11s_serial_array.sh`; this keeps only one E01-E06 task running at once.
+2. Submit the serial main run with `bash scripts/remote/submit_yolo11s_serial_queue.sh`; this keeps only one E01-E06 experiment running at once while using only one submitted Slurm job.
 3. Monitor with `bash scripts/remote/watch_runs.sh runs/yolo11s_100ep_serial 40`.
 4. After E01-E06 completes, decide whether to run YOLO11x E07/E08.
 5. Bring back `runs/` and `reports/` with WinSCP.

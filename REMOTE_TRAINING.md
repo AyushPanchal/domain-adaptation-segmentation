@@ -63,9 +63,10 @@ row if available, and the tail of `stdout.log`.
 
 ## One Experiment At A Time On Slurm
 
-Use the serial Slurm array for the main YOLO11s E01-E06 run. The array is
-declared as `--array=1-6%1`, so Slurm will keep at most one experiment task
-running at any time.
+Use the single-job serial queue for the main YOLO11s E01-E06 run. It submits
+one Slurm job, then runs E01, E02, E03, E04, E05, and E06 sequentially inside
+that allocation. This keeps only one experiment training at a time and avoids
+array submit-limit errors such as `AssocMaxSubmitJobLimit`.
 
 ```bash
 git pull
@@ -79,14 +80,18 @@ export YOLO_WORKERS=0
 export YOLO_EPOCHS=100
 export YOLO_PATIENCE=25
 
-bash scripts/remote/submit_yolo11s_serial_array.sh
+bash scripts/remote/submit_yolo11s_serial_queue.sh
 ```
 
 If a node is unstable, pass normal `sbatch` options through the helper:
 
 ```bash
-bash scripts/remote/submit_yolo11s_serial_array.sh --exclude=node1
+bash scripts/remote/submit_yolo11s_serial_queue.sh --exclude=node1
 ```
+
+If your account allows Slurm arrays, `scripts/remote/submit_yolo11s_serial_array.sh`
+is also available. It uses `--array=1-6%1`, but some clusters count all six
+array tasks against the submit quota.
 
 Monitor it from the login node:
 
