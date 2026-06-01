@@ -18,7 +18,7 @@ python -m domain_adaptation_segmentation.training.run_experiment \
   --epochs "$YOLO_EPOCHS" \
   --batch "${YOLO_BATCH:-8}" \
   --workers "$YOLO_WORKERS" \
-  --patience 5
+  --patience "${YOLO_PATIENCE:-5}"
 
 python -m domain_adaptation_segmentation.training.collect_results \
   --runs-root "$OUTPUT_ROOT" \
