@@ -62,6 +62,7 @@ visible-to-thermal object detection.
 | 2026-06-02 | Added Kaggle direct one-experiment workflow | Use `notebooks/kaggle_one_experiment_e01.ipynb` with dataset `ayushbpanchal/indraeye-seg`; no large ZIP upload is needed. The notebook clones the small GitHub repo, writes a direct YOLO YAML using `/kaggle/input/datasets/ayushbpanchal/indraeye-seg` with fallback to `/kaggle/input/indraeye-seg`, and runs only E01. Defaults use T4x2: device `0,1`, batch 16, workers 2, resume auto. Use `RUN_STAGE="smoke"` for 1 epoch first and `RUN_STAGE="full"` for 100 epochs later. |
 | 2026-06-02 | Completed Kaggle E01 full run | `downloads/full_e01_results.zip`; status completed on T4x2. Early stopped at epoch 35/100 with best epoch 10. Final best.pt validation: mask mAP50 0.221, mask mAP50-95 0.0961, box mAP50 0.236, box mAP50-95 0.163. |
 | 2026-06-02 | Added dual eval outputs to Kaggle notebook | After training, `notebooks/kaggle_one_experiment_e01.ipynb` evaluates `best.pt` on `eval_ir` (IR-only, primary domain-transfer metric) and `eval_eo_ir` (EO val + IR val combined). Metrics are saved under `OUTPUT_ROOT/evaluations/*/metrics.json` and printed in the notebook. |
+| 2026-06-02 | Completed E01 eval_ir and eval_eo_ir checks | E01 `best.pt` eval_ir: mask mAP50 0.2203, mask mAP50-95 0.0948, box mAP50 0.2362, box mAP50-95 0.1644. eval_eo_ir: mask mAP50 0.3386, mask mAP50-95 0.1669, box mAP50 0.3621, box mAP50-95 0.2603. |
 
 ## Next Recommended Actions
 
