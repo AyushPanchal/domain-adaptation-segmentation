@@ -73,13 +73,14 @@ visible-to-thermal object detection.
 | 2026-06-02 | Completed Kaggle E04 smoke run | `downloads/smoke_e04_results.zip`; status completed on T4x2 in 149.26 seconds. E04 smoke eval_ir: mask mAP50 0.2006, mask mAP50-95 0.0812, box mAP50 0.2144, box mAP50-95 0.1384. eval_eo_ir: mask mAP50 0.1768, mask mAP50-95 0.0705, box mAP50 0.1987, box mAP50-95 0.1282. |
 | 2026-06-02 | Completed Kaggle E04 full run | `downloads/full_e04_results.zip`; status completed on T4x2. Early stopped at epoch 26/100 with best epoch 1, so full-run `best.pt` metrics match smoke. E04 eval_ir: mask mAP50 0.2006, mask mAP50-95 0.0812, box mAP50 0.2144, box mAP50-95 0.1384. eval_eo_ir: mask mAP50 0.1768, mask mAP50-95 0.0705, box mAP50 0.1987, box mAP50-95 0.1282. E04 outperformed E03 but underperformed E02 Full Gray on primary IR mask metrics. |
 | 2026-06-02 | Added Kaggle E09 joint EO+IR notebook | Use `notebooks/kaggle_one_experiment_e09_joint_eo_ir.ipynb`. It copies EO train and IR train into `/kaggle/working/generated/e09_joint_eo_ir/images/train` with filename prefixes, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_e09_results.zip` or `full_e09_results.zip`. This is a supervised mixed-domain diagnostic, not an EO-only domain-transfer method. |
+| 2026-06-02 | Completed Kaggle E09 smoke run | `downloads/smoke_e09_results.zip`; status completed on T4x2 in 223.11 seconds. E09 smoke eval_ir: mask mAP50 0.3854, mask mAP50-95 0.1823, box mAP50 0.4001, box mAP50-95 0.2747. eval_eo_ir: mask mAP50 0.3342, mask mAP50-95 0.1516, box mAP50 0.3602, box mAP50-95 0.2507. This confirms the pipeline/model can learn much better with IR supervision; low EO-only results are mostly domain shift. |
 
 ## Next Recommended Actions
 
-1. Run E09 smoke on Kaggle T4 x2 with `RUN_STAGE="smoke"` in `notebooks/kaggle_one_experiment_e09_joint_eo_ir.ipynb`.
-2. Download `/kaggle/working/smoke_e09_results.zip` and inspect it before the full run.
-3. If smoke passes, run E09 full and record `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
-4. Use E09 to diagnose whether low EO-only results are mainly due to missing IR supervision/domain shift.
+1. Run E09 full on Kaggle T4 x2 by changing only `RUN_STAGE="full"` in `notebooks/kaggle_one_experiment_e09_joint_eo_ir.ipynb`.
+2. Download `/kaggle/working/full_e09_results.zip`.
+3. Record E09 full-run `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
+4. Use E09 full as a supervised mixed-domain reference/diagnostic, not as an EO-only method.
 
 ## Latest Data Discovery Summary
 
