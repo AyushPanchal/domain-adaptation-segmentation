@@ -71,13 +71,14 @@ visible-to-thermal object detection.
 | 2026-06-02 | Completed Kaggle E03 full run | `downloads/full_e03_results.zip`; status completed on T4x2. Early stopped at epoch 30/100 with best epoch 5. E03 `best.pt` eval_ir: mask mAP50 0.1972, mask mAP50-95 0.0811, box mAP50 0.2051, box mAP50-95 0.1342. eval_eo_ir: mask mAP50 0.1427, mask mAP50-95 0.0605, box mAP50 0.1553, box mAP50-95 0.1027. E03 underperformed E02 Full Gray on primary IR mask metrics. |
 | 2026-06-02 | Added Kaggle E04 MGA notebook | Use `notebooks/kaggle_one_experiment_e04_mga.ipynb`. It generates polygon mask-guided grayscale EO training images inside `/kaggle/working/generated/e04_mga`, skips class `4: Ignore`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_e04_results.zip` or `full_e04_results.zip`. |
 | 2026-06-02 | Completed Kaggle E04 smoke run | `downloads/smoke_e04_results.zip`; status completed on T4x2 in 149.26 seconds. E04 smoke eval_ir: mask mAP50 0.2006, mask mAP50-95 0.0812, box mAP50 0.2144, box mAP50-95 0.1384. eval_eo_ir: mask mAP50 0.1768, mask mAP50-95 0.0705, box mAP50 0.1987, box mAP50-95 0.1282. |
+| 2026-06-02 | Completed Kaggle E04 full run | `downloads/full_e04_results.zip`; status completed on T4x2. Early stopped at epoch 26/100 with best epoch 1, so full-run `best.pt` metrics match smoke. E04 eval_ir: mask mAP50 0.2006, mask mAP50-95 0.0812, box mAP50 0.2144, box mAP50-95 0.1384. eval_eo_ir: mask mAP50 0.1768, mask mAP50-95 0.0705, box mAP50 0.1987, box mAP50-95 0.1282. E04 outperformed E03 but underperformed E02 Full Gray on primary IR mask metrics. |
 
 ## Next Recommended Actions
 
-1. Run E04 full on Kaggle T4 x2 by changing only `RUN_STAGE="full"` in `notebooks/kaggle_one_experiment_e04_mga.ipynb`.
-2. Download `/kaggle/working/full_e04_results.zip`.
-3. Record E04 full-run `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
-4. Compare E04 against E01/E02/E03 to test whether mask-level object guidance fixes the box-level degradation.
+1. Prepare the E05 BA-MGA Kaggle notebook using the same one-experiment structure, but with feathered polygon masks (`feather_radius=3.0`) for boundary-aware grayscale blending.
+2. Run E05 smoke on Kaggle T4 x2 with `RUN_STAGE="smoke"` and download `/kaggle/working/smoke_e05_results.zip`.
+3. If smoke passes, run E05 full and record `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
+4. Compare E05 against E02/E04 to check whether boundary-aware blending fixes the hard-mask degradation.
 
 ## Latest Data Discovery Summary
 
