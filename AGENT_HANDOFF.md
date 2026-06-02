@@ -66,6 +66,7 @@ visible-to-thermal object detection.
 | 2026-06-02 | Added Kaggle E02 full-gray notebook | Use `notebooks/kaggle_one_experiment_e02_full_gray.ipynb`. It generates full grayscale EO training images inside `/kaggle/working/generated/e02_full_gray`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_e02_results.zip` or `full_e02_results.zip`. |
 | 2026-06-02 | Completed Kaggle E02 smoke run | `downloads/smoke_e02_results.zip`; status completed on T4x2 in 149.43 seconds. E02 smoke eval_ir: mask mAP50 0.1199, mask mAP50-95 0.0625, box mAP50 0.1232, box mAP50-95 0.0683. eval_eo_ir: mask mAP50 0.1197, mask mAP50-95 0.0605, box mAP50 0.1220, box mAP50-95 0.0692. |
 | 2026-06-02 | Completed Kaggle E02 full run | `downloads/full_e02_results.zip`; status completed on T4x2. Early stopped at epoch 76/100 with best epoch 51. E02 `best.pt` eval_ir: mask mAP50 0.2274, mask mAP50-95 0.1040, box mAP50 0.2438, box mAP50-95 0.1548. eval_eo_ir: mask mAP50 0.2917, mask mAP50-95 0.1417, box mAP50 0.3194, box mAP50-95 0.2179. |
+| 2026-06-02 | Added Kaggle E03 box-guided gray notebook | Use `notebooks/kaggle_one_experiment_e03_box_guided_gray.ipynb`. It generates box-guided grayscale EO training images inside `/kaggle/working/generated/e03_box_guided_gray`, skips class `4: Ignore`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_e03_results.zip` or `full_e03_results.zip`. |
 
 ## Next Recommended Actions
 
