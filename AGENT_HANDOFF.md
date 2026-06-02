@@ -72,13 +72,14 @@ visible-to-thermal object detection.
 | 2026-06-02 | Added Kaggle E04 MGA notebook | Use `notebooks/kaggle_one_experiment_e04_mga.ipynb`. It generates polygon mask-guided grayscale EO training images inside `/kaggle/working/generated/e04_mga`, skips class `4: Ignore`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_e04_results.zip` or `full_e04_results.zip`. |
 | 2026-06-02 | Completed Kaggle E04 smoke run | `downloads/smoke_e04_results.zip`; status completed on T4x2 in 149.26 seconds. E04 smoke eval_ir: mask mAP50 0.2006, mask mAP50-95 0.0812, box mAP50 0.2144, box mAP50-95 0.1384. eval_eo_ir: mask mAP50 0.1768, mask mAP50-95 0.0705, box mAP50 0.1987, box mAP50-95 0.1282. |
 | 2026-06-02 | Completed Kaggle E04 full run | `downloads/full_e04_results.zip`; status completed on T4x2. Early stopped at epoch 26/100 with best epoch 1, so full-run `best.pt` metrics match smoke. E04 eval_ir: mask mAP50 0.2006, mask mAP50-95 0.0812, box mAP50 0.2144, box mAP50-95 0.1384. eval_eo_ir: mask mAP50 0.1768, mask mAP50-95 0.0705, box mAP50 0.1987, box mAP50-95 0.1282. E04 outperformed E03 but underperformed E02 Full Gray on primary IR mask metrics. |
+| 2026-06-02 | Added Kaggle E09 joint EO+IR notebook | Use `notebooks/kaggle_one_experiment_e09_joint_eo_ir.ipynb`. It copies EO train and IR train into `/kaggle/working/generated/e09_joint_eo_ir/images/train` with filename prefixes, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_e09_results.zip` or `full_e09_results.zip`. This is a supervised mixed-domain diagnostic, not an EO-only domain-transfer method. |
 
 ## Next Recommended Actions
 
-1. Prepare the E05 BA-MGA Kaggle notebook using the same one-experiment structure, but with feathered polygon masks (`feather_radius=3.0`) for boundary-aware grayscale blending.
-2. Run E05 smoke on Kaggle T4 x2 with `RUN_STAGE="smoke"` and download `/kaggle/working/smoke_e05_results.zip`.
-3. If smoke passes, run E05 full and record `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
-4. Compare E05 against E02/E04 to check whether boundary-aware blending fixes the hard-mask degradation.
+1. Run E09 smoke on Kaggle T4 x2 with `RUN_STAGE="smoke"` in `notebooks/kaggle_one_experiment_e09_joint_eo_ir.ipynb`.
+2. Download `/kaggle/working/smoke_e09_results.zip` and inspect it before the full run.
+3. If smoke passes, run E09 full and record `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
+4. Use E09 to diagnose whether low EO-only results are mainly due to missing IR supervision/domain shift.
 
 ## Latest Data Discovery Summary
 

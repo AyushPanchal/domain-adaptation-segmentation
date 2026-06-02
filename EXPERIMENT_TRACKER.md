@@ -17,3 +17,4 @@ fails. Results should also be exported as CSV/JSON under `reports/tables/`.
 | E06 | IR Oracle | YOLO11s-seg | IR | IR | TBD | planned | - | - | - | - | Upper-bound baseline |
 | E07 | Source RGB | YOLO11x-seg | RGB | IR | TBD | planned | - | - | - | - | Large-model domain gap baseline |
 | E08 | BA-MGA | YOLO11x-seg | RGB | IR | TBD | planned | - | - | - | - | Best-performance result |
+| E09 | Joint EO+IR Supervised | YOLO11s-seg | EO+IR | IR | Kaggle T4x2 | notebook ready | - | - | - | `notebooks/kaggle_one_experiment_e09_joint_eo_ir.ipynb` | Diagnostic supervised mixed-domain baseline. Trains on EO train plus IR train with filename prefixes under `/kaggle/working/generated/e09_joint_eo_ir`; eval uses `eval_ir` as primary and `eval_eo_ir` as secondary. This is not an EO-only domain-transfer method because it uses IR training labels. |
