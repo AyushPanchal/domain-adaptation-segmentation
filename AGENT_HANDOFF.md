@@ -70,12 +70,13 @@ visible-to-thermal object detection.
 | 2026-06-02 | Completed Kaggle E03 smoke run | `downloads/smoke_e03_results.zip`; status completed on T4x2 in 149.77 seconds. E03 smoke eval_ir: mask mAP50 0.1605, mask mAP50-95 0.0581, box mAP50 0.1651, box mAP50-95 0.1023. eval_eo_ir: mask mAP50 0.1636, mask mAP50-95 0.0603, box mAP50 0.1850, box mAP50-95 0.1213. |
 | 2026-06-02 | Completed Kaggle E03 full run | `downloads/full_e03_results.zip`; status completed on T4x2. Early stopped at epoch 30/100 with best epoch 5. E03 `best.pt` eval_ir: mask mAP50 0.1972, mask mAP50-95 0.0811, box mAP50 0.2051, box mAP50-95 0.1342. eval_eo_ir: mask mAP50 0.1427, mask mAP50-95 0.0605, box mAP50 0.1553, box mAP50-95 0.1027. E03 underperformed E02 Full Gray on primary IR mask metrics. |
 | 2026-06-02 | Added Kaggle E04 MGA notebook | Use `notebooks/kaggle_one_experiment_e04_mga.ipynb`. It generates polygon mask-guided grayscale EO training images inside `/kaggle/working/generated/e04_mga`, skips class `4: Ignore`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_e04_results.zip` or `full_e04_results.zip`. |
+| 2026-06-02 | Completed Kaggle E04 smoke run | `downloads/smoke_e04_results.zip`; status completed on T4x2 in 149.26 seconds. E04 smoke eval_ir: mask mAP50 0.2006, mask mAP50-95 0.0812, box mAP50 0.2144, box mAP50-95 0.1384. eval_eo_ir: mask mAP50 0.1768, mask mAP50-95 0.0705, box mAP50 0.1987, box mAP50-95 0.1282. |
 
 ## Next Recommended Actions
 
-1. Prepare the E04 MGA Kaggle notebook using the same one-experiment structure as E02/E03, but with polygon mask-guided grayscale instead of box-guided regions.
-2. Run E04 smoke on Kaggle T4 x2 with `RUN_STAGE="smoke"` and download `/kaggle/working/smoke_e04_results.zip`.
-3. If smoke passes, run E04 full and record `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
+1. Run E04 full on Kaggle T4 x2 by changing only `RUN_STAGE="full"` in `notebooks/kaggle_one_experiment_e04_mga.ipynb`.
+2. Download `/kaggle/working/full_e04_results.zip`.
+3. Record E04 full-run `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
 4. Compare E04 against E01/E02/E03 to test whether mask-level object guidance fixes the box-level degradation.
 
 ## Latest Data Discovery Summary
