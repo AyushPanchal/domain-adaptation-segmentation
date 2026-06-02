@@ -63,14 +63,15 @@ visible-to-thermal object detection.
 | 2026-06-02 | Completed Kaggle E01 full run | `downloads/full_e01_results.zip`; status completed on T4x2. Early stopped at epoch 35/100 with best epoch 10. Final best.pt validation: mask mAP50 0.221, mask mAP50-95 0.0961, box mAP50 0.236, box mAP50-95 0.163. |
 | 2026-06-02 | Added dual eval outputs to Kaggle notebook | After training, `notebooks/kaggle_one_experiment_e01.ipynb` evaluates `best.pt` on `eval_ir` (IR-only, primary domain-transfer metric) and `eval_eo_ir` (EO val + IR val combined). Metrics are saved under `OUTPUT_ROOT/evaluations/*/metrics.json` and printed in the notebook. |
 | 2026-06-02 | Completed E01 eval_ir and eval_eo_ir checks | E01 `best.pt` eval_ir: mask mAP50 0.2203, mask mAP50-95 0.0948, box mAP50 0.2362, box mAP50-95 0.1644. eval_eo_ir: mask mAP50 0.3386, mask mAP50-95 0.1669, box mAP50 0.3621, box mAP50-95 0.2603. |
+| 2026-06-02 | Added Kaggle E02 full-gray notebook | Use `notebooks/kaggle_one_experiment_e02_full_gray.ipynb`. It generates full grayscale EO training images inside `/kaggle/working/generated/e02_full_gray`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_e02_results.zip` or `full_e02_results.zip`. |
 
 ## Next Recommended Actions
 
-1. On HPC, pull latest code.
-2. Submit the serial main run with `bash scripts/remote/submit_yolo11s_serial_queue.sh`; this keeps only one E01-E06 experiment running at once while using only one submitted Slurm job.
-3. Monitor with `bash scripts/remote/watch_runs.sh runs/yolo11s_100ep_serial 40`.
-4. After E01-E06 completes, decide whether to run YOLO11x E07/E08.
-5. Bring back `runs/` and `reports/` with WinSCP.
+1. On Kaggle, open `notebooks/kaggle_one_experiment_e02_full_gray.ipynb`.
+2. Attach dataset `ayushbpanchal/indraeye-seg`, enable Internet, and select GPU T4 x2.
+3. Run with `RUN_STAGE="smoke"` first and download `/kaggle/working/smoke_e02_results.zip`.
+4. If smoke passes, change only `RUN_STAGE="full"`, run all cells, and download `/kaggle/working/full_e02_results.zip`.
+5. Record E02 `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
 
 ## Latest Data Discovery Summary
 

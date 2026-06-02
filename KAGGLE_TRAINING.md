@@ -14,10 +14,11 @@ In the Kaggle notebook:
 2. Select accelerator `GPU T4 x2`.
 3. Enable Internet so the notebook can clone the GitHub code repo and install
    packages.
-4. Open/run:
+4. Open/run one notebook:
 
 ```text
-notebooks/kaggle_one_experiment_e01.ipynb
+notebooks/kaggle_one_experiment_e01.ipynb                 # E01 Source RGB
+notebooks/kaggle_one_experiment_e02_full_gray.ipynb       # E02 Full Gray
 ```
 
 The notebook uses:
@@ -31,8 +32,8 @@ The notebook uses:
 
 It auto-detects this path and also falls back to `/kaggle/input/indraeye-seg`
 if Kaggle mounts the dataset using the shorter slug. It creates a small YOLO
-dataset YAML inside `/kaggle/working`, then runs E01. No large ZIP upload is
-required.
+dataset YAML inside `/kaggle/working`, then runs the selected experiment. No
+large ZIP upload is required.
 
 Start with:
 
@@ -56,11 +57,14 @@ YOLO_EPOCHS=1    # smoke
 YOLO_EPOCHS=100  # full
 ```
 
-The notebook prints logs live, prints metrics in the notebook, and creates:
+The notebook prints logs live, prints metrics in the notebook, and creates one
+of these result zips:
 
 ```text
 /kaggle/working/smoke_e01_results.zip
 /kaggle/working/full_e01_results.zip
+/kaggle/working/smoke_e02_results.zip
+/kaggle/working/full_e02_results.zip
 ```
 
 After training, the notebook evaluates `best.pt` on two validation settings:
@@ -152,14 +156,16 @@ Watch progress in the notebook output or inspect:
 
 ```text
 notebooks/kaggle_one_experiment_e01.ipynb
+notebooks/kaggle_one_experiment_e02_full_gray.ipynb
 ```
 
-It is a single-notebook workflow for one experiment. It:
+Each notebook is a single-experiment workflow. It:
 
 - runs a smoke test first with `RUN_STAGE="smoke"`
 - switches to the full 100-epoch run later with `RUN_STAGE="full"`
 - streams logs live in each notebook cell
 - prints `status.json`, the latest `results.csv` rows, and key mask/box metrics
+- evaluates `best.pt` on `eval_ir` and `eval_eo_ir`
 - packages run outputs and report tables at the end
 
 For Kaggle, the final zip is exposed as a notebook file/link. For Colab, the
@@ -176,6 +182,7 @@ The Kaggle full-run result zip is:
 
 ```text
 /kaggle/working/full_e01_results.zip
+/kaggle/working/full_e02_results.zip
 ```
 
 Default settings use both Kaggle T4 GPUs:
@@ -183,8 +190,11 @@ Default settings use both Kaggle T4 GPUs:
 ```text
 DATASET_ROOT=/kaggle/input/datasets/ayushbpanchal/indraeye-seg
 EXPERIMENT_CONFIG=configs/experiments/e01_kaggle_direct_source_rgb_yolo11s.yaml
+EXPERIMENT_CONFIG=configs/experiments/e02_kaggle_full_gray_yolo11s.yaml
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_direct_e01_smoke  # smoke
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_direct_e01_full   # full
+OUTPUT_ROOT=/kaggle/working/runs/kaggle_e02_full_gray_smoke
+OUTPUT_ROOT=/kaggle/working/runs/kaggle_e02_full_gray_full
 YOLO_DEVICE=0,1
 YOLO_EVAL_DEVICE=0
 YOLO_BATCH=16
