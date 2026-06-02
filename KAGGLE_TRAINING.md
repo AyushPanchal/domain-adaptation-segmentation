@@ -63,6 +63,16 @@ The notebook prints logs live, prints metrics in the notebook, and creates:
 /kaggle/working/full_e01_results.zip
 ```
 
+After training, the notebook evaluates `best.pt` on two validation settings:
+
+```text
+eval_ir     = IR validation only
+eval_eo_ir  = EO validation + IR validation combined
+```
+
+Use `eval_ir` as the primary RGB-to-IR domain-transfer metric. Use
+`eval_eo_ir` as the combined overall-validation metric.
+
 Kaggle cannot silently auto-download local files from the kernel, but the final
 cell displays a `FileLink` and the zip also appears in the Output/Files panel.
 In Colab, the same cell uses `google.colab.files.download(...)`.
@@ -176,6 +186,7 @@ EXPERIMENT_CONFIG=configs/experiments/e01_kaggle_direct_source_rgb_yolo11s.yaml
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_direct_e01_smoke  # smoke
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_direct_e01_full   # full
 YOLO_DEVICE=0,1
+YOLO_EVAL_DEVICE=0
 YOLO_BATCH=16
 YOLO_WORKERS=2
 YOLO_EPOCHS=1    # smoke
