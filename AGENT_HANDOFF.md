@@ -67,12 +67,13 @@ visible-to-thermal object detection.
 | 2026-06-02 | Completed Kaggle E02 smoke run | `downloads/smoke_e02_results.zip`; status completed on T4x2 in 149.43 seconds. E02 smoke eval_ir: mask mAP50 0.1199, mask mAP50-95 0.0625, box mAP50 0.1232, box mAP50-95 0.0683. eval_eo_ir: mask mAP50 0.1197, mask mAP50-95 0.0605, box mAP50 0.1220, box mAP50-95 0.0692. |
 | 2026-06-02 | Completed Kaggle E02 full run | `downloads/full_e02_results.zip`; status completed on T4x2. Early stopped at epoch 76/100 with best epoch 51. E02 `best.pt` eval_ir: mask mAP50 0.2274, mask mAP50-95 0.1040, box mAP50 0.2438, box mAP50-95 0.1548. eval_eo_ir: mask mAP50 0.2917, mask mAP50-95 0.1417, box mAP50 0.3194, box mAP50-95 0.2179. |
 | 2026-06-02 | Added Kaggle E03 box-guided gray notebook | Use `notebooks/kaggle_one_experiment_e03_box_guided_gray.ipynb`. It generates box-guided grayscale EO training images inside `/kaggle/working/generated/e03_box_guided_gray`, skips class `4: Ignore`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_e03_results.zip` or `full_e03_results.zip`. |
+| 2026-06-02 | Completed Kaggle E03 smoke run | `downloads/smoke_e03_results.zip`; status completed on T4x2 in 149.77 seconds. E03 smoke eval_ir: mask mAP50 0.1605, mask mAP50-95 0.0581, box mAP50 0.1651, box mAP50-95 0.1023. eval_eo_ir: mask mAP50 0.1636, mask mAP50-95 0.0603, box mAP50 0.1850, box mAP50-95 0.1213. |
 
 ## Next Recommended Actions
 
-1. Prepare the E03 Box-Guided Gray Kaggle notebook using the same one-experiment structure as E01/E02.
-2. Run E03 smoke on Kaggle T4 x2 with `RUN_STAGE="smoke"` and download `/kaggle/working/smoke_e03_results.zip`.
-3. If smoke passes, run E03 full and record `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
+1. Run E03 full on Kaggle T4 x2 by changing only `RUN_STAGE="full"` in `notebooks/kaggle_one_experiment_e03_box_guided_gray.ipynb`.
+2. Download `/kaggle/working/full_e03_results.zip`.
+3. Record E03 full-run `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
 4. Compare E01 Source RGB, E02 Full Gray, and E03 Box-Guided Gray before starting E04/E05 proposed mask-guided methods.
 
 ## Latest Data Discovery Summary
