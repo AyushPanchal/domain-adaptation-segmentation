@@ -22,6 +22,7 @@ notebooks/kaggle_one_experiment_e02_full_gray.ipynb       # E02 Full Gray
 notebooks/kaggle_one_experiment_e03_box_guided_gray.ipynb # E03 Box-Guided Gray
 notebooks/kaggle_one_experiment_e04_mga.ipynb             # E04 MGA
 notebooks/kaggle_one_experiment_e09_joint_eo_ir.ipynb     # E09 EO+IR supervised diagnostic
+notebooks/kaggle_one_experiment_n1_ir_only.ipynb          # N1 IR-only supervised baseline
 ```
 
 The notebook uses:
@@ -74,6 +75,8 @@ of these result zips:
 /kaggle/working/full_e04_results.zip
 /kaggle/working/smoke_e09_results.zip
 /kaggle/working/full_e09_results.zip
+/kaggle/working/smoke_n1_results.zip
+/kaggle/working/full_n1_results.zip
 ```
 
 After training, the notebook evaluates `best.pt` on two validation settings:
@@ -169,6 +172,7 @@ notebooks/kaggle_one_experiment_e02_full_gray.ipynb
 notebooks/kaggle_one_experiment_e03_box_guided_gray.ipynb
 notebooks/kaggle_one_experiment_e04_mga.ipynb
 notebooks/kaggle_one_experiment_e09_joint_eo_ir.ipynb
+notebooks/kaggle_one_experiment_n1_ir_only.ipynb
 ```
 
 Each notebook is a single-experiment workflow. It:
@@ -198,6 +202,7 @@ The Kaggle full-run result zip is:
 /kaggle/working/full_e03_results.zip
 /kaggle/working/full_e04_results.zip
 /kaggle/working/full_e09_results.zip
+/kaggle/working/full_n1_results.zip
 ```
 
 Default settings use both Kaggle T4 GPUs:
@@ -209,6 +214,7 @@ EXPERIMENT_CONFIG=configs/experiments/e02_kaggle_full_gray_yolo11s.yaml
 EXPERIMENT_CONFIG=configs/experiments/e03_kaggle_box_guided_gray_yolo11s.yaml
 EXPERIMENT_CONFIG=configs/experiments/e04_kaggle_mga_yolo11s.yaml
 EXPERIMENT_CONFIG=configs/experiments/e09_kaggle_joint_eo_ir_yolo11s.yaml
+EXPERIMENT_CONFIG=configs/experiments/n1_kaggle_ir_only_yolo11s.yaml
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_direct_e01_smoke  # smoke
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_direct_e01_full   # full
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_e02_full_gray_smoke
@@ -219,6 +225,8 @@ OUTPUT_ROOT=/kaggle/working/runs/kaggle_e04_mga_smoke
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_e04_mga_full
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_e09_joint_eo_ir_smoke
 OUTPUT_ROOT=/kaggle/working/runs/kaggle_e09_joint_eo_ir_full
+OUTPUT_ROOT=/kaggle/working/runs/kaggle_n1_ir_only_smoke
+OUTPUT_ROOT=/kaggle/working/runs/kaggle_n1_ir_only_full
 YOLO_DEVICE=0,1
 YOLO_EVAL_DEVICE=0
 YOLO_BATCH=16

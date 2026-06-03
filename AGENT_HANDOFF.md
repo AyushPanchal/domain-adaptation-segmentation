@@ -75,13 +75,14 @@ visible-to-thermal object detection.
 | 2026-06-02 | Added Kaggle E09 joint EO+IR notebook | Use `notebooks/kaggle_one_experiment_e09_joint_eo_ir.ipynb`. It copies EO train and IR train into `/kaggle/working/generated/e09_joint_eo_ir/images/train` with filename prefixes, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_e09_results.zip` or `full_e09_results.zip`. This is a supervised mixed-domain diagnostic, not an EO-only domain-transfer method. |
 | 2026-06-02 | Completed Kaggle E09 smoke run | `downloads/smoke_e09_results.zip`; status completed on T4x2 in 223.11 seconds. E09 smoke eval_ir: mask mAP50 0.3854, mask mAP50-95 0.1823, box mAP50 0.4001, box mAP50-95 0.2747. eval_eo_ir: mask mAP50 0.3342, mask mAP50-95 0.1516, box mAP50 0.3602, box mAP50-95 0.2507. This confirms the pipeline/model can learn much better with IR supervision; low EO-only results are mostly domain shift. |
 | 2026-06-03 | Completed Kaggle E09 full run | `downloads/full_e09_results.zip`; status completed on T4x2. Run resumed from epoch 42, early stopped at epoch 73/100, and best model was epoch 48. E09 eval_ir: mask mAP50 0.6691, mask mAP50-95 0.4229, box mAP50 0.6899, box mAP50-95 0.5640. eval_eo_ir: mask mAP50 0.5483, mask mAP50-95 0.3069, box mAP50 0.5774, box mAP50-95 0.4469. This is a supervised mixed-domain reference and should not be presented as EO-only adaptation. |
+| 2026-06-03 | Added Kaggle N1 IR-only notebook | Use `notebooks/kaggle_one_experiment_n1_ir_only.ipynb`. It copies IR train into `/kaggle/working/generated/n1_ir_only/images/train`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_n1_results.zip` or `full_n1_results.zip`. This is the target-domain supervised baseline needed to interpret E09 EO+IR joint training. |
 
 ## Next Recommended Actions
 
-1. Prepare the E05 BA-MGA Kaggle notebook using feathered polygon masks (`feather_radius=3.0`) for boundary-aware grayscale blending.
-2. Run E05 smoke on Kaggle T4 x2 with `RUN_STAGE="smoke"` and download `/kaggle/working/smoke_e05_results.zip`.
-3. If smoke passes, run E05 full and record `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
-4. Use E09 full as the supervised mixed-domain reference/diagnostic when discussing the EO-only domain gap.
+1. Run N1 smoke on Kaggle T4 x2 with `RUN_STAGE="smoke"` in `notebooks/kaggle_one_experiment_n1_ir_only.ipynb`.
+2. Download `/kaggle/working/smoke_n1_results.zip` and inspect it before the full run.
+3. If smoke passes, run N1 full and record `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
+4. Compare N1 IR-only against E09 EO+IR joint to determine whether EO data helps once IR labels are available.
 
 ## Latest Data Discovery Summary
 
