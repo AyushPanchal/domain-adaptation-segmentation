@@ -79,12 +79,13 @@ visible-to-thermal object detection.
 | 2026-06-03 | Completed Kaggle N1 smoke run | `downloads/smoke_n1_results.zip`; status completed on T4x2 in 165.58 seconds. N1 smoke eval_ir: mask mAP50 0.3703, mask mAP50-95 0.2051, box mAP50 0.3936, box mAP50-95 0.2739. eval_eo_ir: mask mAP50 0.2316, mask mAP50-95 0.1093, box mAP50 0.2485, box mAP50-95 0.1681. IR-only smoke is close to E09 EO+IR smoke on primary IR metrics. |
 | 2026-06-03 | Completed Kaggle N1 full run | `downloads/full_n1_results.zip`; status completed on T4x2 in 2869.52 seconds. N1 eval_ir: mask mAP50 0.6530, mask mAP50-95 0.4342, box mAP50 0.7015, box mAP50-95 0.5743. eval_eo_ir: mask mAP50 0.3233, mask mAP50-95 0.1902, box mAP50 0.3660, box mAP50-95 0.2894. N1 completed 100/100 epochs after resume; best training-row mask mAP50-95 was at epoch 81. Compared with E09, IR-only is slightly lower on IR mask mAP50 but slightly higher on IR mask mAP50-95 and box metrics; E09 remains much better for combined EO+IR evaluation. |
 | 2026-06-03 | Added Kaggle N2 balanced EO+IR notebook | Use `notebooks/kaggle_one_experiment_n2_balanced_eo_ir.ipynb`. It samples equal EO and IR training image/label pairs with fixed `BALANCE_SEED=42`, copies them into `/kaggle/working/generated/n2_balanced_eo_ir/images/train`, writes `balance_manifest.json`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_n2_results.zip` or `full_n2_results.zip`. |
+| 2026-06-03 | Completed Kaggle N2 smoke run | `downloads/smoke_n2_results.zip`; status completed on T4x2 in 196.69 seconds. Balance manifest: raw EO 2024, raw IR 2967, balanced train pairs 2024 per domain, total train pairs 4048. N2 smoke eval_ir: mask mAP50 0.3529, mask mAP50-95 0.1897, box mAP50 0.3699, box mAP50-95 0.2570. eval_eo_ir: mask mAP50 0.3280, mask mAP50-95 0.1676, box mAP50 0.3528, box mAP50-95 0.2481. Smoke passed; full N2 is ready to run. |
 
 ## Next Recommended Actions
 
-1. Run N2 smoke on Kaggle T4 x2 with `RUN_STAGE="smoke"` in `notebooks/kaggle_one_experiment_n2_balanced_eo_ir.ipynb`.
-2. Download `/kaggle/working/smoke_n2_results.zip` and inspect it before the full run.
-3. If smoke passes, run N2 full and compare against E09 and N1 using the same `eval_ir` and `eval_eo_ir` metrics.
+1. Run N2 full on Kaggle T4 x2 by changing only `RUN_STAGE="full"` in `notebooks/kaggle_one_experiment_n2_balanced_eo_ir.ipynb`.
+2. Download `/kaggle/working/full_n2_results.zip`.
+3. Compare full N2 against E09 and N1 using the same `eval_ir` and `eval_eo_ir` metrics.
 
 ## Latest Data Discovery Summary
 
