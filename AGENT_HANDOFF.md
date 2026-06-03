@@ -80,12 +80,13 @@ visible-to-thermal object detection.
 | 2026-06-03 | Completed Kaggle N1 full run | `downloads/full_n1_results.zip`; status completed on T4x2 in 2869.52 seconds. N1 eval_ir: mask mAP50 0.6530, mask mAP50-95 0.4342, box mAP50 0.7015, box mAP50-95 0.5743. eval_eo_ir: mask mAP50 0.3233, mask mAP50-95 0.1902, box mAP50 0.3660, box mAP50-95 0.2894. N1 completed 100/100 epochs after resume; best training-row mask mAP50-95 was at epoch 81. Compared with E09, IR-only is slightly lower on IR mask mAP50 but slightly higher on IR mask mAP50-95 and box metrics; E09 remains much better for combined EO+IR evaluation. |
 | 2026-06-03 | Added Kaggle N2 balanced EO+IR notebook | Use `notebooks/kaggle_one_experiment_n2_balanced_eo_ir.ipynb`. It samples equal EO and IR training image/label pairs with fixed `BALANCE_SEED=42`, copies them into `/kaggle/working/generated/n2_balanced_eo_ir/images/train`, writes `balance_manifest.json`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_n2_results.zip` or `full_n2_results.zip`. |
 | 2026-06-03 | Completed Kaggle N2 smoke run | `downloads/smoke_n2_results.zip`; status completed on T4x2 in 196.69 seconds. Balance manifest: raw EO 2024, raw IR 2967, balanced train pairs 2024 per domain, total train pairs 4048. N2 smoke eval_ir: mask mAP50 0.3529, mask mAP50-95 0.1897, box mAP50 0.3699, box mAP50-95 0.2570. eval_eo_ir: mask mAP50 0.3280, mask mAP50-95 0.1676, box mAP50 0.3528, box mAP50-95 0.2481. Smoke passed; full N2 is ready to run. |
+| 2026-06-03 | Completed Kaggle N2 full run | `downloads/full_n2_results.zip`; status completed on T4x2 in 6174.00 seconds. Balance manifest: raw EO 2024, raw IR 2967, balanced train pairs 2024 per domain, total train pairs 4048. N2 eval_ir: mask mAP50 0.6407, mask mAP50-95 0.4031, box mAP50 0.6680, box mAP50-95 0.5325. eval_eo_ir: mask mAP50 0.5251, mask mAP50-95 0.2969, box mAP50 0.5618, box mAP50-95 0.4321. Early stopped at epoch 56/100; best epoch 31. N2 is much stronger than N1 on combined EO+IR, but E09 remains the best mixed-domain model overall. |
 
 ## Next Recommended Actions
 
-1. Run N2 full on Kaggle T4 x2 by changing only `RUN_STAGE="full"` in `notebooks/kaggle_one_experiment_n2_balanced_eo_ir.ipynb`.
-2. Download `/kaggle/working/full_n2_results.zip`.
-3. Compare full N2 against E09 and N1 using the same `eval_ir` and `eval_eo_ir` metrics.
+1. Decide the next paper-facing experiment: either large-model mixed-domain training (`YOLO11l-seg`/`YOLO11x-seg`) using the E09 or N2 setup, or a balanced augmentation variant that includes IR labels.
+2. Keep E09 as the strongest current YOLO11s mixed-domain baseline and N1 as the IR-only upper/reference baseline.
+3. Use N2 as the balanced-sampling ablation: it improves combined EO+IR over N1 but does not beat E09.
 
 ## Latest Data Discovery Summary
 
