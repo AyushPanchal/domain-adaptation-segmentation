@@ -77,13 +77,13 @@ visible-to-thermal object detection.
 | 2026-06-03 | Completed Kaggle E09 full run | `downloads/full_e09_results.zip`; status completed on T4x2. Run resumed from epoch 42, early stopped at epoch 73/100, and best model was epoch 48. E09 eval_ir: mask mAP50 0.6691, mask mAP50-95 0.4229, box mAP50 0.6899, box mAP50-95 0.5640. eval_eo_ir: mask mAP50 0.5483, mask mAP50-95 0.3069, box mAP50 0.5774, box mAP50-95 0.4469. This is a supervised mixed-domain reference and should not be presented as EO-only adaptation. |
 | 2026-06-03 | Added Kaggle N1 IR-only notebook | Use `notebooks/kaggle_one_experiment_n1_ir_only.ipynb`. It copies IR train into `/kaggle/working/generated/n1_ir_only/images/train`, trains YOLO11s-seg on T4x2, evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_n1_results.zip` or `full_n1_results.zip`. This is the target-domain supervised baseline needed to interpret E09 EO+IR joint training. |
 | 2026-06-03 | Completed Kaggle N1 smoke run | `downloads/smoke_n1_results.zip`; status completed on T4x2 in 165.58 seconds. N1 smoke eval_ir: mask mAP50 0.3703, mask mAP50-95 0.2051, box mAP50 0.3936, box mAP50-95 0.2739. eval_eo_ir: mask mAP50 0.2316, mask mAP50-95 0.1093, box mAP50 0.2485, box mAP50-95 0.1681. IR-only smoke is close to E09 EO+IR smoke on primary IR metrics. |
+| 2026-06-03 | Completed Kaggle N1 full run | `downloads/full_n1_results.zip`; status completed on T4x2 in 2869.52 seconds. N1 eval_ir: mask mAP50 0.6530, mask mAP50-95 0.4342, box mAP50 0.7015, box mAP50-95 0.5743. eval_eo_ir: mask mAP50 0.3233, mask mAP50-95 0.1902, box mAP50 0.3660, box mAP50-95 0.2894. N1 completed 100/100 epochs after resume; best training-row mask mAP50-95 was at epoch 81. Compared with E09, IR-only is slightly lower on IR mask mAP50 but slightly higher on IR mask mAP50-95 and box metrics; E09 remains much better for combined EO+IR evaluation. |
 
 ## Next Recommended Actions
 
-1. Run N1 full on Kaggle T4 x2 by changing only `RUN_STAGE="full"` in `notebooks/kaggle_one_experiment_n1_ir_only.ipynb`.
-2. Download `/kaggle/working/full_n1_results.zip`.
-3. Record N1 full-run `eval_ir` and `eval_eo_ir` metrics in `EXPERIMENT_TRACKER.md`.
-4. Compare N1 IR-only against E09 EO+IR joint to determine whether EO data helps once IR labels are available.
+1. Build the next IR-involved experiment notebook: balanced EO+IR supervised training, where EO and IR contribute equal training counts.
+2. Keep the same `eval_ir` and `eval_eo_ir` protocol so it can be compared directly against E09 and N1.
+3. If balanced EO+IR improves `eval_eo_ir` without hurting `eval_ir`, use it as the main mixed-domain baseline for the dissertation paper.
 
 ## Latest Data Discovery Summary
 
