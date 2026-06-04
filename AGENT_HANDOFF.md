@@ -83,12 +83,13 @@ visible-to-thermal object detection.
 | 2026-06-03 | Completed Kaggle N2 full run | `downloads/full_n2_results.zip`; status completed on T4x2 in 6174.00 seconds. Balance manifest: raw EO 2024, raw IR 2967, balanced train pairs 2024 per domain, total train pairs 4048. N2 eval_ir: mask mAP50 0.6407, mask mAP50-95 0.4031, box mAP50 0.6680, box mAP50-95 0.5325. eval_eo_ir: mask mAP50 0.5251, mask mAP50-95 0.2969, box mAP50 0.5618, box mAP50-95 0.4321. Early stopped at epoch 56/100; best epoch 31. N2 is much stronger than N1 on combined EO+IR, but E09 remains the best mixed-domain model overall. |
 | 2026-06-03 | Added Kaggle N3 joint EO+IR YOLO11l notebook | Use `notebooks/kaggle_one_experiment_n3_joint_eo_ir_yolo11l.ipynb`. It follows the E09 full EO+IR training recipe but upgrades the model to `yolo11l-seg.pt` and uses `YOLO_BATCH=8` for safer T4x2 memory. It evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_n3_results.zip` or `full_n3_results.zip`. |
 | 2026-06-03 | Completed Kaggle N3 smoke run | `downloads/smoke_n3_results.zip`; status completed on T4x2 in 310.04 seconds. N3 smoke eval_ir: mask mAP50 0.3996, mask mAP50-95 0.1986, box mAP50 0.4302, box mAP50-95 0.3200. eval_eo_ir: mask mAP50 0.3429, mask mAP50-95 0.1630, box mAP50 0.3804, box mAP50-95 0.2795. YOLO11l trained with `device=0,1`, `batch=8`, and peak displayed GPU_mem about 4.7G, so the full N3 run is safe to launch. |
+| 2026-06-04 | Completed Kaggle N3 full run | `downloads/full_n3_results.zip`; status completed on T4x2 in 5898.00 seconds. N3 eval_ir: mask mAP50 0.6968, mask mAP50-95 0.4555, box mAP50 0.7167, box mAP50-95 0.6099. eval_eo_ir: mask mAP50 0.5823, mask mAP50-95 0.3308, box mAP50 0.6192, box mAP50-95 0.5025. Run resumed from `last.pt`; final status recorded epoch 95/100, and early stopping reported best epoch 70. This is the strongest mixed-domain result so far and beats E09 on both IR-only and combined EO+IR evaluation. |
 
 ## Next Recommended Actions
 
-1. Run N3 full on Kaggle T4 x2 by changing only `RUN_STAGE="full"` in `notebooks/kaggle_one_experiment_n3_joint_eo_ir_yolo11l.ipynb`.
-2. Download `/kaggle/working/full_n3_results.zip`.
-3. Compare full N3 against E09, N1, and N2 using the same `eval_ir` and `eval_eo_ir` metrics.
+1. Treat N3 as the current main result for paper/dissertation tables.
+2. Prepare a compact comparison table for N1, E09, N2, and N3 using `eval_ir` and `eval_eo_ir`.
+3. Consider one final ablation only if time permits: `YOLO11l` IR-only or `YOLO11l` balanced EO+IR, otherwise move to writing/figures.
 
 ## Latest Data Discovery Summary
 
