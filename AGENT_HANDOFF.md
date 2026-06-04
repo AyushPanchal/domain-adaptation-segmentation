@@ -84,12 +84,13 @@ visible-to-thermal object detection.
 | 2026-06-03 | Added Kaggle N3 joint EO+IR YOLO11l notebook | Use `notebooks/kaggle_one_experiment_n3_joint_eo_ir_yolo11l.ipynb`. It follows the E09 full EO+IR training recipe but upgrades the model to `yolo11l-seg.pt` and uses `YOLO_BATCH=8` for safer T4x2 memory. It evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_n3_results.zip` or `full_n3_results.zip`. |
 | 2026-06-03 | Completed Kaggle N3 smoke run | `downloads/smoke_n3_results.zip`; status completed on T4x2 in 310.04 seconds. N3 smoke eval_ir: mask mAP50 0.3996, mask mAP50-95 0.1986, box mAP50 0.4302, box mAP50-95 0.3200. eval_eo_ir: mask mAP50 0.3429, mask mAP50-95 0.1630, box mAP50 0.3804, box mAP50-95 0.2795. YOLO11l trained with `device=0,1`, `batch=8`, and peak displayed GPU_mem about 4.7G, so the full N3 run is safe to launch. |
 | 2026-06-04 | Completed Kaggle N3 full run | `downloads/full_n3_results.zip`; status completed on T4x2 in 5898.00 seconds. N3 eval_ir: mask mAP50 0.6968, mask mAP50-95 0.4555, box mAP50 0.7167, box mAP50-95 0.6099. eval_eo_ir: mask mAP50 0.5823, mask mAP50-95 0.3308, box mAP50 0.6192, box mAP50-95 0.5025. Run resumed from `last.pt`; final status recorded epoch 95/100, and early stopping reported best epoch 70. This is the strongest mixed-domain result so far and beats E09 on both IR-only and combined EO+IR evaluation. |
+| 2026-06-04 | Added Kaggle N4 IR-only YOLO11l notebook | Use `notebooks/kaggle_one_experiment_n4_ir_only_yolo11l.ipynb`. It follows the N1 IR-only training recipe but upgrades the model to `yolo11l-seg.pt` and uses `YOLO_BATCH=8` for safer T4x2 memory. It evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_n4_results.zip` or `full_n4_results.zip`. This is the IR specialist needed before testing an N3+N4 ensemble. |
 
 ## Next Recommended Actions
 
-1. Treat N3 as the current main result for paper/dissertation tables.
-2. Prepare a compact comparison table for N1, E09, N2, and N3 using `eval_ir` and `eval_eo_ir`.
-3. Consider one final ablation only if time permits: `YOLO11l` IR-only or `YOLO11l` balanced EO+IR, otherwise move to writing/figures.
+1. Run N4 smoke on Kaggle T4 x2 with `RUN_STAGE="smoke"` in `notebooks/kaggle_one_experiment_n4_ir_only_yolo11l.ipynb`.
+2. Download `/kaggle/working/smoke_n4_results.zip` and inspect memory/metrics before the full run.
+3. If smoke passes, run N4 full and compare against N1/N3 before implementing N3+N4 ensemble evaluation.
 
 ## Latest Data Discovery Summary
 
