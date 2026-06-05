@@ -90,12 +90,13 @@ visible-to-thermal object detection.
 | 2026-06-05 | Added N6 N3+N4 ensemble evaluator and Kaggle notebook | New module: `src/domain_adaptation_segmentation/training/evaluate_segmentation_ensemble.py`. New notebook: `notebooks/kaggle_ensemble_n3_n4_yolo11l.ipynb`. The evaluator performs cross-model NMS over raw predictions and reconstructs masks with each selected candidate's own source-model prototype, avoiding the standard Ultralytics ensemble limitation for segmentation masks. The notebook searches `/kaggle/input` and `/kaggle/working` for `full_n3_results.zip` and `full_n4_results.zip`, extracts `best.pt`, evaluates `eval_ir` and `eval_eo_ir`, prints deltas against N3/N4, and packages `n6_n3_n4_ensemble_results.zip`. A local one-image CPU smoke test passed. |
 | 2026-06-05 | Completed Kaggle N6 N3+N4 ensemble evaluation | `downloads/n6_n3_n4_ensemble_results.zip`; eval_ir: mask mAP50 0.6910, mask mAP50-95 0.4553, box mAP50 0.7171, box mAP50-95 0.6143. eval_eo_ir: mask mAP50 0.5462, mask mAP50-95 0.3139, box mAP50 0.5828, box mAP50-95 0.4749. Compared with N3, N6 is slightly better on IR box metrics (+0.0004 box mAP50, +0.0044 box mAP50-95) but slightly lower on IR mask mAP50-95 (-0.0002) and clearly lower on combined EO+IR. Treat N6 as an ensemble ablation, not the best model. |
 | 2026-06-05 | Added Kaggle N7 high-resolution N3-style notebook | Use `notebooks/kaggle_one_experiment_n7_joint_eo_ir_yolo11l_img960.ipynb`. It follows the N3 EO+IR YOLO11l recipe but changes only the resolution axis: `imgsz=960`, `batch=4`, `device=0,1`, eval on `eval_ir` and `eval_eo_ir`. Run smoke first and inspect memory/runtime before attempting full. This is the next best chance for a real mask-quality gain because it targets small-object and boundary detail without changing model family. |
+| 2026-06-05 | Completed Kaggle N7 high-resolution smoke run | `downloads/smoke_n7_results.zip`; status completed in 543.78 seconds with `imgsz=960`, batch=4, device=0,1. Parsed peak GPU memory from stdout was about 9.01G. N7 smoke eval_ir: mask mAP50 0.3871, mask mAP50-95 0.2413, box mAP50 0.4038, box mAP50-95 0.2933. eval_eo_ir: mask mAP50 0.3589, mask mAP50-95 0.2208, box mAP50 0.3836, box mAP50-95 0.2831. Compared with N3 smoke, N7 is lower on IR mask mAP50 but better on strict mask mAP50-95 for both IR and EO+IR. Full N7 is worth running. |
 
 ## Next Recommended Actions
 
-1. Run N7 smoke on Kaggle T4x2 with `RUN_STAGE="smoke"` in `notebooks/kaggle_one_experiment_n7_joint_eo_ir_yolo11l_img960.ipynb`.
-2. If N7 smoke fits memory and completes, run N7 full and compare against N3 on `eval_ir` mask mAP50-95 and `eval_eo_ir` mask mAP50-95.
-3. If N7 does not improve masks, keep N3 as final best and use N6 as the ensemble ablation; only then consider YOLO11x at 640 as a capacity-only test.
+1. Run N7 full on Kaggle T4x2 by changing `RUN_STAGE="full"` in `notebooks/kaggle_one_experiment_n7_joint_eo_ir_yolo11l_img960.ipynb`.
+2. Download `/kaggle/working/full_n7_results.zip` and compare against N3 on `eval_ir` mask mAP50-95 and `eval_eo_ir` mask mAP50-95.
+3. If N7 improves masks, use it as the final best high-resolution model; otherwise keep N3 as final best and use N7 as the resolution ablation.
 
 ## Latest Data Discovery Summary
 
