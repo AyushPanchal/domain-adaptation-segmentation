@@ -8,15 +8,11 @@ from pathlib import Path
 from typing import Any
 
 import torch
+import torchvision
 from ultralytics import YOLO
 from ultralytics.models.yolo.segment.val import SegmentationValidator
 from ultralytics.nn.tasks import load_checkpoint
 from ultralytics.utils import ops
-
-try:
-    from ultralytics.utils.nms import non_max_suppression
-except ModuleNotFoundError:  # Ultralytics versions before the NMS module split.
-    from ultralytics.utils.ops import non_max_suppression
 
 
 def scalar(value: Any) -> Any:
@@ -59,7 +55,10 @@ class SegmentationNmsEnsemble(torch.nn.Module):
     def fuse(self, verbose: bool = True) -> "SegmentationNmsEnsemble":
         for i, model in enumerate(self.models):
             if hasattr(model, "fuse"):
-                self.models[i] = model.fuse(verbose=verbose)
+                try:
+                    self.models[i] = model.fuse(verbose=verbose)
+                except TypeError:
+                    self.models[i] = model.fuse()
         return self
 
     def forward(
@@ -103,16 +102,13 @@ class SegmentationNmsEnsembleValidator(SegmentationValidator):
         prototypes: list[torch.Tensor] = preds["prototypes"]
         candidate_counts: list[int] = preds["candidate_counts"]
 
-        outputs, kept_indices = non_max_suppression(
+        outputs, kept_indices = self._nms_with_indices(
             prediction,
-            self.args.conf,
-            self.args.iou,
+            conf_thres=float(self.args.conf or 0.001),
+            iou_thres=float(self.args.iou),
             nc=self.nc,
-            multi_label=True,
-            agnostic=self.args.single_cls or self.args.agnostic_nms,
-            max_det=self.args.max_det,
-            end2end=self.end2end,
-            return_idxs=True,
+            agnostic=bool(self.args.single_cls or self.args.agnostic_nms),
+            max_det=int(self.args.max_det),
         )
 
         imgsz = [4 * x for x in prototypes[0].shape[2:]]
@@ -160,6 +156,71 @@ class SegmentationNmsEnsembleValidator(SegmentationValidator):
             source_ids[(kept_indices >= start) & (kept_indices < end)] = source_index
             start = end
         return source_ids
+
+    @staticmethod
+    def _nms_with_indices(
+        prediction: torch.Tensor,
+        conf_thres: float,
+        iou_thres: float,
+        nc: int,
+        agnostic: bool,
+        max_det: int,
+        max_wh: int = 7680,
+        max_nms: int = 30000,
+    ) -> tuple[list[torch.Tensor], list[torch.Tensor]]:
+        """Version-stable NMS for segmentation tensors, preserving raw candidate indices."""
+        batch_size = prediction.shape[0]
+        extra = prediction.shape[1] - nc - 4
+        class_start = 4
+        mask_start = 4 + nc
+        candidates = prediction[:, class_start:mask_start].amax(1) > conf_thres
+        prediction = prediction.transpose(-1, -2)
+        prediction[..., :4] = ops.xywh2xyxy(prediction[..., :4])
+
+        outputs = [torch.zeros((0, 6 + extra), device=prediction.device)] * batch_size
+        kept_indices = [torch.zeros((0,), dtype=torch.long, device=prediction.device)] * batch_size
+
+        for image_index, image_prediction in enumerate(prediction):
+            keep_candidate = candidates[image_index]
+            image_indices = torch.arange(
+                image_prediction.shape[0], dtype=torch.long, device=image_prediction.device
+            )
+            image_prediction = image_prediction[keep_candidate]
+            image_indices = image_indices[keep_candidate]
+            if image_prediction.shape[0] == 0:
+                continue
+
+            boxes = image_prediction[:, :4]
+            class_scores = image_prediction[:, class_start:mask_start]
+            mask_coefficients = image_prediction[:, mask_start:]
+
+            row_indices, class_indices = torch.where(class_scores > conf_thres)
+            if row_indices.shape[0] == 0:
+                continue
+
+            detections = torch.cat(
+                (
+                    boxes[row_indices],
+                    class_scores[row_indices, class_indices, None],
+                    class_indices[:, None].float(),
+                    mask_coefficients[row_indices],
+                ),
+                dim=1,
+            )
+            raw_indices = image_indices[row_indices]
+
+            if detections.shape[0] > max_nms:
+                top = detections[:, 4].argsort(descending=True)[:max_nms]
+                detections = detections[top]
+                raw_indices = raw_indices[top]
+
+            offsets = detections[:, 5:6] * (0 if agnostic else max_wh)
+            keep = torchvision.ops.nms(detections[:, :4] + offsets, detections[:, 4], iou_thres)
+            keep = keep[:max_det]
+            outputs[image_index] = detections[keep]
+            kept_indices[image_index] = raw_indices[keep]
+
+        return outputs, kept_indices
 
 
 def evaluate_segmentation_ensemble(
