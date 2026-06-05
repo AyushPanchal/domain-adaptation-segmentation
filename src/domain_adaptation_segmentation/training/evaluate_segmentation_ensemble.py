@@ -75,9 +75,7 @@ class SegmentationNmsEnsemble(torch.nn.Module):
 
         for model in self.models:
             output = model(x, augment=augment, profile=profile, visualize=visualize)
-            raw = output[0]
-            proto_output = output[1]
-            proto = proto_output[-1] if isinstance(proto_output, (list, tuple)) else proto_output
+            raw, proto = self._extract_raw_and_proto(output)
 
             raw_predictions.append(raw)
             prototypes.append(proto)
@@ -88,6 +86,54 @@ class SegmentationNmsEnsemble(torch.nn.Module):
             "prototypes": prototypes,
             "candidate_counts": candidate_counts,
         }
+
+    def _extract_raw_and_proto(self, output: Any) -> tuple[torch.Tensor, torch.Tensor]:
+        """Extract YOLO segmentation prediction and prototype tensors across Ultralytics versions."""
+        tensors = list(self._flatten_tensors(output))
+        proto_candidates = [tensor for tensor in tensors if tensor.ndim == 4 and tensor.shape[1] > 0]
+        if not proto_candidates:
+            raise ValueError(f"Could not find a segmentation prototype tensor in output: {self._describe(output)}")
+
+        proto = max(proto_candidates, key=lambda tensor: tensor.shape[-1] * tensor.shape[-2])
+        expected_channels = 4 + self.nc + proto.shape[1]
+        raw_candidates: list[torch.Tensor] = []
+        for tensor in tensors:
+            if tensor.ndim != 3:
+                continue
+            if tensor.shape[1] == expected_channels:
+                raw_candidates.append(tensor)
+            elif tensor.shape[2] == expected_channels:
+                raw_candidates.append(tensor.transpose(1, 2))
+
+        if not raw_candidates:
+            raise ValueError(
+                "Could not find a raw YOLO segmentation prediction tensor "
+                f"with {expected_channels} channels in output: {self._describe(output)}"
+            )
+
+        raw = max(raw_candidates, key=lambda tensor: tensor.shape[-1])
+        return raw, proto
+
+    @classmethod
+    def _flatten_tensors(cls, value: Any):
+        if isinstance(value, torch.Tensor):
+            yield value
+        elif isinstance(value, dict):
+            for item in value.values():
+                yield from cls._flatten_tensors(item)
+        elif isinstance(value, (list, tuple)):
+            for item in value:
+                yield from cls._flatten_tensors(item)
+
+    @classmethod
+    def _describe(cls, value: Any) -> Any:
+        if isinstance(value, torch.Tensor):
+            return tuple(value.shape)
+        if isinstance(value, dict):
+            return {key: cls._describe(item) for key, item in value.items()}
+        if isinstance(value, (list, tuple)):
+            return [cls._describe(item) for item in value]
+        return type(value).__name__
 
 
 class SegmentationNmsEnsembleValidator(SegmentationValidator):
