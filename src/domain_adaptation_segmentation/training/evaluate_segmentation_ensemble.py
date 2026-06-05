@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import Any
 
 import torch
-import torchvision
 from ultralytics import YOLO
 from ultralytics.models.yolo.segment.val import SegmentationValidator
 from ultralytics.nn.tasks import load_checkpoint
@@ -215,12 +214,46 @@ class SegmentationNmsEnsembleValidator(SegmentationValidator):
                 raw_indices = raw_indices[top]
 
             offsets = detections[:, 5:6] * (0 if agnostic else max_wh)
-            keep = torchvision.ops.nms(detections[:, :4] + offsets, detections[:, 4], iou_thres)
+            keep = SegmentationNmsEnsembleValidator._torch_nms(
+                detections[:, :4] + offsets, detections[:, 4], iou_thres
+            )
             keep = keep[:max_det]
             outputs[image_index] = detections[keep]
             kept_indices[image_index] = raw_indices[keep]
 
         return outputs, kept_indices
+
+    @staticmethod
+    def _torch_nms(boxes: torch.Tensor, scores: torch.Tensor, iou_thres: float) -> torch.Tensor:
+        """Pure PyTorch NMS to avoid Torchvision compiled-op issues on Kaggle."""
+        if boxes.numel() == 0:
+            return torch.empty((0,), dtype=torch.long, device=boxes.device)
+
+        x1, y1, x2, y2 = boxes.unbind(dim=1)
+        areas = (x2 - x1).clamp(min=0) * (y2 - y1).clamp(min=0)
+        order = scores.argsort(descending=True)
+        keep = []
+
+        while order.numel() > 0:
+            index = order[0]
+            keep.append(index)
+            if order.numel() == 1:
+                break
+
+            rest = order[1:]
+            xx1 = torch.maximum(x1[index], x1[rest])
+            yy1 = torch.maximum(y1[index], y1[rest])
+            xx2 = torch.minimum(x2[index], x2[rest])
+            yy2 = torch.minimum(y2[index], y2[rest])
+
+            inter_w = (xx2 - xx1).clamp(min=0)
+            inter_h = (yy2 - yy1).clamp(min=0)
+            inter = inter_w * inter_h
+            union = areas[index] + areas[rest] - inter
+            iou = inter / union.clamp(min=1e-7)
+            order = rest[iou <= iou_thres]
+
+        return torch.stack(keep) if keep else torch.empty((0,), dtype=torch.long, device=boxes.device)
 
 
 def evaluate_segmentation_ensemble(
