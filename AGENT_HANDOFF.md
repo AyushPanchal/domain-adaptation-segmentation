@@ -89,12 +89,13 @@ visible-to-thermal object detection.
 | 2026-06-04 | Completed Kaggle N4 full run | `downloads/full_n4_results.zip`; status completed on T4x2 in 12853.39 seconds. N4 eval_ir: mask mAP50 0.6555, mask mAP50-95 0.4438, box mAP50 0.7056, box mAP50-95 0.5943. eval_eo_ir: mask mAP50 0.3448, mask mAP50-95 0.1984, box mAP50 0.3768, box mAP50-95 0.3011. Completed 100/100 epochs; best training-row mask mAP50-95 was epoch 79. N4 improves over N1 slightly but remains below N3, so use it as the first ensemble candidate with N3 rather than as the new best standalone model. |
 | 2026-06-05 | Added N6 N3+N4 ensemble evaluator and Kaggle notebook | New module: `src/domain_adaptation_segmentation/training/evaluate_segmentation_ensemble.py`. New notebook: `notebooks/kaggle_ensemble_n3_n4_yolo11l.ipynb`. The evaluator performs cross-model NMS over raw predictions and reconstructs masks with each selected candidate's own source-model prototype, avoiding the standard Ultralytics ensemble limitation for segmentation masks. The notebook searches `/kaggle/input` and `/kaggle/working` for `full_n3_results.zip` and `full_n4_results.zip`, extracts `best.pt`, evaluates `eval_ir` and `eval_eo_ir`, prints deltas against N3/N4, and packages `n6_n3_n4_ensemble_results.zip`. A local one-image CPU smoke test passed. |
 | 2026-06-05 | Completed Kaggle N6 N3+N4 ensemble evaluation | `downloads/n6_n3_n4_ensemble_results.zip`; eval_ir: mask mAP50 0.6910, mask mAP50-95 0.4553, box mAP50 0.7171, box mAP50-95 0.6143. eval_eo_ir: mask mAP50 0.5462, mask mAP50-95 0.3139, box mAP50 0.5828, box mAP50-95 0.4749. Compared with N3, N6 is slightly better on IR box metrics (+0.0004 box mAP50, +0.0044 box mAP50-95) but slightly lower on IR mask mAP50-95 (-0.0002) and clearly lower on combined EO+IR. Treat N6 as an ensemble ablation, not the best model. |
+| 2026-06-05 | Added Kaggle N7 high-resolution N3-style notebook | Use `notebooks/kaggle_one_experiment_n7_joint_eo_ir_yolo11l_img960.ipynb`. It follows the N3 EO+IR YOLO11l recipe but changes only the resolution axis: `imgsz=960`, `batch=4`, `device=0,1`, eval on `eval_ir` and `eval_eo_ir`. Run smoke first and inspect memory/runtime before attempting full. This is the next best chance for a real mask-quality gain because it targets small-object and boundary detail without changing model family. |
 
 ## Next Recommended Actions
 
-1. Keep N3 as the current best standalone result for paper tables.
-2. Use N6 as an ensemble ablation showing that adding an IR-only specialist mostly helps box localization but does not improve mask quality over N3.
-3. Next high-value path: train N5 EO-only YOLO11l specialist or try a confidence/weighted ensemble variant only if time permits.
+1. Run N7 smoke on Kaggle T4x2 with `RUN_STAGE="smoke"` in `notebooks/kaggle_one_experiment_n7_joint_eo_ir_yolo11l_img960.ipynb`.
+2. If N7 smoke fits memory and completes, run N7 full and compare against N3 on `eval_ir` mask mAP50-95 and `eval_eo_ir` mask mAP50-95.
+3. If N7 does not improve masks, keep N3 as final best and use N6 as the ensemble ablation; only then consider YOLO11x at 640 as a capacity-only test.
 
 ## Latest Data Discovery Summary
 
