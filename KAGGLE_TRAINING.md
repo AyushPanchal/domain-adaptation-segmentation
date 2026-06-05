@@ -26,6 +26,7 @@ notebooks/kaggle_one_experiment_n1_ir_only.ipynb          # N1 IR-only supervise
 notebooks/kaggle_one_experiment_n2_balanced_eo_ir.ipynb   # N2 balanced EO+IR supervised baseline
 notebooks/kaggle_one_experiment_n3_joint_eo_ir_yolo11l.ipynb # N3 EO+IR YOLO11l large-model baseline
 notebooks/kaggle_one_experiment_n4_ir_only_yolo11l.ipynb  # N4 IR-only YOLO11l specialist
+notebooks/kaggle_ensemble_n3_n4_yolo11l.ipynb             # N6 N3+N4 mask-aware ensemble evaluation
 ```
 
 The notebook uses:
@@ -86,6 +87,7 @@ of these result zips:
 /kaggle/working/full_n3_results.zip
 /kaggle/working/smoke_n4_results.zip
 /kaggle/working/full_n4_results.zip
+/kaggle/working/n6_n3_n4_ensemble_results.zip
 ```
 
 After training, the notebook evaluates `best.pt` on two validation settings:
@@ -97,6 +99,12 @@ eval_eo_ir  = EO validation + IR validation combined
 
 Use `eval_ir` as the primary RGB-to-IR domain-transfer metric. Use
 `eval_eo_ir` as the combined overall-validation metric.
+
+For N6, add `full_n3_results.zip` and `full_n4_results.zip` as Kaggle input
+files, or place them in `/kaggle/working`. The notebook extracts each
+experiment's `best.pt`, runs a mask-aware N3+N4 ensemble evaluation, prints
+deltas against the standalone N3/N4 baselines, and packages
+`/kaggle/working/n6_n3_n4_ensemble_results.zip`.
 
 Kaggle cannot silently auto-download local files from the kernel, but the final
 cell displays a `FileLink` and the zip also appears in the Output/Files panel.

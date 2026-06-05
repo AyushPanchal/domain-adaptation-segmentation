@@ -87,12 +87,13 @@ visible-to-thermal object detection.
 | 2026-06-04 | Added Kaggle N4 IR-only YOLO11l notebook | Use `notebooks/kaggle_one_experiment_n4_ir_only_yolo11l.ipynb`. It follows the N1 IR-only training recipe but upgrades the model to `yolo11l-seg.pt` and uses `YOLO_BATCH=8` for safer T4x2 memory. It evaluates `best.pt` on `eval_ir` and `eval_eo_ir`, and packages `smoke_n4_results.zip` or `full_n4_results.zip`. This is the IR specialist needed before testing an N3+N4 ensemble. |
 | 2026-06-04 | Completed Kaggle N4 smoke run | `downloads/smoke_n4_results.zip`; status completed on T4x2 in 208.76 seconds. N4 smoke eval_ir: mask mAP50 0.3904, mask mAP50-95 0.2039, box mAP50 0.4242, box mAP50-95 0.3103. eval_eo_ir: mask mAP50 0.2359, mask mAP50-95 0.1114, box mAP50 0.2651, box mAP50-95 0.1872. Smoke passed; full N4 is ready to run. |
 | 2026-06-04 | Completed Kaggle N4 full run | `downloads/full_n4_results.zip`; status completed on T4x2 in 12853.39 seconds. N4 eval_ir: mask mAP50 0.6555, mask mAP50-95 0.4438, box mAP50 0.7056, box mAP50-95 0.5943. eval_eo_ir: mask mAP50 0.3448, mask mAP50-95 0.1984, box mAP50 0.3768, box mAP50-95 0.3011. Completed 100/100 epochs; best training-row mask mAP50-95 was epoch 79. N4 improves over N1 slightly but remains below N3, so use it as the first ensemble candidate with N3 rather than as the new best standalone model. |
+| 2026-06-05 | Added N6 N3+N4 ensemble evaluator and Kaggle notebook | New module: `src/domain_adaptation_segmentation/training/evaluate_segmentation_ensemble.py`. New notebook: `notebooks/kaggle_ensemble_n3_n4_yolo11l.ipynb`. The evaluator performs cross-model NMS over raw predictions and reconstructs masks with each selected candidate's own source-model prototype, avoiding the standard Ultralytics ensemble limitation for segmentation masks. The notebook searches `/kaggle/input` and `/kaggle/working` for `full_n3_results.zip` and `full_n4_results.zip`, extracts `best.pt`, evaluates `eval_ir` and `eval_eo_ir`, prints deltas against N3/N4, and packages `n6_n3_n4_ensemble_results.zip`. A local one-image CPU smoke test passed. |
 
 ## Next Recommended Actions
 
-1. Implement N3+N4 ensemble evaluation using saved `best.pt` checkpoints from `downloads/full_n3_results.zip` and `downloads/full_n4_results.zip`.
-2. Evaluate the ensemble on both `eval_ir` and `eval_eo_ir`; compare against N3 as the current standalone best.
-3. If N3+N4 gives any gain, package it as the first ensemble result; otherwise proceed to N5 EO-only YOLO11l specialist.
+1. Run `notebooks/kaggle_ensemble_n3_n4_yolo11l.ipynb` on Kaggle with `full_n3_results.zip` and `full_n4_results.zip` available as input files or in `/kaggle/working`.
+2. Download `/kaggle/working/n6_n3_n4_ensemble_results.zip` and inspect whether ensemble `mask_mAP50-95` beats N3 on `eval_ir` or `eval_eo_ir`.
+3. If N6 gives any gain, record it as the first ensemble result; otherwise proceed to N5 EO-only YOLO11l specialist.
 
 ## Latest Data Discovery Summary
 
