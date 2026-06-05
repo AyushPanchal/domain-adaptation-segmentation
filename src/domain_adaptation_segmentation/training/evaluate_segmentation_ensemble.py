@@ -12,7 +12,11 @@ from ultralytics import YOLO
 from ultralytics.models.yolo.segment.val import SegmentationValidator
 from ultralytics.nn.tasks import load_checkpoint
 from ultralytics.utils import ops
-from ultralytics.utils import nms
+
+try:
+    from ultralytics.utils.nms import non_max_suppression
+except ModuleNotFoundError:  # Ultralytics versions before the NMS module split.
+    from ultralytics.utils.ops import non_max_suppression
 
 
 def scalar(value: Any) -> Any:
@@ -99,7 +103,7 @@ class SegmentationNmsEnsembleValidator(SegmentationValidator):
         prototypes: list[torch.Tensor] = preds["prototypes"]
         candidate_counts: list[int] = preds["candidate_counts"]
 
-        outputs, kept_indices = nms.non_max_suppression(
+        outputs, kept_indices = non_max_suppression(
             prediction,
             self.args.conf,
             self.args.iou,
