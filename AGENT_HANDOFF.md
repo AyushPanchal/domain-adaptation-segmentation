@@ -95,12 +95,13 @@ visible-to-thermal object detection.
 | 2026-06-06 | Added Kaggle N8 high-resolution YOLO11x stretch notebook | Use `notebooks/kaggle_one_experiment_n8_joint_eo_ir_yolo11x_img960.ipynb`. It follows the N7 high-resolution EO+IR recipe but upgrades model capacity to `yolo11x-seg.pt`. Current defaults: `imgsz=960`, `batch=2`, `device=0`, eval on `eval_ir` and `eval_eo_ir`. Run smoke first because YOLO11x at 960 is memory/runtime risky on T4x2. |
 | 2026-06-06 | Patched N8 to avoid two-GPU DDP failure | Kaggle smoke failed under `device=0,1` with PyTorch DDP `Expected to have finished reduction... unused parameters` on rank 1, not CUDA OOM. Updated N8 default to `device=0`, `batch=2`; if memory fails, reduce batch to 1. |
 | 2026-06-06 | Patched N8 best.pt lookup path | Single-GPU N8 smoke trained but the notebook looked for `experiments/n8_joint.../best.pt`; the runner saves under `experiments/N8_joint...` because run dirs are `<id>_<name>`. Updated `EXPERIMENT_NAME` to `N8_joint_eo_ir_yolo11x_img960`. |
+| 2026-06-06 | Completed Kaggle N8 YOLO11x high-resolution smoke run | `downloads/smoke_n8_results.zip`; status completed in 1323.60 seconds with `imgsz=960`, device=0, batch=2. Parsed peak GPU memory from stdout was about 13.9G. N8 smoke eval_ir: mask mAP50 0.4345, mask mAP50-95 0.2849, box mAP50 0.4465, box mAP50-95 0.3312. eval_eo_ir: mask mAP50 0.3699, mask mAP50-95 0.2384, box mAP50 0.3853, box mAP50-95 0.2853. N8 smoke beats N7 smoke on mask metrics, but one epoch took about 22 minutes on single T4, so full N8@960 is a runtime/quota risk. |
 
 ## Next Recommended Actions
 
-1. Pull the latest repo in Kaggle, then rerun N8 smoke with `RUN_STAGE="smoke"`, `YOLO_DEVICE="0"`, `YOLO_BATCH="2"`.
-2. If smoke passes cleanly, run N8 full by changing only `RUN_STAGE="full"`.
-3. If N8 fails for memory, reduce `YOLO_BATCH` to `1` in the notebook and rerun smoke; if runtime is too high, keep N7 as final best and treat N8 as an attempted capacity ablation.
+1. Keep N7 as the current best completed model unless the user explicitly wants to spend quota on repeated-resume N8 full training.
+2. If proceeding with N8 full, run `RUN_STAGE="full"` with `YOLO_DEVICE="0"`, `YOLO_BATCH="2"`, and expect long runtime; resume may be needed across Kaggle sessions.
+3. Otherwise, move to final result consolidation: N7 headline, N3 640-resolution baseline, N6 ensemble ablation, and N8 smoke as a capacity-scaling diagnostic.
 
 ## Latest Data Discovery Summary
 
