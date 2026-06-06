@@ -31,6 +31,11 @@ notebooks/kaggle_one_experiment_n7_joint_eo_ir_yolo11l_img960.ipynb # N7 N3-styl
 notebooks/kaggle_one_experiment_n8_joint_eo_ir_yolo11x_img960.ipynb # N8 high-res YOLO11x stretch, imgsz=960
 ```
 
+N8 note: run it on `YOLO_DEVICE="0"` first. The two-GPU setting launches
+PyTorch DDP and can fail with an unused-parameter reduction error for
+`yolo11x-seg.pt` at `imgsz=960`. If single-GPU memory fails, reduce
+`YOLO_BATCH` from `2` to `1`.
+
 The notebook uses:
 
 ```text

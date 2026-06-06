@@ -92,13 +92,14 @@ visible-to-thermal object detection.
 | 2026-06-05 | Added Kaggle N7 high-resolution N3-style notebook | Use `notebooks/kaggle_one_experiment_n7_joint_eo_ir_yolo11l_img960.ipynb`. It follows the N3 EO+IR YOLO11l recipe but changes only the resolution axis: `imgsz=960`, `batch=4`, `device=0,1`, eval on `eval_ir` and `eval_eo_ir`. Run smoke first and inspect memory/runtime before attempting full. This is the next best chance for a real mask-quality gain because it targets small-object and boundary detail without changing model family. |
 | 2026-06-05 | Completed Kaggle N7 high-resolution smoke run | `downloads/smoke_n7_results.zip`; status completed in 543.78 seconds with `imgsz=960`, batch=4, device=0,1. Parsed peak GPU memory from stdout was about 9.01G. N7 smoke eval_ir: mask mAP50 0.3871, mask mAP50-95 0.2413, box mAP50 0.4038, box mAP50-95 0.2933. eval_eo_ir: mask mAP50 0.3589, mask mAP50-95 0.2208, box mAP50 0.3836, box mAP50-95 0.2831. Compared with N3 smoke, N7 is lower on IR mask mAP50 but better on strict mask mAP50-95 for both IR and EO+IR. Full N7 is worth running. |
 | 2026-06-06 | Completed Kaggle N7 high-resolution full run | `downloads/full_n7_results.zip`; status completed in 17837.79 seconds after resume with `imgsz=960`, batch=4, device=0,1. N7 eval_ir: mask mAP50 0.7025, mask mAP50-95 0.5250, box mAP50 0.7192, box mAP50-95 0.6128. eval_eo_ir: mask mAP50 0.6163, mask mAP50-95 0.4310, box mAP50 0.6383, box mAP50-95 0.5244. This is the new best result and beats N3 by +0.0695 on IR mask mAP50-95 and +0.1002 on EO+IR mask mAP50-95. Early stopping reported best epoch 51; training CSV best mask row was epoch 68. |
-| 2026-06-06 | Added Kaggle N8 high-resolution YOLO11x stretch notebook | Use `notebooks/kaggle_one_experiment_n8_joint_eo_ir_yolo11x_img960.ipynb`. It follows the N7 high-resolution EO+IR recipe but upgrades model capacity to `yolo11x-seg.pt`. Defaults: `imgsz=960`, `batch=2`, `device=0,1`, eval on `eval_ir` and `eval_eo_ir`. Run smoke first because YOLO11x at 960 is memory/runtime risky on T4x2. |
+| 2026-06-06 | Added Kaggle N8 high-resolution YOLO11x stretch notebook | Use `notebooks/kaggle_one_experiment_n8_joint_eo_ir_yolo11x_img960.ipynb`. It follows the N7 high-resolution EO+IR recipe but upgrades model capacity to `yolo11x-seg.pt`. Current defaults: `imgsz=960`, `batch=2`, `device=0`, eval on `eval_ir` and `eval_eo_ir`. Run smoke first because YOLO11x at 960 is memory/runtime risky on T4x2. |
+| 2026-06-06 | Patched N8 to avoid two-GPU DDP failure | Kaggle smoke failed under `device=0,1` with PyTorch DDP `Expected to have finished reduction... unused parameters` on rank 1, not CUDA OOM. Updated N8 default to `device=0`, `batch=2`; if memory fails, reduce batch to 1. |
 
 ## Next Recommended Actions
 
-1. Run N8 smoke on Kaggle T4x2 with `RUN_STAGE="smoke"` and inspect peak memory/runtime.
+1. Pull the latest repo in Kaggle, then rerun N8 smoke with `RUN_STAGE="smoke"`, `YOLO_DEVICE="0"`, `YOLO_BATCH="2"`.
 2. If smoke passes cleanly, run N8 full by changing only `RUN_STAGE="full"`.
-3. If N8 fails for memory, reduce `YOLO_BATCH` to `1` in the notebook and rerun smoke; if it still fails, keep N7 as final best and treat N8 as an attempted capacity ablation.
+3. If N8 fails for memory, reduce `YOLO_BATCH` to `1` in the notebook and rerun smoke; if runtime is too high, keep N7 as final best and treat N8 as an attempted capacity ablation.
 
 ## Latest Data Discovery Summary
 
