@@ -28,6 +28,7 @@ notebooks/kaggle_one_experiment_n3_joint_eo_ir_yolo11l.ipynb # N3 EO+IR YOLO11l 
 notebooks/kaggle_one_experiment_n4_ir_only_yolo11l.ipynb  # N4 IR-only YOLO11l specialist
 notebooks/kaggle_ensemble_n3_n4_yolo11l.ipynb             # N6 N3+N4 mask-aware ensemble evaluation
 notebooks/kaggle_one_experiment_n7_joint_eo_ir_yolo11l_img960.ipynb # N7 N3-style high-res YOLO11l, imgsz=960
+notebooks/kaggle_one_experiment_n8_joint_eo_ir_yolo11x_img960.ipynb # N8 high-res YOLO11x stretch, imgsz=960
 ```
 
 The notebook uses:
@@ -91,6 +92,8 @@ of these result zips:
 /kaggle/working/n6_n3_n4_ensemble_results.zip
 /kaggle/working/smoke_n7_results.zip
 /kaggle/working/full_n7_results.zip
+/kaggle/working/smoke_n8_results.zip
+/kaggle/working/full_n8_results.zip
 ```
 
 After training, the notebook evaluates `best.pt` on two validation settings:
