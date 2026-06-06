@@ -91,12 +91,13 @@ visible-to-thermal object detection.
 | 2026-06-05 | Completed Kaggle N6 N3+N4 ensemble evaluation | `downloads/n6_n3_n4_ensemble_results.zip`; eval_ir: mask mAP50 0.6910, mask mAP50-95 0.4553, box mAP50 0.7171, box mAP50-95 0.6143. eval_eo_ir: mask mAP50 0.5462, mask mAP50-95 0.3139, box mAP50 0.5828, box mAP50-95 0.4749. Compared with N3, N6 is slightly better on IR box metrics (+0.0004 box mAP50, +0.0044 box mAP50-95) but slightly lower on IR mask mAP50-95 (-0.0002) and clearly lower on combined EO+IR. Treat N6 as an ensemble ablation, not the best model. |
 | 2026-06-05 | Added Kaggle N7 high-resolution N3-style notebook | Use `notebooks/kaggle_one_experiment_n7_joint_eo_ir_yolo11l_img960.ipynb`. It follows the N3 EO+IR YOLO11l recipe but changes only the resolution axis: `imgsz=960`, `batch=4`, `device=0,1`, eval on `eval_ir` and `eval_eo_ir`. Run smoke first and inspect memory/runtime before attempting full. This is the next best chance for a real mask-quality gain because it targets small-object and boundary detail without changing model family. |
 | 2026-06-05 | Completed Kaggle N7 high-resolution smoke run | `downloads/smoke_n7_results.zip`; status completed in 543.78 seconds with `imgsz=960`, batch=4, device=0,1. Parsed peak GPU memory from stdout was about 9.01G. N7 smoke eval_ir: mask mAP50 0.3871, mask mAP50-95 0.2413, box mAP50 0.4038, box mAP50-95 0.2933. eval_eo_ir: mask mAP50 0.3589, mask mAP50-95 0.2208, box mAP50 0.3836, box mAP50-95 0.2831. Compared with N3 smoke, N7 is lower on IR mask mAP50 but better on strict mask mAP50-95 for both IR and EO+IR. Full N7 is worth running. |
+| 2026-06-06 | Completed Kaggle N7 high-resolution full run | `downloads/full_n7_results.zip`; status completed in 17837.79 seconds after resume with `imgsz=960`, batch=4, device=0,1. N7 eval_ir: mask mAP50 0.7025, mask mAP50-95 0.5250, box mAP50 0.7192, box mAP50-95 0.6128. eval_eo_ir: mask mAP50 0.6163, mask mAP50-95 0.4310, box mAP50 0.6383, box mAP50-95 0.5244. This is the new best result and beats N3 by +0.0695 on IR mask mAP50-95 and +0.1002 on EO+IR mask mAP50-95. Early stopping reported best epoch 51; training CSV best mask row was epoch 68. |
 
 ## Next Recommended Actions
 
-1. Run N7 full on Kaggle T4x2 by changing `RUN_STAGE="full"` in `notebooks/kaggle_one_experiment_n7_joint_eo_ir_yolo11l_img960.ipynb`.
-2. Download `/kaggle/working/full_n7_results.zip` and compare against N3 on `eval_ir` mask mAP50-95 and `eval_eo_ir` mask mAP50-95.
-3. If N7 improves masks, use it as the final best high-resolution model; otherwise keep N3 as final best and use N7 as the resolution ablation.
+1. Treat N7 as the current final best/high-resolution model for paper and dissertation tables.
+2. Build the final experiment summary table with N7 as the headline, N3 as the 640-resolution baseline, and N6 as the ensemble ablation.
+3. Optional only if time/quota remains: evaluate qualitative predictions from N3 vs N7 to show sharper high-resolution masks.
 
 ## Latest Data Discovery Summary
 
