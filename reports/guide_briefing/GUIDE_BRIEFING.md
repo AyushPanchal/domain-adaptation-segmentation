@@ -1,6 +1,6 @@
-# Guide Review Briefing: EO/IR Aerial Image Segmentation Experiments
+# EO/IR Aerial Image Segmentation: Experimental Study
 
-Prepared for discussion with project guide, and structured so the same material can later be reused in the MTech dissertation and research paper.
+Technical summary for MTech dissertation and research paper planning.
 
 Date: 2026-06-09  
 Repository: `domain-adaptation-segmentation`  
@@ -10,7 +10,6 @@ Task: YOLO-based object segmentation in electro-optical (EO) and infrared (IR) a
 
 ## Index
 
-- [How To Use This Document In The Meeting](#how-to-use-this-document-in-the-meeting)
 - [1. Executive Summary](#1-executive-summary)
 - [2. Problem Statement](#2-problem-statement)
 - [3. Dataset and Evaluation Setup](#3-dataset-and-evaluation-setup)
@@ -31,33 +30,11 @@ Task: YOLO-based object segmentation in electro-optical (EO) and infrared (IR) a
 - [10. Potential Thesis Contributions](#10-potential-thesis-contributions)
 - [11. Paper Storyline](#11-paper-storyline)
 - [12. Suggested Dissertation Chapter Mapping](#12-suggested-dissertation-chapter-mapping)
-- [13. Limitations and Honest Discussion](#13-limitations-and-honest-discussion)
-- [14. Discussion Points for Guide Meeting](#14-discussion-points-for-guide-meeting)
-- [15. Next Work Before Guide/Defense](#15-next-work-before-guidedefense)
+- [13. Limitations and Discussion](#13-limitations-and-discussion)
+- [14. Open Technical Decisions](#14-open-technical-decisions)
+- [15. Remaining Work Before Submission/Defense](#15-remaining-work-before-submissiondefense)
 - [16. Artifacts Created](#16-artifacts-created)
-- [17. Short Version to Tell the Guide](#17-short-version-to-tell-the-guide)
-
----
-
-## How To Use This Document In The Meeting
-
-For a short guide meeting, start with:
-
-1. [Executive Summary](#1-executive-summary)
-2. [Structured Experiment Design](#4-structured-experiment-design)
-3. [Performance Progression](#6-performance-progression)
-4. [Main Comparison](#7-main-comparison)
-5. [Scientific Interpretation](#9-scientific-interpretation)
-6. [Discussion Points for Guide Meeting](#14-discussion-points-for-guide-meeting)
-
-For dissertation/paper writing, reuse:
-
-- [Problem Statement](#2-problem-statement) for the introduction.
-- [Dataset and Evaluation Setup](#3-dataset-and-evaluation-setup) for methodology.
-- [Experiment Inventory](#5-experiment-inventory) for experimental setup.
-- [Full Quantitative Results](#8-full-quantitative-results) for results.
-- [Scientific Interpretation](#9-scientific-interpretation) for discussion.
-- [Potential Thesis Contributions](#10-potential-thesis-contributions) and [Paper Storyline](#11-paper-storyline) for framing.
+- [17. Concise Summary](#17-concise-summary)
 
 ---
 
@@ -83,7 +60,7 @@ Current interpretation:
 | Best 640-resolution large baseline | N3 | Strong YOLO11l reference at 640 |
 | Ensemble ablation | N6 | Shows naive mask-aware ensemble does not beat high-res joint training |
 
-Recommended message to guide:
+Central conclusion:
 
 > The strongest dissertation result is not that grayscale augmentation alone solves EO-to-IR segmentation. The stronger and more defensible result is a controlled study showing that IR supervision, high-resolution training, and model capacity affect YOLO segmentation differently. N7 is best for primary IR strict mask quality, while N8 is best for combined EO+IR evaluation.
 
@@ -216,7 +193,7 @@ Key reading:
 
 ## 7. Main Comparison
 
-This is the main table to show in the guide meeting.
+The table below summarizes the central quantitative comparison.
 
 | ID | Method | Model | Eval | Mask mAP50 | Mask mAP50-95 | Box mAP50 | Box mAP50-95 |
 |---|---|---|---|---:|---:|---:|---:|
@@ -406,7 +383,7 @@ Avoid overclaiming:
 
 ---
 
-## 13. Limitations and Honest Discussion
+## 13. Limitations and Discussion
 
 The following points should be stated transparently:
 
@@ -418,25 +395,25 @@ The following points should be stated transparently:
 
 ---
 
-## 14. Discussion Points for Guide Meeting
+## 14. Open Technical Decisions
 
-These are the points where guide feedback will be most useful:
+The following points remain important for final dissertation and paper framing:
 
-| Topic | Question for guide | Why it matters |
+| Topic | Decision Needed | Why it matters |
 |---|---|---|
 | Paper positioning | Should we frame this as a controlled experimental study rather than a new adaptation algorithm? | This is the most honest framing because supervised EO+IR training gives the strongest results. |
 | Main model claim | Should N7 be the headline model, with N8 as the capacity ablation? | N7 is best on primary IR mask mAP50-95, while N8 is best on combined EO+IR. |
 | Evaluation priority | Should the dissertation prioritize `eval_ir` or `eval_eo_ir`? | The choice changes whether N7 or N8 is emphasized. |
-| Qualitative results | Which classes/images should be shown for visual comparison? | Qualitative figures will strengthen the defense and paper. |
+| Qualitative results | Which classes/images should be selected for visual comparison? | Qualitative figures will strengthen the defense and paper. |
 | Publication scope | Should the paper include all E01-E04 grayscale experiments or focus on N3/N6/N7/N8? | This affects paper length and clarity. |
 
-Suggested decision to request:
+Recommended framing:
 
 > Use N7 as the primary IR segmentation result, use N8 as the largest-model combined-domain result, and present N6 as an ensemble ablation.
 
 ---
 
-## 15. Next Work Before Guide/Defense
+## 15. Remaining Work Before Submission/Defense
 
 Recommended next steps:
 
@@ -467,7 +444,7 @@ Final result summary:
 reports/final/final_results_summary.md
 ```
 
-Guide briefing assets:
+Briefing assets:
 
 ```text
 reports/guide_briefing/assets/experiment_design_map.png
@@ -491,6 +468,6 @@ scripts/analysis/build_guide_briefing_assets.py
 
 ---
 
-## 17. Short Version to Tell the Guide
+## 17. Concise Summary
 
 We ran a structured set of YOLO segmentation experiments on EO/IR aerial data. EO-only and grayscale-style approaches were weak for IR masks. Adding IR supervision gave the main jump. YOLO11l improved over YOLO11s, and increasing resolution to 960 gave the best primary IR segmentation result. YOLO11x at 960 improved combined EO+IR evaluation but did not beat YOLO11l at 960 on the strict IR mask metric. Therefore, our main conclusion is that high-resolution mixed-domain YOLO segmentation is the strongest direction, with N7 as the primary IR model and N8 as a capacity-scaling/combined-domain ablation.
