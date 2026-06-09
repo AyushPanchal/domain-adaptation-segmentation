@@ -1,10 +1,63 @@
-# Guide Briefing: EO/IR Aerial Image Segmentation Experiments
+# Guide Review Briefing: EO/IR Aerial Image Segmentation Experiments
 
-Prepared for dissertation and paper discussion.
+Prepared for discussion with project guide, and structured so the same material can later be reused in the MTech dissertation and research paper.
 
 Date: 2026-06-09  
 Repository: `domain-adaptation-segmentation`  
 Task: YOLO-based object segmentation in electro-optical (EO) and infrared (IR) aerial imagery
+
+---
+
+## Index
+
+- [How To Use This Document In The Meeting](#how-to-use-this-document-in-the-meeting)
+- [1. Executive Summary](#1-executive-summary)
+- [2. Problem Statement](#2-problem-statement)
+- [3. Dataset and Evaluation Setup](#3-dataset-and-evaluation-setup)
+- [4. Structured Experiment Design](#4-structured-experiment-design)
+- [5. Experiment Inventory](#5-experiment-inventory)
+- [6. Performance Progression](#6-performance-progression)
+- [7. Main Comparison](#7-main-comparison)
+- [8. Full Quantitative Results](#8-full-quantitative-results)
+  - [8.1 IR-only validation](#81-ir-only-validation-eval_ir)
+  - [8.2 Combined EO+IR validation](#82-combined-eoir-validation-eval_eo_ir)
+- [9. Scientific Interpretation](#9-scientific-interpretation)
+  - [9.1 EO-only adaptation was not sufficient](#91-eo-only-adaptation-was-not-sufficient)
+  - [9.2 IR supervision is the dominant factor](#92-ir-supervision-is-the-dominant-factor)
+  - [9.3 Model scale helps, but not alone](#93-model-scale-helps-but-not-alone)
+  - [9.4 Resolution is the cleanest improvement](#94-resolution-is-the-cleanest-improvement)
+  - [9.5 YOLO11x improves combined evaluation, not primary IR strict masks](#95-yolo11x-improves-combined-evaluation-not-primary-ir-strict-masks)
+  - [9.6 Ensembling did not beat high-resolution joint training](#96-ensembling-did-not-beat-high-resolution-joint-training)
+- [10. Potential Thesis Contributions](#10-potential-thesis-contributions)
+- [11. Paper Storyline](#11-paper-storyline)
+- [12. Suggested Dissertation Chapter Mapping](#12-suggested-dissertation-chapter-mapping)
+- [13. Limitations and Honest Discussion](#13-limitations-and-honest-discussion)
+- [14. Discussion Points for Guide Meeting](#14-discussion-points-for-guide-meeting)
+- [15. Next Work Before Guide/Defense](#15-next-work-before-guidedefense)
+- [16. Artifacts Created](#16-artifacts-created)
+- [17. Short Version to Tell the Guide](#17-short-version-to-tell-the-guide)
+
+---
+
+## How To Use This Document In The Meeting
+
+For a short guide meeting, start with:
+
+1. [Executive Summary](#1-executive-summary)
+2. [Structured Experiment Design](#4-structured-experiment-design)
+3. [Performance Progression](#6-performance-progression)
+4. [Main Comparison](#7-main-comparison)
+5. [Scientific Interpretation](#9-scientific-interpretation)
+6. [Discussion Points for Guide Meeting](#14-discussion-points-for-guide-meeting)
+
+For dissertation/paper writing, reuse:
+
+- [Problem Statement](#2-problem-statement) for the introduction.
+- [Dataset and Evaluation Setup](#3-dataset-and-evaluation-setup) for methodology.
+- [Experiment Inventory](#5-experiment-inventory) for experimental setup.
+- [Full Quantitative Results](#8-full-quantitative-results) for results.
+- [Scientific Interpretation](#9-scientific-interpretation) for discussion.
+- [Potential Thesis Contributions](#10-potential-thesis-contributions) and [Paper Storyline](#11-paper-storyline) for framing.
 
 ---
 
@@ -29,6 +82,10 @@ Current interpretation:
 | Best combined EO+IR model | N8 | Highest EO+IR mask mAP50-95: `0.4422` |
 | Best 640-resolution large baseline | N3 | Strong YOLO11l reference at 640 |
 | Ensemble ablation | N6 | Shows naive mask-aware ensemble does not beat high-res joint training |
+
+Recommended message to guide:
+
+> The strongest dissertation result is not that grayscale augmentation alone solves EO-to-IR segmentation. The stronger and more defensible result is a controlled study showing that IR supervision, high-resolution training, and model capacity affect YOLO segmentation differently. N7 is best for primary IR strict mask quality, while N8 is best for combined EO+IR evaluation.
 
 ---
 
@@ -361,7 +418,25 @@ The following points should be stated transparently:
 
 ---
 
-## 14. Next Work Before Guide/Defense
+## 14. Discussion Points for Guide Meeting
+
+These are the points where guide feedback will be most useful:
+
+| Topic | Question for guide | Why it matters |
+|---|---|---|
+| Paper positioning | Should we frame this as a controlled experimental study rather than a new adaptation algorithm? | This is the most honest framing because supervised EO+IR training gives the strongest results. |
+| Main model claim | Should N7 be the headline model, with N8 as the capacity ablation? | N7 is best on primary IR mask mAP50-95, while N8 is best on combined EO+IR. |
+| Evaluation priority | Should the dissertation prioritize `eval_ir` or `eval_eo_ir`? | The choice changes whether N7 or N8 is emphasized. |
+| Qualitative results | Which classes/images should be shown for visual comparison? | Qualitative figures will strengthen the defense and paper. |
+| Publication scope | Should the paper include all E01-E04 grayscale experiments or focus on N3/N6/N7/N8? | This affects paper length and clarity. |
+
+Suggested decision to request:
+
+> Use N7 as the primary IR segmentation result, use N8 as the largest-model combined-domain result, and present N6 as an ensemble ablation.
+
+---
+
+## 15. Next Work Before Guide/Defense
 
 Recommended next steps:
 
@@ -377,7 +452,7 @@ Recommended next steps:
 
 ---
 
-## 15. Artifacts Created
+## 16. Artifacts Created
 
 Final tables:
 
@@ -416,6 +491,6 @@ scripts/analysis/build_guide_briefing_assets.py
 
 ---
 
-## 16. Short Version to Tell the Guide
+## 17. Short Version to Tell the Guide
 
 We ran a structured set of YOLO segmentation experiments on EO/IR aerial data. EO-only and grayscale-style approaches were weak for IR masks. Adding IR supervision gave the main jump. YOLO11l improved over YOLO11s, and increasing resolution to 960 gave the best primary IR segmentation result. YOLO11x at 960 improved combined EO+IR evaluation but did not beat YOLO11l at 960 on the strict IR mask metric. Therefore, our main conclusion is that high-resolution mixed-domain YOLO segmentation is the strongest direction, with N7 as the primary IR model and N8 as a capacity-scaling/combined-domain ablation.
