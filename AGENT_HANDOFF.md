@@ -98,12 +98,13 @@ visible-to-thermal object detection.
 | 2026-06-06 | Completed Kaggle N8 YOLO11x high-resolution smoke run | `downloads/smoke_n8_results.zip`; status completed in 1323.60 seconds with `imgsz=960`, device=0, batch=2. Parsed peak GPU memory from stdout was about 13.9G. N8 smoke eval_ir: mask mAP50 0.4345, mask mAP50-95 0.2849, box mAP50 0.4465, box mAP50-95 0.3312. eval_eo_ir: mask mAP50 0.3699, mask mAP50-95 0.2384, box mAP50 0.3853, box mAP50-95 0.2853. N8 smoke beats N7 smoke on mask metrics, but one epoch took about 22 minutes on single T4, so full N8@960 is a runtime/quota risk. |
 | 2026-06-09 | Checked Kaggle N8 YOLO11x high-resolution full run | `downloads/full_n8_results.zip`; status completed. Python `zipfile` reports a bad central directory, but Windows `tar` can read the packaged metrics/status files. Final eval_ir: mask mAP50 0.7041, mask mAP50-95 0.5145, box mAP50 0.7205, box mAP50-95 0.6091. eval_eo_ir: mask mAP50 0.6463, mask mAP50-95 0.4422, box mAP50 0.6632, box mAP50-95 0.5455. Training rows reached epoch 96; early stopping reported best epoch 71. N8 improves combined EO+IR metrics over N7 but is slightly lower than N7 on primary IR mask mAP50-95, so use it as capacity-scaling ablation / combined-eval best rather than replacing N7 outright. |
 | 2026-06-09 | Built final result consolidation artifacts | Added `scripts/analysis/build_final_results.py`. Generated `reports/final/final_results_summary.md`, `reports/final/tables/final_metrics_long.csv`, `reports/final/tables/main_comparison.csv`, and mask mAP50-95 bar charts under `reports/final/figures/`. The tables include all full experiments E01/E02/E03/E04/E09/N1/N2/N3/N4/N6/N7/N8 across `eval_ir` and `eval_eo_ir`. |
+| 2026-06-09 | Built guide-facing structured briefing | Added `reports/guide_briefing/GUIDE_BRIEFING.md` with dataset summary, experiment inventory, result tables, interpretation, thesis contributions, paper storyline, limitations, and next steps. Added generated visuals under `reports/guide_briefing/assets/` using `scripts/analysis/build_guide_briefing_assets.py`. |
 
 ## Next Recommended Actions
 
-1. Use `reports/final/final_results_summary.md` as the starting point for paper/dissertation result writing.
-2. Generate qualitative examples comparing N7 vs N8 if the full N8 visual archive is available locally; avoid using N8 smoke visuals for final qualitative claims.
-3. Prepare final paper tables from `reports/final/tables/main_comparison.csv` and `reports/final/tables/final_metrics_long.csv`.
+1. Show `reports/guide_briefing/GUIDE_BRIEFING.md` to the guide for feedback on story, claims, and experiment framing.
+2. Use `reports/final/final_results_summary.md` as the starting point for paper/dissertation result writing.
+3. Generate qualitative examples comparing N7 vs N8 if the full N8 visual archive is available locally; avoid using N8 smoke visuals for final qualitative claims.
 
 ## Latest Data Discovery Summary
 
