@@ -100,6 +100,7 @@ visible-to-thermal object detection.
 | 2026-06-09 | Built final result consolidation artifacts | Added `scripts/analysis/build_final_results.py`. Generated `reports/final/final_results_summary.md`, `reports/final/tables/final_metrics_long.csv`, `reports/final/tables/main_comparison.csv`, and mask mAP50-95 bar charts under `reports/final/figures/`. The tables include all full experiments E01/E02/E03/E04/E09/N1/N2/N3/N4/N6/N7/N8 across `eval_ir` and `eval_eo_ir`. |
 | 2026-06-09 | Built structured technical briefing | Added `reports/guide_briefing/GUIDE_BRIEFING.md` with dataset summary, experiment inventory, result tables, interpretation, thesis contributions, paper storyline, limitations, and next steps. Added generated visuals under `reports/guide_briefing/assets/` using `scripts/analysis/build_guide_briefing_assets.py`. |
 | 2026-06-09 | Neutralized briefing wording | Updated `reports/guide_briefing/GUIDE_BRIEFING.md` with a clickable index, formal section titles, open technical decisions, and no informal meeting-prep wording. |
+| 2026-06-10 | Drafted dissertation Chapter 1 | Added `thesis/Chapter1/ch1.tex` with introduction, motivation, problem statement, research questions, objectives, scope, dataset overview, methodology overview, contributions, report organization, and chapter summary. |
 
 ## Next Recommended Actions
 
