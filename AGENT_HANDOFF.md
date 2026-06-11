@@ -102,6 +102,7 @@ visible-to-thermal object detection.
 | 2026-06-09 | Neutralized briefing wording | Updated `reports/guide_briefing/GUIDE_BRIEFING.md` with a clickable index, formal section titles, open technical decisions, and no informal meeting-prep wording. |
 | 2026-06-10 | Drafted dissertation Chapter 1 | Added `thesis/Chapter1/ch1.tex` with introduction, motivation, problem statement, research questions, objectives, scope, dataset overview, methodology overview, contributions, report organization, and chapter summary. |
 | 2026-06-11 | Drafted dissertation Chapter 2 | Added `thesis/Chapter2/ch2.tex` covering aerial perception, EO/IR sensing, domain gap, detection, segmentation, YOLO models, domain adaptation, visible-to-thermal augmentation, mixed-domain training, model scaling, resolution, ensembling, IndraEye, related work, and research gap. Citation placeholders were added for the later BibTeX file. |
+| 2026-06-11 | Drafted dissertation Chapter 3 | Added `thesis/Chapter3/ch3.tex` covering experimental design goals, dataset organization, class taxonomy, evaluation protocol, EO-only baselines, grayscale transformations, IR supervision, model scaling, high-resolution experiments, ensemble design, experiment matrix, execution environment, result tracking, and analysis plan. |
 
 ## Next Recommended Actions
 
