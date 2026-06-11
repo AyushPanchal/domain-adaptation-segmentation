@@ -104,6 +104,7 @@ visible-to-thermal object detection.
 | 2026-06-11 | Drafted dissertation Chapter 2 | Added `thesis/Chapter2/ch2.tex` covering aerial perception, EO/IR sensing, domain gap, detection, segmentation, YOLO models, domain adaptation, visible-to-thermal augmentation, mixed-domain training, model scaling, resolution, ensembling, IndraEye, related work, and research gap. Citation placeholders were added for the later BibTeX file. |
 | 2026-06-11 | Drafted dissertation Chapter 3 | Added `thesis/Chapter3/ch3.tex` covering experimental design goals, dataset organization, class taxonomy, evaluation protocol, EO-only baselines, grayscale transformations, IR supervision, model scaling, high-resolution experiments, ensemble design, experiment matrix, execution environment, result tracking, and analysis plan. |
 | 2026-06-11 | Normalized Chapter 3 experiment notation | Updated thesis-facing Chapter 3 labels to a single E01-E12 sequence. Mapping: internal E09 -> thesis E05, N1 -> E06, N2 -> E07, N3 -> E08, N4 -> E09, N6 -> E10, N7 -> E11, N8 -> E12. Internal result artifacts retain their original filenames/IDs. |
+| 2026-06-12 | Added Chapter 3 workflow figure | Added `scripts/analysis/build_thesis_figures.py`, generated `thesis/Figures/Chapter3/proposed_workflow.{png,pdf}`, and inserted the workflow as Figure 3.1 in `thesis/Chapter3/ch3.tex`. |
 
 ## Next Recommended Actions
 

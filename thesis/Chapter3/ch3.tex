@@ -6,6 +6,15 @@ Chapter 2 discussed the theoretical background and literature related to EO/IR a
 
 The experimental design follows a controlled progression. First, EO-only baselines are used to measure the direct EO-to-IR domain gap. Next, grayscale-domain transformations are applied to EO data to test whether reducing visible color bias improves IR generalization. After that, real IR supervision is introduced through IR-only and EO+IR mixed-domain training. The study then evaluates the effect of model scaling, high-resolution training, and mask-aware ensembling. This design allows each major factor to be analyzed separately.
 
+Figure \ref{fig:proposed_workflow} summarizes the proposed workflow used to organize the dataset preparation, experiment groups, model training, evaluation, and result consolidation stages.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{Figures/Chapter3/proposed_workflow.png}
+\caption{Proposed workflow for the EO/IR aerial image segmentation study.}
+\label{fig:proposed_workflow}
+\end{figure}
+
 \section{Design Goals}
 
 The proposed framework was designed with the following goals:
