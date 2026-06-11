@@ -175,8 +175,8 @@ The representative supervised experiments are shown in Table \ref{tab:ir_supervi
 \textbf{ID} & \textbf{Training Data} & \textbf{Model} & \textbf{Purpose} \\
 \hline
 E05 & EO+IR & YOLO11s-seg & Mixed-domain supervised baseline \\
-N1 & IR & YOLO11s-seg & Target-domain supervised baseline \\
-N2 & Balanced EO+IR & YOLO11s-seg & Controls EO/IR training ratio \\
+E06 & IR & YOLO11s-seg & Target-domain supervised baseline \\
+E07 & Balanced EO+IR & YOLO11s-seg & Controls EO/IR training ratio \\
 \hline
 \end{tabular}
 \end{table}
@@ -198,14 +198,14 @@ The model scaling experiments compare YOLO11s-seg and YOLO11l-seg under similar 
 \textbf{ID} & \textbf{Training Data} & \textbf{Model} & \textbf{Purpose} \\
 \hline
 E05 & EO+IR & YOLO11s-seg & Small mixed-domain reference \\
-N3 & EO+IR & YOLO11l-seg & Large mixed-domain model \\
-N1 & IR & YOLO11s-seg & Small IR-only reference \\
-N4 & IR & YOLO11l-seg & Large IR specialist \\
+E08 & EO+IR & YOLO11l-seg & Large mixed-domain model \\
+E06 & IR & YOLO11s-seg & Small IR-only reference \\
+E09 & IR & YOLO11l-seg & Large IR specialist \\
 \hline
 \end{tabular}
 \end{table}
 
-This design allows two comparisons. First, E05 and N3 measure the effect of scaling for mixed-domain training. Second, N1 and N4 measure the effect of scaling for IR-only supervised training.
+This design allows two comparisons. First, E05 and E08 measure the effect of scaling for mixed-domain training. Second, E06 and E09 measure the effect of scaling for IR-only supervised training.
 
 \section{High-Resolution Design}
 
@@ -221,14 +221,14 @@ The high-resolution experiments increase the training and evaluation image size 
 \hline
 \textbf{ID} & \textbf{Training Data} & \textbf{Model} & \textbf{Resolution} \\
 \hline
-N3 & EO+IR & YOLO11l-seg & 640 \\
-N7 & EO+IR & YOLO11l-seg & 960 \\
-N8 & EO+IR & YOLO11x-seg & 960 \\
+E08 & EO+IR & YOLO11l-seg & 640 \\
+E11 & EO+IR & YOLO11l-seg & 960 \\
+E12 & EO+IR & YOLO11x-seg & 960 \\
 \hline
 \end{tabular}
 \end{table}
 
-N7 isolates the effect of increasing resolution while keeping the model family at YOLO11l. N8 tests whether a larger YOLO11x model at the same high resolution improves further.
+E11 isolates the effect of increasing resolution while keeping the model family at YOLO11l. E12 tests whether a larger YOLO11x model at the same high resolution improves further.
 
 \section{Ensemble Design}
 
@@ -244,7 +244,7 @@ The ensemble is performed at prediction level. Each model generates predictions 
 \hline
 \textbf{ID} & \textbf{Components} & \textbf{Model Types} & \textbf{Purpose} \\
 \hline
-N6 & N3 + N4 & YOLO11l-seg + YOLO11l-seg & Generalist-specialist fusion \\
+E10 & E08 + E09 & YOLO11l-seg + YOLO11l-seg & Generalist-specialist fusion \\
 \hline
 \end{tabular}
 \end{table}
@@ -269,13 +269,13 @@ E02 & EO grayscale & YOLO11s-seg & 640 & Full grayscale baseline \\
 E03 & EO box-gray & YOLO11s-seg & 640 & Box-guided grayscale \\
 E04 & EO mask-gray & YOLO11s-seg & 640 & Mask-guided grayscale \\
 E05 & EO+IR & YOLO11s-seg & 640 & Mixed-domain baseline \\
-N1 & IR & YOLO11s-seg & 640 & IR-only baseline \\
-N2 & Balanced EO+IR & YOLO11s-seg & 640 & Data-ratio control \\
-N3 & EO+IR & YOLO11l-seg & 640 & Large mixed-domain model \\
-N4 & IR & YOLO11l-seg & 640 & Large IR specialist \\
-N6 & N3+N4 ensemble & 2x YOLO11l-seg & 640 & Ensemble ablation \\
-N7 & EO+IR & YOLO11l-seg & 960 & High-resolution model \\
-N8 & EO+IR & YOLO11x-seg & 960 & XL high-resolution model \\
+E06 & IR & YOLO11s-seg & 640 & IR-only baseline \\
+E07 & Balanced EO+IR & YOLO11s-seg & 640 & Data-ratio control \\
+E08 & EO+IR & YOLO11l-seg & 640 & Large mixed-domain model \\
+E09 & IR & YOLO11l-seg & 640 & Large IR specialist \\
+E10 & E08+E09 ensemble & 2x YOLO11l-seg & 640 & Ensemble ablation \\
+E11 & EO+IR & YOLO11l-seg & 960 & High-resolution model \\
+E12 & EO+IR & YOLO11x-seg & 960 & XL high-resolution model \\
 \hline
 \end{tabular}
 \end{table}
@@ -324,11 +324,11 @@ The experiments are analyzed in a staged manner:
 \begin{enumerate}
     \item Compare E01-E04 to evaluate EO-only transfer and grayscale-domain transformation.
     \item Compare E01 with E05 to measure the impact of adding IR supervision.
-    \item Compare E05, N1, and N2 to understand mixed-domain, target-domain, and balanced training.
-    \item Compare E05 with N3 and N1 with N4 to study model scaling.
-    \item Compare N3 and N7 to study high-resolution training.
-    \item Compare N7 and N8 to study high-resolution model capacity.
-    \item Compare N3, N4, and N6 to evaluate ensembling.
+    \item Compare E05, E06, and E07 to understand mixed-domain, target-domain, and balanced training.
+    \item Compare E05 with E08 and E06 with E09 to study model scaling.
+    \item Compare E08 and E11 to study high-resolution training.
+    \item Compare E11 and E12 to study high-resolution model capacity.
+    \item Compare E08, E09, and E10 to evaluate ensembling.
 \end{enumerate}
 
 The analysis uses mask mAP50-95 as the primary metric. Mask mAP50, box mAP50, and box mAP50-95 are used as supporting metrics. The primary conclusion is based on IR-only validation, while combined EO+IR validation is used to interpret cross-modality robustness.
