@@ -111,7 +111,7 @@ These dataset YAML files are consumed directly by the YOLO training and evaluati
 
 Each experiment is represented through a configuration containing the experiment identifier, experiment name, model variant, dataset YAML path, image size, batch size, training epochs, and random seed. The training runner reads this configuration and converts it into a YOLO command.
 
-The original configuration files under \texttt{configs/experiments/} cover the initial E-series experiments. Later Kaggle notebooks extend the same idea for additional supervised, large-model, high-resolution, and ensemble experiments. In the thesis, the experiments are reported using the unified E01-E12 notation described in Chapter 3, while some internal artifact names retain their original notebook identifiers.
+The configuration files under \texttt{configs/experiments/} define the initial experiment set. Later Kaggle notebooks extend the same implementation pattern for additional supervised, large-model, high-resolution, and ensemble experiments.
 
 \section{Training Runner}
 
@@ -259,9 +259,7 @@ These measures reduce the chance of losing information when experiments run on r
 
 \section{Implementation Challenges}
 
-Several practical challenges were encountered during implementation. Large segmentation models require substantial GPU memory, especially when the image size is increased to 960. This required smaller batch sizes for high-resolution experiments. Remote sessions also had quota limits, so some runs had to be resumed from checkpoints or moved between accounts.
-
-Another challenge was keeping notation consistent. Some early notebooks and result archives used internal identifiers such as E09 or N-series names, while the thesis uses a unified E01-E12 notation. The internal identifiers were retained in files to avoid breaking stored artifacts, but the thesis-facing experiment matrix was normalized for clarity.
+Several practical challenges were encountered during implementation. Large segmentation models require substantial GPU memory, especially when the image size is increased to 960. This required smaller batch sizes for high-resolution experiments. Remote sessions also had quota limits, so some runs had to be resumed from checkpoints.
 
 Ensemble evaluation also required additional care because segmentation masks are not represented only by bounding boxes. The ensemble implementation had to preserve prototype tensors so that masks could be reconstructed correctly after cross-model non-maximum suppression.
 
