@@ -63,87 +63,97 @@ def add_arrow(ax, start: tuple[float, float], end: tuple[float, float], rad: flo
 
 
 def save_proposed_workflow() -> None:
-    fig, ax = plt.subplots(figsize=(14, 8))
-    ax.set_xlim(0, 14)
-    ax.set_ylim(0, 8)
+    fig, ax = plt.subplots(figsize=(8.2, 10.4))
+    ax.set_xlim(0, 8.2)
+    ax.set_ylim(0, 10.4)
     ax.axis("off")
 
     fig.patch.set_facecolor("#f8fafc")
     ax.set_facecolor("#f8fafc")
 
     ax.text(
-        7,
-        7.62,
+        4.1,
+        10.05,
         "Proposed Workflow for EO/IR Aerial Image Segmentation",
         ha="center",
         va="center",
-        fontsize=18,
+        fontsize=14,
         fontweight="bold",
         color="#0f172a",
     )
     ax.text(
-        7,
-        7.25,
+        4.1,
+        9.72,
         "Controlled YOLO-Seg experiments across modality, scale, resolution, and ensemble axes",
         ha="center",
         va="center",
-        fontsize=11,
+        fontsize=8.5,
         color="#475569",
     )
 
     # Input and preparation path.
-    add_box(ax, 0.55, 5.75, 2.25, 1.05, "IndraEye\nEO + IR Dataset", "#dbeafe", fontsize=10)
-    add_box(ax, 3.35, 5.75, 2.25, 1.05, "Data Validation\nClass Mapping\nYOLO Labels", "#e0f2fe", fontsize=9)
-    add_box(ax, 6.15, 5.75, 2.25, 1.05, "Dataset YAMLs\nTrain/Val Splits\nRun Configs", "#ccfbf1", fontsize=9)
+    add_box(ax, 0.35, 8.65, 2.05, 0.78, "IndraEye\nEO + IR Dataset", "#dbeafe", fontsize=8.8)
+    add_box(ax, 3.08, 8.65, 2.05, 0.78, "Data Validation\nClass Mapping\nYOLO Labels", "#e0f2fe", fontsize=8.0)
+    add_box(ax, 5.8, 8.65, 2.05, 0.78, "Dataset YAMLs\nTrain/Val Splits\nRun Configs", "#ccfbf1", fontsize=8.0)
 
-    add_arrow(ax, (2.8, 6.28), (3.35, 6.28))
-    add_arrow(ax, (5.6, 6.28), (6.15, 6.28))
+    add_arrow(ax, (2.4, 9.04), (3.08, 9.04))
+    add_arrow(ax, (5.13, 9.04), (5.8, 9.04))
+    add_arrow(ax, (6.82, 8.65), (4.1, 8.18), rad=-0.08)
 
-    # Experiment groups.
-    add_box(ax, 0.65, 3.95, 2.55, 1.15, "EO-only Transfer\nE01", "#fef3c7", fontsize=10)
-    add_box(ax, 3.65, 3.95, 2.55, 1.15, "Grayscale Domain\nTransforms\nE02-E04", "#fde68a", fontsize=9)
-    add_box(ax, 6.65, 3.95, 2.55, 1.15, "IR Supervision\nEO+IR / IR / Balanced\nE05-E07", "#dcfce7", fontsize=9)
-    add_box(ax, 9.65, 3.95, 2.55, 1.15, "Scale + Resolution\nEnsemble Study\nE08-E12", "#ede9fe", fontsize=9)
+    # Experiment matrix.
+    add_box(ax, 1.1, 7.55, 6.0, 0.58, "Controlled Experiment Matrix", "#ffffff", fontsize=9.0)
+    add_arrow(ax, (4.1, 7.55), (4.1, 7.28))
 
-    add_arrow(ax, (7.28, 5.75), (1.92, 5.1), rad=0.08)
-    add_arrow(ax, (7.28, 5.75), (4.92, 5.1), rad=0.04)
-    add_arrow(ax, (7.28, 5.75), (7.92, 5.1), rad=-0.04)
-    add_arrow(ax, (7.28, 5.75), (10.92, 5.1), rad=-0.08)
+    add_box(ax, 0.8, 6.67, 6.6, 0.58, "EO-only transfer baseline: E01", "#fef3c7", fontsize=8.8)
+    add_box(ax, 0.8, 5.86, 6.6, 0.58, "Grayscale-domain transformations: E02-E04", "#fde68a", fontsize=8.5)
+    add_box(ax, 0.8, 5.05, 6.6, 0.58, "IR and mixed-domain supervision: E05-E07", "#dcfce7", fontsize=8.5)
+    add_box(ax, 0.8, 4.24, 6.6, 0.58, "Model scale, resolution, and ensemble study: E08-E12", "#ede9fe", fontsize=8.2)
+
+    add_arrow(ax, (4.1, 6.67), (4.1, 6.44))
+    add_arrow(ax, (4.1, 5.86), (4.1, 5.63))
+    add_arrow(ax, (4.1, 5.05), (4.1, 4.82))
+    add_arrow(ax, (4.1, 4.24), (4.1, 3.9))
 
     # Training and evaluation.
-    add_box(ax, 4.45, 2.45, 5.1, 0.95, "YOLO11 Segmentation Training\npretrained weights, consistent labels, tracked runs", "#ffffff", fontsize=10)
-    add_arrow(ax, (1.92, 3.95), (4.75, 3.4), rad=-0.05)
-    add_arrow(ax, (4.92, 3.95), (5.75, 3.4), rad=-0.03)
-    add_arrow(ax, (7.92, 3.95), (7.6, 3.4), rad=0.02)
-    add_arrow(ax, (10.92, 3.95), (9.25, 3.4), rad=0.05)
+    add_box(
+        ax,
+        1.35,
+        3.18,
+        5.5,
+        0.72,
+        "YOLO11 Segmentation Training\npretrained weights, consistent labels, tracked runs",
+        "#ffffff",
+        fontsize=8.6,
+    )
+    add_arrow(ax, (4.1, 3.18), (4.1, 2.82))
 
-    add_box(ax, 2.05, 1.25, 3.05, 0.95, "Primary Evaluation\nIR validation\nmask mAP50-95", "#fee2e2", fontsize=9)
-    add_box(ax, 5.5, 1.25, 3.05, 0.95, "Secondary Evaluation\nEO+IR validation\nrobustness", "#ffedd5", fontsize=9)
-    add_box(ax, 8.95, 1.25, 3.05, 0.95, "Consolidated Analysis\nCSV/JSON tables\nmodel comparison", "#e2e8f0", fontsize=9)
+    add_box(ax, 0.25, 2.0, 2.35, 0.72, "Primary Evaluation\nIR validation\nmask mAP50-95", "#fee2e2", fontsize=7.5)
+    add_box(ax, 2.93, 2.0, 2.35, 0.72, "Secondary Evaluation\nEO+IR validation\nrobustness", "#ffedd5", fontsize=7.5)
+    add_box(ax, 5.6, 2.0, 2.35, 0.72, "Consolidated Analysis\nCSV/JSON tables\nmodel comparison", "#e2e8f0", fontsize=7.5)
 
-    add_arrow(ax, (5.7, 2.45), (3.58, 2.2), rad=0.05)
-    add_arrow(ax, (7.0, 2.45), (7.02, 2.2), rad=0.0)
-    add_arrow(ax, (8.3, 2.45), (10.48, 2.2), rad=-0.05)
+    add_arrow(ax, (4.1, 2.82), (1.42, 2.72), rad=0.10)
+    add_arrow(ax, (4.1, 2.82), (4.1, 2.72), rad=0.0)
+    add_arrow(ax, (4.1, 2.82), (6.78, 2.72), rad=-0.10)
 
     # Final outcome band.
     add_box(
         ax,
-        3.1,
-        0.25,
-        7.8,
+        0.75,
+        0.95,
+        6.7,
         0.68,
         "Outcome: select strongest IR and combined EO+IR models using controlled evidence",
         "#f0fdf4",
-        fontsize=9,
+        fontsize=8.0,
     )
-    add_arrow(ax, (3.58, 1.25), (5.25, 0.93), rad=-0.05)
-    add_arrow(ax, (7.02, 1.25), (7.0, 0.93), rad=0.0)
-    add_arrow(ax, (10.48, 1.25), (8.78, 0.93), rad=0.05)
+    add_arrow(ax, (1.42, 2.0), (2.45, 1.63), rad=-0.05)
+    add_arrow(ax, (4.1, 2.0), (4.1, 1.63), rad=0.0)
+    add_arrow(ax, (6.78, 2.0), (5.75, 1.63), rad=0.05)
 
-    fig.tight_layout(pad=0.4)
+    fig.tight_layout(pad=0.15)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    fig.savefig(OUT_DIR / "proposed_workflow.png", dpi=220)
-    fig.savefig(OUT_DIR / "proposed_workflow.pdf")
+    fig.savefig(OUT_DIR / "proposed_workflow.png", dpi=260, bbox_inches="tight", pad_inches=0.08)
+    fig.savefig(OUT_DIR / "proposed_workflow.pdf", bbox_inches="tight", pad_inches=0.08)
     plt.close(fig)
 
 
