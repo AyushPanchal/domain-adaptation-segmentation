@@ -1,5 +1,13 @@
 # Chapter 5 Image Generation Prompts
 
+Note: the final Chapter 5 figures are now generated directly from code using:
+
+```text
+python scripts/analysis/build_chapter5_figures.py
+```
+
+The prompts below are retained only as optional fallback instructions if an external image generator is needed later.
+
 Use these prompts to generate thesis-ready visuals for Chapter 5. Save the generated images with the exact filenames shown below inside:
 
 ```text
