@@ -1,0 +1,270 @@
+\chapter{Implementation Methodology}
+
+\section{Introduction}
+
+Chapter 3 presented the design and analysis of the experimental framework. This chapter describes how the framework was implemented in practice. The implementation was developed as a reproducible Python-based workflow for preparing EO/IR segmentation datasets, generating grayscale-domain variants, training YOLO segmentation models, evaluating checkpoints, collecting metrics, and preserving experiment outputs.
+
+The implementation was designed for remote GPU execution because full YOLO segmentation training is computationally expensive. Early checks were performed on the SVNIT GPU cluster, while most complete experiments were executed using Kaggle notebooks with GPU resources. The repository was organized so that the same experiment logic could be reused across environments with minimal changes.
+
+\section{Repository Organization}
+
+The project repository is organized into configuration files, source modules, execution scripts, notebooks, reports, and thesis material. The main implementation directories are:
+
+\begin{itemize}
+    \item \texttt{configs/}: class definitions, dataset definitions, and experiment configuration files.
+    \item \texttt{src/domain\_adaptation\_segmentation/}: Python source code for data preparation, augmentation, validation, training, evaluation, and result collection.
+    \item \texttt{scripts/local/}: local utility scripts for dataset copying, validation, augmentation generation, and packaging.
+    \item \texttt{scripts/remote/}: remote execution scripts for Kaggle and Slurm/HPC environments.
+    \item \texttt{notebooks/}: Kaggle notebooks used for one-experiment training and evaluation workflows.
+    \item \texttt{reports/}: generated tables, guide briefing material, and result summaries.
+    \item \texttt{thesis/}: dissertation chapters and thesis figures.
+\end{itemize}
+
+This structure separates experiment configuration from implementation logic. As a result, new experiments can be added by defining new dataset paths, model variants, and training parameters without rewriting the training runner.
+
+\section{Software Environment}
+
+The implementation uses Python as the primary programming language. YOLO segmentation training and validation are performed using the Ultralytics YOLO package. PyTorch provides GPU acceleration through CUDA. Image processing for grayscale-domain transformation is implemented using the Python Imaging Library interface provided by Pillow. Configuration files are stored in YAML format, while run status files and evaluation outputs are stored in JSON format.
+
+The main software components used in the workflow are:
+
+\begin{itemize}
+    \item Python for orchestration and scripting.
+    \item PyTorch for deep learning execution on GPU.
+    \item Ultralytics YOLO for segmentation model training and validation.
+    \item Pillow for image transformation and mask-guided grayscale generation.
+    \item YAML configuration files for dataset and experiment definitions.
+    \item JSON and CSV files for status tracking and result storage.
+\end{itemize}
+
+\section{Class Configuration}
+
+The object class mapping is stored in \texttt{configs/classes/indraeye\_seg\_active12.yaml}. This file defines the twelve active class identifiers used consistently across dataset preparation, training, and evaluation. A single class configuration prevents mismatches between EO and IR labels.
+
+The class configuration is used by the dataset generation code to write YOLO-compatible dataset YAML files. It is also used during validation to ensure that label files contain valid class identifiers. Keeping the class taxonomy centralized improves reproducibility because all experiments share the same semantic label space.
+
+\section{Raw Dataset Preparation}
+
+The raw dataset is organized into EO and IR domains with separate image and label folders for training and validation. The local dataset preparation workflow copies matched image-label pairs into the project directory. Only images that have corresponding YOLO segmentation label files are retained for the training workflow.
+
+Dataset validation checks are performed before generating processed datasets. The validation step verifies:
+
+\begin{itemize}
+    \item the existence of image-label pairs,
+    \item valid label file formatting,
+    \item valid class identifiers,
+    \item valid polygon coordinate ranges,
+    \item train and validation split consistency.
+\end{itemize}
+
+This step is important because segmentation labels contain polygon coordinates, and malformed polygon data can cause training or evaluation failures.
+
+\section{YOLO Segmentation Label Format}
+
+The labels are stored in YOLO segmentation format. Each row in a label file contains a class identifier followed by normalized polygon coordinates. The coordinates are stored as alternating \texttt{x} and \texttt{y} values in the range \([0, 1]\). During augmentation, these normalized coordinates are converted to pixel coordinates so that object-level transformations can be applied to the corresponding image regions.
+
+For each object instance, the implementation reads:
+
+\begin{itemize}
+    \item the class identifier,
+    \item the polygon coordinate sequence,
+    \item the corresponding image width and height,
+    \item the pixel-space polygon mask or bounding region.
+\end{itemize}
+
+The same label file is copied to the processed dataset after image transformation because the grayscale-domain transformations do not change object geometry.
+
+\section{Augmentation Dataset Generation}
+
+The grayscale-domain datasets are generated using the implementation in \texttt{generate\_augmented\_datasets.py}. The purpose of this module is to create processed YOLO-compatible datasets for each EO-only adaptation baseline.
+
+The implementation supports the following methods:
+
+\begin{itemize}
+    \item \texttt{source\_rgb}: original EO training images without grayscale transformation.
+    \item \texttt{full\_gray}: full-image grayscale conversion.
+    \item \texttt{box\_guided\_gray}: grayscale conversion inside object bounding boxes.
+    \item \texttt{mga}: mask-guided grayscale conversion inside object polygons.
+    \item \texttt{ba\_mga}: boundary-aware mask-guided grayscale conversion using feathered masks.
+    \item \texttt{ir\_oracle}: IR training images used as the supervised IR reference in the earlier configuration set.
+\end{itemize}
+
+For full grayscale, the complete EO image is converted to grayscale and then converted back to a three-channel image so that it remains compatible with YOLO input expectations. For box-guided grayscale, the rectangular object region around each polygon is converted to grayscale. For mask-guided grayscale, only the polygon region is converted. For boundary-aware mask-guided grayscale, the polygon mask is blurred before compositing so that the transition near object boundaries is smoother.
+
+The \texttt{Ignore} class is skipped during object-region grayscale augmentation. This prevents ignored regions from being treated as semantic foreground regions during transformation.
+
+\section{Dataset YAML Generation}
+
+After each processed dataset is generated, the implementation writes a YOLO dataset YAML file. The YAML file defines:
+
+\begin{itemize}
+    \item the dataset root path,
+    \item the training image path,
+    \item the validation image path,
+    \item the number of classes,
+    \item the class names.
+\end{itemize}
+
+These dataset YAML files are consumed directly by the YOLO training and evaluation commands. For Kaggle runs, additional notebook cells generate dataset YAMLs that point directly to the Kaggle dataset input path and to temporary generated folders under \texttt{/kaggle/working}.
+
+\section{Experiment Configuration}
+
+Each experiment is represented through a configuration containing the experiment identifier, experiment name, model variant, dataset YAML path, image size, batch size, training epochs, and random seed. The training runner reads this configuration and converts it into a YOLO command.
+
+The original configuration files under \texttt{configs/experiments/} cover the initial E-series experiments. Later Kaggle notebooks extend the same idea for additional supervised, large-model, high-resolution, and ensemble experiments. In the thesis, the experiments are reported using the unified E01-E12 notation described in Chapter 3, while some internal artifact names retain their original notebook identifiers.
+
+\section{Training Runner}
+
+The main training runner is implemented in \texttt{run\_experiment.py}. It performs the following steps:
+
+\begin{enumerate}
+    \item reads the experiment YAML file,
+    \item resolves the dataset YAML path,
+    \item creates a structured run directory,
+    \item builds the YOLO segmentation training command,
+    \item writes the command to \texttt{command.txt},
+    \item writes initial status and timestamp JSON files,
+    \item launches the YOLO training process,
+    \item streams training output to \texttt{stdout.log},
+    \item updates heartbeat information in \texttt{status.json},
+    \item collects important outputs after training completes.
+\end{enumerate}
+
+The generated YOLO command uses \texttt{segment train} mode. The main parameters include model checkpoint, dataset YAML path, epochs, image size, batch size, device, worker count, seed, patience, output project directory, plot generation, and model saving.
+
+\section{Checkpoint Resume Support}
+
+Remote GPU jobs can be interrupted due to time limits, quota limits, or scheduler cancellation. To handle this, the training runner supports checkpoint-based resume. If resume mode is enabled, the runner searches for the latest checkpoint at:
+
+\begin{verbatim}
+ultralytics/train/weights/last.pt
+\end{verbatim}
+
+When this checkpoint exists, training is resumed using the checkpoint path and \texttt{resume=True}. This was important for long experiments because several runs had to continue from partially completed training states. The status file records the resume checkpoint path so that the run history remains traceable.
+
+\section{Run Directory Structure}
+
+Each experiment run is stored in a dedicated directory under the selected output root. A typical run directory contains:
+
+\begin{itemize}
+    \item \texttt{config.yaml}: copy of the experiment configuration,
+    \item \texttt{command.txt}: generated YOLO command,
+    \item \texttt{status.json}: run state, timestamps, heartbeat, return code, and output paths,
+    \item \texttt{timestamps.json}: start time, finish time, and elapsed duration,
+    \item \texttt{stdout.log}: live training output,
+    \item \texttt{stderr.log}: startup or return-code failure information,
+    \item \texttt{results.csv}: YOLO training metrics copied from the Ultralytics output folder,
+    \item \texttt{ultralytics/train/weights/best.pt}: best checkpoint,
+    \item \texttt{ultralytics/train/weights/last.pt}: latest checkpoint.
+\end{itemize}
+
+This structure makes it possible to inspect each run even after a notebook or remote session terminates.
+
+\section{Kaggle Notebook Implementation}
+
+Kaggle notebooks were used for most complete experiments because they provided accessible GPU resources and direct access to the uploaded IndraEye dataset. The Kaggle workflow avoids uploading the full codebase and dataset as a large archive. Instead, each notebook clones the repository, reads the Kaggle dataset from \texttt{/kaggle/input}, generates temporary datasets when needed, runs one experiment, evaluates the best checkpoint, and packages the results.
+
+The one-experiment notebook design follows a common structure:
+
+\begin{enumerate}
+    \item install or verify dependencies,
+    \item clone or update the GitHub repository,
+    \item define dataset paths,
+    \item generate experiment-specific training data if required,
+    \item write dataset YAML files,
+    \item run a smoke test or full training run,
+    \item locate \texttt{best.pt},
+    \item evaluate on IR-only validation,
+    \item evaluate on combined EO+IR validation,
+    \item package logs, metrics, and checkpoints into a result archive.
+\end{enumerate}
+
+The smoke-test mode uses a very small number of epochs to confirm that dataset paths, labels, GPU access, and training commands are correct. The full-run mode is used only after the smoke test succeeds.
+
+\section{Remote Cluster Implementation}
+
+The SVNIT cluster/HPC workflow uses shell scripts and Slurm batch files under \texttt{scripts/remote/}. These scripts were used for environment checks, smoke tests, single-experiment submissions, and serial experiment queues. The Slurm scripts configure the conda environment, GPU resource request, CPU count, memory, output logs, and optional resume behavior.
+
+The cluster workflow was useful for early GPU verification and debugging. However, long training runs were affected by scheduler cancellation and job policy limits. The final full experiment workflow therefore relied primarily on Kaggle notebooks, while retaining the cluster scripts for portability.
+
+\section{Evaluation Implementation}
+
+Single-model evaluation is implemented in \texttt{evaluate\_model.py}. This script loads a trained YOLO checkpoint and runs YOLO validation on a specified dataset YAML file. The evaluation command records:
+
+\begin{itemize}
+    \item model checkpoint path,
+    \item dataset YAML path,
+    \item device,
+    \item image size,
+    \item batch size,
+    \item worker count,
+    \item output directory,
+    \item full YOLO metrics dictionary.
+\end{itemize}
+
+The evaluation payload is written to \texttt{metrics.json}. The most important metrics for this dissertation are mask mAP50 and mask mAP50-95. Box metrics are also saved and reported as supporting metrics.
+
+\section{Validation Settings}
+
+Two evaluation dataset YAML files are created during the Kaggle workflow. The first points to the IR validation images and is used for primary IR-domain evaluation. The second points to a combined validation set containing both EO and IR validation images. The combined validation set is used to estimate cross-modality robustness.
+
+This separation is important because a model may perform strongly on IR-only validation but weakly on EO images, or it may perform moderately across both modalities. Keeping both evaluation settings makes the analysis more complete.
+
+\section{Ensemble Evaluation Implementation}
+
+The ensemble evaluation is implemented in \texttt{evaluate\_segmentation\_ensemble.py}. Standard YOLO ensembling is not sufficient for this use case because segmentation models produce both detection predictions and mask prototype tensors. Therefore, the ensemble implementation loads multiple YOLO segmentation checkpoints and preserves each model's prototype tensor during inference.
+
+The ensemble module concatenates raw predictions from multiple models and then applies non-maximum suppression while preserving the source model index for each retained prediction. The custom segmentation validator reconstructs masks using the prototype tensor from the model that produced the selected prediction. This allows late-stage mask-aware evaluation of multiple YOLO segmentation models.
+
+In this dissertation, the ensemble is used as an ablation to evaluate whether combining a mixed-domain generalist and an IR specialist improves over individual models.
+
+\section{Result Collection}
+
+Training and evaluation results are collected from YOLO output folders, run status files, and evaluation JSON files. Consolidated result tables are generated using analysis scripts under \texttt{scripts/analysis/}. These tables are used for guide briefings, thesis result chapters, and future paper preparation.
+
+The result collection workflow preserves:
+
+\begin{itemize}
+    \item training curves from \texttt{results.csv},
+    \item best and last model checkpoints,
+    \item evaluation metrics for each validation setting,
+    \item run duration and completion status,
+    \item packaged result archives downloaded from Kaggle.
+\end{itemize}
+
+\section{Result Packaging}
+
+After each Kaggle experiment, important outputs are packaged into a compressed archive. The package usually includes run logs, status files, training metrics, evaluation metrics, result tables, selected qualitative outputs, and trained weights when needed. This packaging step makes the experiment portable from Kaggle to the local system.
+
+Packaging is especially important in quota-limited notebook environments because the working directory may be lost after the session ends. By downloading or preserving the result archive, the experiment remains available for later analysis.
+
+\section{Reproducibility Measures}
+
+Several design decisions were made to improve reproducibility:
+
+\begin{itemize}
+    \item all experiments use explicit configuration values,
+    \item dataset YAML files are written and preserved,
+    \item class mapping is centralized,
+    \item random seed values are set in training commands,
+    \item command strings are saved before execution,
+    \item status and timestamp files are written for every run,
+    \item logs are streamed to disk during training,
+    \item checkpoint resume is supported,
+    \item metrics are exported as JSON files,
+    \item result summaries are generated from saved artifacts rather than manual transcription.
+\end{itemize}
+
+These measures reduce the chance of losing information when experiments run on remote machines.
+
+\section{Implementation Challenges}
+
+Several practical challenges were encountered during implementation. Large segmentation models require substantial GPU memory, especially when the image size is increased to 960. This required smaller batch sizes for high-resolution experiments. Remote sessions also had quota limits, so some runs had to be resumed from checkpoints or moved between accounts.
+
+Another challenge was keeping notation consistent. Some early notebooks and result archives used internal identifiers such as E09 or N-series names, while the thesis uses a unified E01-E12 notation. The internal identifiers were retained in files to avoid breaking stored artifacts, but the thesis-facing experiment matrix was normalized for clarity.
+
+Ensemble evaluation also required additional care because segmentation masks are not represented only by bounding boxes. The ensemble implementation had to preserve prototype tensors so that masks could be reconstructed correctly after cross-model non-maximum suppression.
+
+\section{Chapter Summary}
+
+This chapter described the implementation methodology used for the EO/IR aerial segmentation experiments. It explained the repository organization, software environment, dataset preparation, label format, augmentation generation, dataset YAML creation, experiment configuration, training runner, checkpoint resume support, Kaggle and cluster execution workflows, evaluation scripts, ensemble implementation, result packaging, and reproducibility measures. The next chapter presents the experimental results and performance analysis.
