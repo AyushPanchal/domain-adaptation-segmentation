@@ -1,0 +1,98 @@
+\chapter{Conclusion and Future Work}
+
+\section{Introduction}
+
+This dissertation studied EO/IR aerial image segmentation using YOLO-based segmentation models. The work focused on the domain gap between electro-optical (EO) and infrared (IR) aerial imagery and evaluated how different training strategies affect segmentation performance in the IR domain and in the combined EO+IR setting.
+
+The study was designed as a controlled empirical analysis rather than as a new neural network architecture. A sequence of experiments was conducted to examine EO-only transfer, grayscale-domain transformations, supervised IR training, mixed EO+IR training, model scaling, high-resolution training, and mask-aware ensembling. The experiments were evaluated mainly using mask mAP50-95 because this metric reflects strict segmentation quality across multiple IoU thresholds.
+
+\section{Summary of the Work}
+
+The dissertation began by identifying the practical need for robust aerial traffic perception across visible and thermal sensing conditions. EO imagery provides rich color and texture cues, but it is sensitive to illumination and visibility conditions. IR imagery provides thermal information and is useful in low-light conditions, but it differs significantly from EO imagery in appearance, contrast, texture, and boundary structure. This difference creates a cross-domain challenge for deep learning models trained on one modality and evaluated on another.
+
+The work used an EO/IR aerial traffic segmentation dataset containing twelve traffic-related classes. The dataset was organized into EO and IR training and validation splits, and all experiments were performed using YOLO-compatible segmentation labels. Two validation settings were used: IR-only validation and combined EO+IR validation. IR-only validation was treated as the primary setting because the main objective was to improve IR-domain segmentation.
+
+The experimental framework was organized into twelve thesis-facing experiments. The early experiments measured EO-only transfer and grayscale-domain augmentation. The next experiments introduced real IR supervision through IR-only and EO+IR training. Later experiments increased YOLO model capacity, raised input resolution from 640 to 960, and evaluated a mask-aware ensemble. This staged design made it possible to isolate the contribution of each factor.
+
+\section{Major Findings}
+
+The first major finding is that EO-only training transfers poorly to IR segmentation. The EO-only baseline obtained low IR mask mAP50-95, showing that the EO-to-IR appearance gap is significant for mask prediction. This confirms that segmentation is highly sensitive to cross-modal changes in texture, intensity distribution, and object boundary appearance.
+
+The second finding is that grayscale-domain transformations alone are not sufficient for strong IR segmentation. Full-image grayscale conversion produced only a small improvement over the EO-only baseline, while box-guided and mask-guided grayscale variants did not improve the result. This suggests that simply removing visible color information does not reproduce the thermal structure of IR imagery.
+
+The third and most important finding is that real IR supervision provides the dominant performance improvement. The shift from EO-only training to joint EO+IR training produced the largest improvement in IR mask mAP50-95. This demonstrates that target-domain labels are much more effective than EO-only appearance transformations for the dataset and models studied in this dissertation.
+
+The fourth finding is that mixed EO+IR training is more robust than IR-only training when both modalities are considered together. IR-only supervised models perform strongly on IR validation, but they are weaker on combined EO+IR validation. Joint EO+IR training provides better overall cross-modality robustness because the model observes both visual and thermal domains during training.
+
+The fifth finding is that model scaling improves segmentation performance. Moving from YOLO11s-seg to YOLO11l-seg improved results in both mixed-domain and IR-only settings. This indicates that larger YOLO segmentation models can learn more effective representations for EO/IR aerial traffic scenes.
+
+The sixth finding is that high-resolution training gives the strongest improvement in strict mask quality. Increasing the image size from 640 to 960 improved mask mAP50-95 substantially. This is especially important for aerial imagery because traffic objects are often small, dense, and sensitive to boundary loss after resizing.
+
+The final finding is that the evaluated mask-aware ensemble did not outperform the best high-resolution single model. Although the ensemble combined a mixed-domain generalist and an IR specialist, its result remained close to the individual large-model baseline and below the high-resolution models. For this study, stronger single-model training was more effective than the tested late-stage fusion approach.
+
+\section{Answers to Research Questions}
+
+The first research question asked how severe the performance drop is when a YOLO segmentation model trained on EO imagery is evaluated on IR imagery. The experiments show that the drop is severe. The EO-only baseline produced weak IR mask mAP50-95, confirming that direct EO-to-IR transfer is not reliable for segmentation.
+
+The second research question asked whether EO-only grayscale and semantic grayscale transformations reduce the EO-to-IR segmentation gap. The results show that these transformations provide limited benefit. Full grayscale gives a small improvement, but object-region grayscale methods do not provide a strong gain. Therefore, grayscale transformations alone are insufficient.
+
+The third research question asked how much improvement is obtained when real IR supervision is introduced. The improvement is large and represents the strongest jump in the experiment sequence. This confirms that real IR training labels are the most important factor for improving IR-domain segmentation.
+
+The fourth research question asked how mixed EO+IR training compares with IR-only supervised training. IR-only training is useful for IR validation, but mixed EO+IR training is better for combined-modality robustness. Therefore, the preferred training strategy depends on whether the deployment target is IR-only or both EO and IR.
+
+The fifth research question asked about the effect of increasing YOLO model capacity. The larger YOLO11l-seg models improve over YOLO11s-seg models, showing that model capacity helps in EO/IR aerial segmentation.
+
+The sixth research question asked whether higher input resolution improves mask quality for small aerial objects. The answer is yes. High-resolution training at 960 produced the strongest strict IR mask performance and improved combined EO+IR performance as well.
+
+The seventh research question asked whether a mask-aware ensemble can improve beyond the best single model. In the evaluated setup, the ensemble did not outperform the strongest high-resolution single model. This suggests that simple prediction-level fusion is not enough to replace stronger training and higher resolution.
+
+The eighth research question asked which model should be preferred for IR segmentation and which should be preferred for combined EO+IR robustness. Based on the final results, E11 is preferred for primary IR segmentation because it achieves the best IR mask mAP50-95. E12 is preferred for combined EO+IR robustness because it achieves the best combined EO+IR mask mAP50-95.
+
+\section{Contributions}
+
+The main contributions of this dissertation are summarized as follows:
+
+\begin{enumerate}
+    \item A reproducible YOLO-based experimental workflow for EO/IR aerial traffic segmentation.
+    \item A controlled comparison of EO-only transfer, grayscale-domain transformation, supervised IR training, and mixed EO+IR training.
+    \item Empirical evidence that EO-only grayscale transformations are not sufficient for strong IR segmentation.
+    \item Empirical evidence that real IR supervision provides the largest improvement in IR-domain mask quality.
+    \item A model scaling analysis showing that larger YOLO segmentation models improve EO/IR segmentation performance.
+    \item A high-resolution analysis showing that 960-resolution training improves strict mask quality for aerial traffic imagery.
+    \item A mask-aware ensemble ablation showing that the tested ensemble does not outperform the strongest high-resolution single model.
+    \item A final model recommendation separating the best IR-domain model from the best combined EO+IR model.
+\end{enumerate}
+
+\section{Limitations}
+
+The conclusions of this dissertation are based on the available EO/IR aerial traffic dataset and its train-validation split. Although the results are consistent across the conducted experiments, additional datasets would be required to confirm whether the same trends hold in other cities, sensor setups, flight altitudes, camera angles, and environmental conditions.
+
+The work does not propose a new segmentation architecture. Instead, it studies how existing YOLO segmentation models behave under EO/IR training conditions. This makes the work practical and reproducible, but it also means that architecture-level fusion and modality-specific feature learning are outside the current scope.
+
+The study does not use perfectly paired EO-IR image alignment. Therefore, the experiments do not explore pixel-level cross-modal translation, paired image fusion, or supervised multimodal correspondence learning. The training strategies are based on available EO and IR images and labels rather than paired sensor fusion.
+
+The evaluation is mainly based on standard YOLO metrics. These metrics are suitable for quantitative comparison, but they do not fully describe all qualitative error modes such as boundary leakage, missed small objects, class confusion, false positives in cluttered thermal regions, or failure under unusual scene conditions.
+
+The strongest models use larger architectures and higher input resolution. These settings improve accuracy, but they also increase GPU memory use, training time, and inference cost. Real-time deployment on embedded or resource-constrained platforms would require additional optimization.
+
+\section{Future Work}
+
+Future work can extend this dissertation in several directions. First, a detailed per-class analysis should be performed to understand which object categories benefit most from IR supervision and high-resolution training. Classes such as persons, motorcycles, rickshaws, and small trucks may behave differently because of object size, appearance, and class frequency.
+
+Second, qualitative error analysis should be expanded. Visual inspection of false positives, missed detections, weak masks, and class confusions can help identify whether the remaining errors are caused by small object size, thermal ambiguity, annotation limitations, occlusion, or model capacity.
+
+Third, more advanced EO/IR fusion strategies can be explored. If paired or approximately aligned EO and IR images are available, future models can use multi-branch networks, feature-level fusion, attention-based modality fusion, or late fusion with learned confidence calibration.
+
+Fourth, domain adaptation methods can be studied beyond grayscale transformation. Possible directions include self-supervised pretraining, contrastive EO/IR representation learning, adversarial domain adaptation, pseudo-labeling, and test-time adaptation for unlabeled IR imagery.
+
+Fifth, ensemble methods can be improved. The evaluated ensemble used prediction-level fusion, but future work can explore confidence calibration, weighted box and mask fusion, class-specific fusion rules, and ensembles across different resolutions or model families.
+
+Sixth, the experiments can be validated on additional datasets and field conditions. Cross-dataset evaluation would help determine whether the observed gains from IR supervision, model scaling, and high-resolution training generalize beyond the current dataset.
+
+Finally, deployment-oriented optimization should be considered. Model pruning, quantization, TensorRT conversion, smaller high-resolution variants, and real-time benchmarking can make the trained models more suitable for practical aerial surveillance systems.
+
+\section{Final Remarks}
+
+This dissertation shows that EO/IR aerial segmentation requires more than EO-only adaptation. The EO-to-IR gap is substantial, and grayscale-style transformations provide only limited improvement. The most effective factor is the inclusion of real IR supervision, followed by larger model capacity and high-resolution training.
+
+The final results identify E11 as the strongest model for primary IR segmentation and E12 as the strongest model for combined EO+IR robustness. These findings provide a clear direction for future EO/IR aerial perception systems: include target-domain IR data whenever possible, train with both modalities when cross-modality robustness is required, and preserve spatial detail for small-object segmentation.
