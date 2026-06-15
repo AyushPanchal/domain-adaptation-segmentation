@@ -221,6 +221,12 @@ MGA: Mask-Guided Gray Augmentation
 BA-MGA: Boundary-Aware Mask-Guided Gray Augmentation
 ```
 
+Fix artifact created:
+
+`docs/latex_fixes/Acr.tex`
+
+This file is a drop-in replacement for `Sections/Acr.tex` in the online LaTeX project.
+
 ### 3. Appendix Is Wrong
 
 Severity: Critical

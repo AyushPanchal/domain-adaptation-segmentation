@@ -111,6 +111,7 @@ visible-to-thermal object detection.
 | 2026-06-15 | Drafted dissertation conclusion and abstract | Added `thesis/Chapter6/ch6.tex` with conclusions, research-question answers, limitations, and future work. Added the front-matter abstract in `thesis/Sections/abstract.tex`. |
 | 2026-06-15 | Audited online LaTeX thesis package | Inspected `docs/cross-domain-semantic-segmentation.zip` and created `docs/ONLINE_LATEX_THESIS_AUDIT.md` with package inventory, compile/static checks, critical issues, and cleanup recommendations. |
 | 2026-06-15 | Fixed LaTeX bibliography source | Added `docs/latex_fixes/SVNITPhDbibtex.bib` with 39 research-paper references covering EO/IR, YOLO, segmentation, aerial perception, and domain adaptation. Static check against the extracted online package reports zero missing citation keys. |
+| 2026-06-15 | Fixed LaTeX acronym source | Added `docs/latex_fixes/Acr.tex` as a drop-in replacement for the online LaTeX `Sections/Acr.tex`, replacing legal/text-clustering acronyms with EO/IR and computer vision acronyms. |
 
 ## Next Recommended Actions
 

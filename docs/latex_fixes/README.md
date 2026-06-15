@@ -1,6 +1,8 @@
-# LaTeX Bibliography Fix
+# LaTeX Fix Files
 
-This folder contains a replacement bibliography file for the online LaTeX thesis package:
+This folder contains drop-in replacement files for the online LaTeX thesis package.
+
+## Bibliography
 
 `SVNITPhDbibtex.bib`
 
@@ -70,3 +72,13 @@ There should be no unresolved citation markers in Chapter 2.
 ## Note
 
 The current Chapter 2 key `unifiedeoir2024` is mapped to a real RGB-infrared aerial vehicle detection paper to avoid unresolved citations. For the cleanest final thesis, the surrounding Chapter 2 sentence can later be rewritten to avoid calling it an SVNIT-specific study unless that exact study is added as a formal publication or internal report.
+
+## Acronyms
+
+`Acr.tex`
+
+Use it to replace the stale acronym file inside the online LaTeX project:
+
+`Sections/Acr.tex`
+
+The replacement removes legal/text-clustering acronyms and adds EO/IR, computer vision, segmentation, training, and evaluation acronyms used by this thesis.
