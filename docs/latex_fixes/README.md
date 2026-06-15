@@ -82,3 +82,19 @@ Use it to replace the stale acronym file inside the online LaTeX project:
 `Sections/Acr.tex`
 
 The replacement removes legal/text-clustering acronyms and adds EO/IR, computer vision, segmentation, training, and evaluation acronyms used by this thesis.
+
+## Appendix Removal
+
+`MainReport.tex`
+
+Use it to replace the online LaTeX project `MainReport.tex` if you want the stale appendix removed for now.
+
+The only intended appendix-related change is:
+
+```tex
+% Appendix removed for current thesis draft. Re-enable after adding a relevant appendix.
+% \include{Appendix/appndx}
+% \blankpage
+```
+
+This removes `Appendix A Industrial Internship Report at Siemens` from the compiled PDF and table of contents.

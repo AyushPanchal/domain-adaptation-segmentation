@@ -263,6 +263,12 @@ or replace the appendix with relevant material, such as:
 - Generated figure list
 - Reproducibility checklist
 
+Fix artifact created:
+
+`docs/latex_fixes/MainReport.tex`
+
+This drop-in replacement comments out the appendix include and the following blank page so the stale Siemens appendix is removed from the compiled report.
+
 ### 4. Broken Citations Are Visible in the PDF
 
 Severity: Critical
