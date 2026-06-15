@@ -109,6 +109,7 @@ visible-to-thermal object detection.
 | 2026-06-12 | Drafted dissertation Chapter 5 | Added `thesis/Chapter5/ch5.tex` with results tables, discussion, and placeholder-safe figure slots. Added `thesis/Figures/Chapter5/IMAGE_GENERATION_PROMPTS.md` with eight external image-generation prompts for Chapter 5 visuals. |
 | 2026-06-12 | Generated Chapter 5 result figures | Added `scripts/analysis/build_chapter5_figures.py` and generated eight thesis-ready Chapter 5 figures in PNG/PDF form under `thesis/Figures/Chapter5/` using exact metric values. |
 | 2026-06-15 | Drafted dissertation conclusion and abstract | Added `thesis/Chapter6/ch6.tex` with conclusions, research-question answers, limitations, and future work. Added the front-matter abstract in `thesis/Sections/abstract.tex`. |
+| 2026-06-15 | Audited online LaTeX thesis package | Inspected `docs/cross-domain-semantic-segmentation.zip` and created `docs/ONLINE_LATEX_THESIS_AUDIT.md` with package inventory, compile/static checks, critical issues, and cleanup recommendations. |
 
 ## Next Recommended Actions
 
