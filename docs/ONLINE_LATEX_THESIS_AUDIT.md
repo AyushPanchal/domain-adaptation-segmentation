@@ -720,6 +720,17 @@ Notes:
 2. Add an appendix containing experiment configurations and reproducibility notes.
 3. Add a short note in README describing the exact compile sequence.
 
+## Additional Fix Artifacts
+
+### List of Publications
+
+Files created:
+
+- `docs/latex_fixes/MainReport.tex`
+- `docs/latex_fixes/our_pub.tex`
+
+The replacement `MainReport.tex` enables the List of Publications, and `our_pub.tex` replaces the stale reference-report publication list with a neutral current-report statement.
+
 ## Suggested Correct Acronym File
 
 Replacement draft for `Sections/Acr.tex`:

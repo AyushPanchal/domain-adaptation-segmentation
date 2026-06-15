@@ -114,6 +114,7 @@ visible-to-thermal object detection.
 | 2026-06-15 | Fixed LaTeX acronym source | Added `docs/latex_fixes/Acr.tex` as a drop-in replacement for the online LaTeX `Sections/Acr.tex`, replacing legal/text-clustering acronyms with EO/IR and computer vision acronyms. |
 | 2026-06-15 | Removed stale LaTeX appendix include | Added `docs/latex_fixes/MainReport.tex` as a drop-in replacement with `Appendix/appndx` disabled so the Siemens internship appendix is removed from the report. |
 | 2026-06-15 | Enabled LaTeX List of Tables | Updated `docs/latex_fixes/MainReport.tex` to enable `\borderlot` and add a `List of Tables` entry in the front matter. |
+| 2026-06-15 | Enabled LaTeX List of Publications | Updated `docs/latex_fixes/MainReport.tex` to include `Sections/our_pub` and added `docs/latex_fixes/our_pub.tex` with a clean current-report placeholder instead of stale reference-report publications. |
 
 ## Next Recommended Actions
 

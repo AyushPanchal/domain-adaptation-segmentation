@@ -109,3 +109,21 @@ The replacement `MainReport.tex` also enables the List of Tables:
 ```
 
 This is useful because Chapters 3 and 5 contain multiple thesis result/design tables.
+
+## List of Publications
+
+`our_pub.tex`
+
+Use it to replace the stale online LaTeX project file:
+
+`Sections/our_pub.tex`
+
+The replacement `MainReport.tex` enables the List of Publications using:
+
+```tex
+\rhead{\textit{List of Publications}}
+\addcontentsline{toc}{chapter}{List of Publications}
+\input{./Sections/our_pub}
+```
+
+The replacement `our_pub.tex` currently states that no publications are included in the report at present. Replace that line later if a paper, preprint, or accepted publication needs to be listed.
