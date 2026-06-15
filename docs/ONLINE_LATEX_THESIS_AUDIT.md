@@ -161,6 +161,12 @@ Recommended fix:
 
 Replace or rebuild `SVNITPhDbibtex.bib` with EO/IR, segmentation, YOLO, domain adaptation, and dataset references. At minimum, add valid entries for all missing citation keys listed above.
 
+Fix artifact created:
+
+`docs/latex_fixes/SVNITPhDbibtex.bib`
+
+This replacement file contains 40 EO/IR, YOLO, aerial perception, segmentation, and domain adaptation references. Static citation checking after replacing the extracted package bibliography reports zero missing citation keys.
+
 ### 2. Acronym List Is From the Wrong Project
 
 Severity: Critical
@@ -768,4 +774,3 @@ Priority should be:
 3. remove stale appendix,
 4. verify front matter,
 5. rebuild and visually inspect the final PDF.
-

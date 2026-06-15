@@ -110,6 +110,7 @@ visible-to-thermal object detection.
 | 2026-06-12 | Generated Chapter 5 result figures | Added `scripts/analysis/build_chapter5_figures.py` and generated eight thesis-ready Chapter 5 figures in PNG/PDF form under `thesis/Figures/Chapter5/` using exact metric values. |
 | 2026-06-15 | Drafted dissertation conclusion and abstract | Added `thesis/Chapter6/ch6.tex` with conclusions, research-question answers, limitations, and future work. Added the front-matter abstract in `thesis/Sections/abstract.tex`. |
 | 2026-06-15 | Audited online LaTeX thesis package | Inspected `docs/cross-domain-semantic-segmentation.zip` and created `docs/ONLINE_LATEX_THESIS_AUDIT.md` with package inventory, compile/static checks, critical issues, and cleanup recommendations. |
+| 2026-06-15 | Fixed LaTeX bibliography source | Added `docs/latex_fixes/SVNITPhDbibtex.bib` with 40 EO/IR, YOLO, segmentation, aerial perception, and domain adaptation references. Static check against the extracted online package reports zero missing citation keys. |
 
 ## Next Recommended Actions
 
