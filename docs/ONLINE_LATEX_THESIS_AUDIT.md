@@ -165,7 +165,7 @@ Fix artifact created:
 
 `docs/latex_fixes/SVNITPhDbibtex.bib`
 
-This replacement file contains 40 EO/IR, YOLO, aerial perception, segmentation, and domain adaptation references. Static citation checking after replacing the extracted package bibliography reports zero missing citation keys.
+This replacement file contains 39 research-paper references covering EO/IR, YOLO, aerial perception, segmentation, and domain adaptation. Software/GitHub-only citations were removed. Static citation checking after replacing the extracted package bibliography reports zero missing citation keys.
 
 ### 2. Acronym List Is From the Wrong Project
 

@@ -11,13 +11,21 @@ Use it to replace the stale bibliography file inside the online LaTeX project:
 ## What Was Fixed
 
 - Removed the old legal/text-clustering bibliography content.
-- Added 40 real references covering:
+- Added 39 research-paper references covering:
   - core object detection,
   - semantic and instance segmentation,
   - YOLO-family models,
   - aerial/UAV perception datasets,
   - EO/IR and RGB-thermal perception,
   - domain adaptation and image translation.
+- Removed software/GitHub-only citations from the bibliography.
+- Ordered the bibliography so the most thesis-relevant papers appear first:
+  - IndraEye,
+  - SAGA,
+  - RGB-infrared aerial vehicle detection,
+  - thermal/multispectral perception,
+  - domain adaptation,
+  - YOLO and core segmentation/detection foundations.
 - Added all citation keys currently used in Chapter 2:
   - `fasterrcnn2015`
   - `yolo2016`
@@ -35,7 +43,7 @@ Use it to replace the stale bibliography file inside the online LaTeX project:
 Static citation check after replacing the extracted online package bibliography:
 
 ```text
-bib_entries: 40
+bib_entries: 39
 citation_instances: 13
 missing_cites: 0
 ```
