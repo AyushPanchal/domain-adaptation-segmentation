@@ -113,6 +113,7 @@ visible-to-thermal object detection.
 | 2026-06-15 | Fixed LaTeX bibliography source | Added `docs/latex_fixes/SVNITPhDbibtex.bib` with 39 research-paper references covering EO/IR, YOLO, segmentation, aerial perception, and domain adaptation. Static check against the extracted online package reports zero missing citation keys. |
 | 2026-06-15 | Fixed LaTeX acronym source | Added `docs/latex_fixes/Acr.tex` as a drop-in replacement for the online LaTeX `Sections/Acr.tex`, replacing legal/text-clustering acronyms with EO/IR and computer vision acronyms. |
 | 2026-06-15 | Removed stale LaTeX appendix include | Added `docs/latex_fixes/MainReport.tex` as a drop-in replacement with `Appendix/appndx` disabled so the Siemens internship appendix is removed from the report. |
+| 2026-06-15 | Enabled LaTeX List of Tables | Updated `docs/latex_fixes/MainReport.tex` to enable `\borderlot` and add a `List of Tables` entry in the front matter. |
 
 ## Next Recommended Actions
 

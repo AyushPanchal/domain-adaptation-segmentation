@@ -432,6 +432,12 @@ Enable the List of Tables if required by the department:
 
 Also check whether manual `\addcontentsline` entries are duplicating or misclassifying front-matter entries.
 
+Fix artifact updated:
+
+`docs/latex_fixes/MainReport.tex`
+
+This replacement file now enables `\borderlot` and uses `List of Tables` for the corresponding table-of-contents entry.
+
 ### 10. Chapter 5 Tables Are Too Wide in PDF Text Extraction
 
 Severity: Major

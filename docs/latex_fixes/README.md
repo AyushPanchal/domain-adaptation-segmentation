@@ -98,3 +98,14 @@ The only intended appendix-related change is:
 ```
 
 This removes `Appendix A Industrial Internship Report at Siemens` from the compiled PDF and table of contents.
+
+## List of Tables
+
+The replacement `MainReport.tex` also enables the List of Tables:
+
+```tex
+\addcontentsline{toc}{section}{List of Tables}
+\borderlot
+```
+
+This is useful because Chapters 3 and 5 contain multiple thesis result/design tables.
