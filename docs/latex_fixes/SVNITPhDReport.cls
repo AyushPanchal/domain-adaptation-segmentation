@@ -691,9 +691,9 @@
     \textbf{\LARGE CERTIFICATE} % Slightly larger text for the title
 \end{center}
 
-\vspace{1cm}
+\vspace{0.75cm}
 
-\noindent This is to certify that the dissertation report entitled \uline{"Cross-Domain Semantic Segmentation in Aerial Traffic Surveillance"}, is prepared and presented by \uline{Mr. Ayush Panchal}, bearing Admn. No: \uline{P24DS013}, of M. Tech. II, Semester IV in Computer Science and Engineering with specialization in Data Science, at the Department of Computer Science and Engineering, Sardar Vallabhbhai National Institute of Technology, Surat, is satisfactory.\\ \vspace*{20pt} 
+\noindent This is to certify that the dissertation report entitled \uline{"Cross-Domain Semantic Segmentation in Aerial Traffic Surveillance"}, is prepared and presented by \uline{Mr. Ayush Panchal}, bearing Admn. No: \uline{P24DS013}, of M. Tech. II, Semester IV in Computer Science and Engineering with specialization in Data Science, at the Department of Computer Science and Engineering, Sardar Vallabhbhai National Institute of Technology, Surat, is satisfactory.\\ \vspace*{12pt} 
 
    \noindent
 \begin{minipage}[t]{0.48\textwidth}
@@ -705,7 +705,7 @@
     Science and Engineering, \\
     Sardar Vallabhbhai National \\
     Institute of Technology, \\
-    Surat - 395007, Gujarat, India \\[20pt]
+    Surat - 395007, Gujarat, India \\[8pt]
    
   }
 
@@ -718,21 +718,21 @@
     Director Data Science, \\
     Elsevier, \\
     Chennai, Tamil Nadu\\
-    India \\[20pt]
+    India \\[8pt]
   }
 \end{minipage}
 
-\vspace{0.65cm}
+\vspace{0.25cm}
 
 \noindent
 \begin{minipage}[t]{0.48\textwidth}
   \vtop{
     \makebox[150pt]{\hrulefill} \\[2pt]
-    \textbf{Jury's Signature} \\[10pt]
+    \textbf{Jury's Signature} \\[4pt]
   }
 \end{minipage}
 
-\vspace{0.85cm}
+\vspace{0.35cm}
 
 \noindent
 \begin{minipage}[t]{0.48\textwidth}
