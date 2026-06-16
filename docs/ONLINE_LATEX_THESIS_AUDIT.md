@@ -731,6 +731,14 @@ Files created:
 
 The replacement `MainReport.tex` enables the List of Publications, and `our_pub.tex` replaces the stale reference-report publication list with a neutral current-report statement.
 
+### Certificate Jury Signature
+
+File created:
+
+`docs/latex_fixes/SVNITPhDReport.cls`
+
+This drop-in class file adds a Jury's Signature block to the certificate page between the supervisor row and the PG Incharge / Head row.
+
 ## Suggested Correct Acronym File
 
 Replacement draft for `Sections/Acr.tex`:

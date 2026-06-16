@@ -127,3 +127,13 @@ The replacement `MainReport.tex` enables the List of Publications using:
 ```
 
 The replacement `our_pub.tex` currently states that no publications are included in the report at present. Replace that line later if a paper, preprint, or accepted publication needs to be listed.
+
+## Certificate Page Jury Signature
+
+`SVNITPhDReport.cls`
+
+Use it to replace the online LaTeX project class file:
+
+`SVNITPhDReport.cls`
+
+The replacement keeps the existing certificate content and adds a left-aligned Jury's Signature block between the supervisor row and the PG Incharge / Head row, matching the certificate layout reference.

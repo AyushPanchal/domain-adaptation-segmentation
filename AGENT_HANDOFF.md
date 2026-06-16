@@ -115,6 +115,7 @@ visible-to-thermal object detection.
 | 2026-06-15 | Removed stale LaTeX appendix include | Added `docs/latex_fixes/MainReport.tex` as a drop-in replacement with `Appendix/appndx` disabled so the Siemens internship appendix is removed from the report. |
 | 2026-06-15 | Enabled LaTeX List of Tables | Updated `docs/latex_fixes/MainReport.tex` to enable `\borderlot` and add a `List of Tables` entry in the front matter. |
 | 2026-06-15 | Enabled LaTeX List of Publications | Updated `docs/latex_fixes/MainReport.tex` to include `Sections/our_pub` and added `docs/latex_fixes/our_pub.tex` with a clean current-report placeholder instead of stale reference-report publications. |
+| 2026-06-16 | Added certificate jury signature block | Added `docs/latex_fixes/SVNITPhDReport.cls` as a drop-in class replacement with a Jury's Signature line between supervisor and PG/HOD certificate signature blocks. |
 
 ## Next Recommended Actions
 
